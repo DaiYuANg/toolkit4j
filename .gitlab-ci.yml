@@ -3,9 +3,9 @@ stages:
 
 build:
   stage: build
-  image: node:14.16.0-buster
+  image: node:latest
   before_script:
-    - curl -f https://get.pnpm.io/v6.16.js | node - add --global pnpm@7
+    - curl -fsSL https://get.pnpm.io/install.sh | sh -
     - pnpm config set store-dir .pnpm-store
   script:
     - pnpm install # install dependencies
