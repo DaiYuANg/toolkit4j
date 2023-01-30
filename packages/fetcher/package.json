@@ -3,6 +3,10 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "author": {
+    "email": "dai_yuang@icloud.com",
+    "name": "DaiYuANg"
+  },
   "files": [
     "dist",
     "index.d.ts"
