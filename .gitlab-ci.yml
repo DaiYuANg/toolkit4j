@@ -3,7 +3,7 @@ stages:
 
 build:
   stage: build
-  image: node:latest
+  image: node:18
   before_script:
     - curl -fsSL https://get.pnpm.io/install.sh | sh -
     - pnpm config set store-dir .pnpm-store
