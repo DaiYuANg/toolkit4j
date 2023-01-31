@@ -5,8 +5,7 @@ build:
   stage: build
   image: node:18
   before_script:
-    - curl -f https://get.pnpm.io/v7.20.js | node - add --global pnpm@7
-    - pnpm config set store-dir .pnpm-store
+    - npm install -g pnpm
   script:
     - pnpm install # install dependencies
     - pnpm build
