@@ -1,5 +1,5 @@
 {
-  "name": "@kitty/socket",
+  "name": "@kitty/sock",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -16,12 +16,19 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build"
+    "build": "tsc && vite build",
+    "test": "vitest",
+    "coverage": "vitest run --coverage"
+  },
+  "dependencies": {
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "typescript": "^4.9.4",
+    "@types/uuid": "^9.0.1",
     "vite": "^4.0.4",
     "vitest": "^0.28.3",
+    "@vitest/ui": "^0.29.2",
     "vite-plugin-dts": "^1.7.1"
   }
 }

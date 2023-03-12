@@ -5,8 +5,8 @@ export default defineConfig({
   build: {
     lib: {
       entry: './src/index.ts',
-      name: 'socket',
-      fileName: 'socket',
+      name: 'sock',
+      fileName: 'sock',
     },
   },
   plugins: [dtsPlugin()],
