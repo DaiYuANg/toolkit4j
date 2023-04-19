@@ -1,17 +1,17 @@
 export type ConnectionOptions = {
-    url: string;
+  url: string;
 
-    protocols: string[] | undefined;
+  protocols: string[] | undefined;
 
-    transformStruct: TransformDataStruct;
+  transformStruct: TransformDataStruct;
 
-    global: boolean
+  global: boolean;
 };
 
 export enum TransformDataStruct {
-    JSON,
-    PRUE_STRING,
-    ARRAY_BUFFER,
-    BLOB,
-    ARRAY_BUFFER_VIEW,
+  JSON,
+  PRUE_STRING,
+  ARRAY_BUFFER,
+  BLOB,
+  ARRAY_BUFFER_VIEW,
 }
