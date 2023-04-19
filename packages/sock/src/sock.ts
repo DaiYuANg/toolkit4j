@@ -1,11 +1,11 @@
-import { WsConnection } from './ws.connection';
+import { Connection } from './connection';
 import { v4 as uuidv4 } from 'uuid';
 import { ConnectionOptions } from './options';
 
 export class Sock {
   baseUrl: string | undefined;
 
-  connections: Map<string, WsConnection> = new Map<string, WsConnection>();
+  connections: Map<string, Connection> = new Map<string, Connection>();
 
   static interceptors: Array<() => void> = new Array<() => void>();
 
@@ -17,11 +17,11 @@ export class Sock {
     return sock;
   }
 
-  public connect(options: ConnectionOptions): WsConnection {
+  public connect(options: ConnectionOptions): Connection {
     // return new Sock();
     uuidv4();
     console.log(uuidv4());
-    const conn = new WsConnection(options);
+    const conn = new Connection(options);
     this.connections.set(uuidv4(), conn);
     return conn;
   }

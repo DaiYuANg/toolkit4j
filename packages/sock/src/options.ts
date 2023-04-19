@@ -1,9 +1,11 @@
 export type ConnectionOptions = {
-    url: string | undefined;
+    url: string;
 
-    protocols: string | undefined;
+    protocols: string[] | undefined;
 
-    transformStruct: TransformDataStruct
+    transformStruct: TransformDataStruct;
+
+    global: boolean
 };
 
 export enum TransformDataStruct {
