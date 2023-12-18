@@ -2,7 +2,6 @@ pluginManagement {
     repositories {
         maven { setUrl("https://repo.spring.io/snapshot") }
         maven { setUrl("https://repo.spring.io/milestone") }
-//    maven { setUrl("https://jitpack.io") }
         mavenLocal()
         mavenCentral()
         gradlePluginPortal()
@@ -42,6 +41,7 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 plugins {
     id("com.gradle.enterprise")
     id("org.danilopianini.gradle-pre-commit-git-hooks")
+    id("org.gradle.toolchains.foojay-resolver-convention") version "0.5.0"
 }
 
 buildCache {
@@ -71,3 +71,6 @@ include("nova-core")
 
 include("nova-cli")
 include("nova-gradle-plugin")
+include("source-processor:nova-markdown-processor")
+include("source-processor:nova-asciidoc-processor")
+include("nova-base")
