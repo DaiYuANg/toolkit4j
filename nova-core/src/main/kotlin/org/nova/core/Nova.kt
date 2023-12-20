@@ -11,8 +11,9 @@ import org.webjars.WebJarAssetLocator
 import java.nio.file.Path
 import java.util.ServiceLoader
 
-class NovaLayout(
-    val output: Path
+class NovaBuildLayout(
+    val output: Path,
+    val sourcePath:Path
 )
 
 val bundleProcessor = module {
@@ -27,17 +28,21 @@ val rootModule = module {
 }
 
 class Nova(
-    val layout: NovaLayout
+    val layout: NovaBuildLayout,
+    private var config: Config
 ) {
+    private val documentProcessor = ServiceLoader.load(SourceProcessor::class.java)
+
     init {
-        val documentProcessor = ServiceLoader.load(SourceProcessor::class.java)
-        documentProcessor.stream().toList()
+        documentProcessor.forEach {
+            System.err.println(it)
+        }
         startKoin {
             modules(rootModule, bundleProcessor)
         }
     }
 
     fun build() {
-
+        System.err.println(documentProcessor)
     }
 }

@@ -4,8 +4,6 @@ plugins {
   kotlin("kapt")
 }
 
-//apply<GuicePlugin>()
-
 group = "org.nectar.nova.core"
 
 version = "1.0-SNAPSHOT"

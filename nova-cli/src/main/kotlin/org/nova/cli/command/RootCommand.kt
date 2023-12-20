@@ -12,15 +12,7 @@ import java.util.concurrent.Callable
     subcommands = [BuildCommand::class]
 )
 class RootCommand :Callable<Int>{
-    @CommandLine.Parameters(index = "0", description = ["The file whose checksum to calculate."])
-    lateinit var file: File
-
-    @CommandLine.Option(names = ["-a", "--algorithm"], description = ["MD5, SHA-1, SHA-256, ..."])
-    var algorithm = "SHA-256"
     override fun call(): Int {
-        val fileContents = Files.readAllBytes(file.toPath())
-        val digest = MessageDigest.getInstance(algorithm).digest(fileContents)
-        println(("%0" + digest.size * 2 + "x").format(BigInteger(1, digest)))
         return 0
     }
 }

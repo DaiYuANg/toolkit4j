@@ -1,4 +1,5 @@
 import io.freefair.gradle.plugins.lombok.LombokPlugin
+import io.gitlab.plunts.gradle.plantuml.plugin.ClassDiagramsExtension
 import io.gitlab.plunts.gradle.plantuml.plugin.PlantUmlPlugin
 
 plugins {
@@ -40,5 +41,13 @@ subprojects {
 
     kotlin {
         jvmToolchain(jdkVersion = jdkVersion.get().toInt())
+    }
+
+    classDiagrams {
+        @Suppress("UNCHECKED_CAST")
+        diagram("123",closureOf<ClassDiagramsExtension.ClassDiagram> {
+            include(packages().recursive())
+            writeTo(file(project.layout.buildDirectory.file("cli.puml")))
+        } as groovy.lang.Closure<ClassDiagramsExtension.ClassDiagram>)
     }
 }
