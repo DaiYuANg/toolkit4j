@@ -67,7 +67,7 @@ gitHooks {
 
 rootProject.name = "Nova"
 
-include("nova-core")
+include("nova-compiler")
 
 include("nova-cli")
 include("nova-gradle-plugin")

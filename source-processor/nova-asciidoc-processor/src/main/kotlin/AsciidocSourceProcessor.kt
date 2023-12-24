@@ -9,4 +9,8 @@ class AsciidocSourceProcessor :SourceProcessor{
     override fun processor(source: String): Document {
         TODO("Not yet implemented")
     }
+
+    override fun whoNext(processor: SourceProcessor) {
+        TODO("Not yet implemented")
+    }
 }

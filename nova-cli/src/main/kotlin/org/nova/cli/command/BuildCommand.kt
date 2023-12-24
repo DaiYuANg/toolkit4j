@@ -1,9 +1,6 @@
 package org.nova.cli.command
 
-import org.nova.core.Config
-import org.nova.core.MetaInfo
-import org.nova.core.Nova
-import org.nova.core.NovaBuildLayout
+import org.nova.core.*
 import picocli.CommandLine
 import java.io.File
 import java.nio.file.Path
@@ -14,9 +11,11 @@ import java.util.concurrent.Callable
     description = ["Build Static Site"]
 )
 class BuildCommand : Callable<Int> {
-    override fun call(): Int {
 
-        val novaBuildLayout = NovaBuildLayout(Path.of(""), Path.of(""))
+    private val source: Path = Path.of("./docs")
+
+    override fun call(): Int {
+        val novaBuildLayout = NovaBuildLayout(output = Path.of(""), sourcePath = source)
         Nova(
             novaBuildLayout, Config(
                 listOf(File("")),

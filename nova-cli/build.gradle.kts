@@ -10,8 +10,7 @@ group = "org.toolkit.site.generator.cli"
 version = "1.0-SNAPSHOT"
 
 dependencies {
-    implementation(projects.novaCore)
-    implementation(projects.sourceProcessor.novaAsciidocProcessor)
+    implementation(projects.novaCompiler)
     implementation(projects.sourceProcessor.novaMarkdownProcessor)
     implementation("io.javalin:javalin:6.0.0-beta.3")
     implementation("info.picocli:picocli:4.7.5")

@@ -14,11 +14,13 @@ repositories {
 }
 val kotlinVersion = libs.versions.kotlin.get();
 
-dependencies{
+dependencies {
     implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}")
     implementation("org.jetbrains.kotlin:kotlin-lombok:${kotlinVersion}")
     implementation("org.jetbrains.kotlin:kotlin-serialization:${kotlinVersion}")
     implementation("org.jetbrains.kotlin:kotlin-noarg:${kotlinVersion}")
+    implementation("org.jetbrains.kotlin:kotlin-noarg:${kotlinVersion}")
+    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}")
     implementation("org.jetbrains.kotlin:kotlin-allopen:${kotlinVersion}")
 //    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}")
     implementation("com.diffplug.spotless:spotless-plugin-gradle:6.23.3")

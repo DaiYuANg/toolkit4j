@@ -1,4 +1,6 @@
-# Kitty
+# Nova
+
+A Jvm platform site generator
 
 ## Getting started
 

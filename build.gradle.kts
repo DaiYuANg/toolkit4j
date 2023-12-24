@@ -26,12 +26,21 @@ allprojects {
 
 
 subprojects {
-    apply<JavaLibraryPlugin>()
     apply<LombokPlugin>()
+    apply<JavaLibraryPlugin>()
     apply<PlantUmlPlugin>()
     apply(plugin = "org.jetbrains.kotlin.jvm")
 
     dependencies{
+        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0-RC2")
+        runtimeOnly("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.8.0-RC2")
+        testImplementation(platform(rootProject.libs.junitBom))
+        testImplementation(rootProject.libs.junitJuiter)
+        testImplementation(rootProject.libs.junitApi)
+        testRuntimeOnly(rootProject.libs.junitEngine)
+        testImplementation(rootProject.libs.junitInjectFile)
+        testImplementation(rootProject.libs.mockitoCore)
+        testImplementation(rootProject.libs.mockitoJunit)
         testImplementation("org.jetbrains.kotlin:kotlin-test")
     }
 
