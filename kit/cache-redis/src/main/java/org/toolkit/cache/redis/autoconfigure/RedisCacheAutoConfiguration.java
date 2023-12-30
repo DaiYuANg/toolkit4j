@@ -3,7 +3,6 @@ package org.toolkit.cache.redis.autoconfigure;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 public class RedisCacheAutoConfiguration {
 
 	//	private ObjectMapper objectMapper;

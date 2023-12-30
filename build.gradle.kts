@@ -1,6 +1,7 @@
 import io.freefair.gradle.plugins.lombok.LombokPlugin
 import io.gitlab.plunts.gradle.plantuml.plugin.ClassDiagramsExtension
 import io.gitlab.plunts.gradle.plantuml.plugin.PlantUmlPlugin
+import me.champeau.jmh.JMHPlugin
 
 plugins {
     `version-catalog`
@@ -30,6 +31,7 @@ subprojects {
     apply<LombokPlugin>()
     apply<JavaLibraryPlugin>()
     apply<PlantUmlPlugin>()
+    apply<JMHPlugin>()
     apply(plugin = "org.jetbrains.kotlin.jvm")
 
     dependencies{
@@ -43,6 +45,7 @@ subprojects {
         testImplementation(rootProject.libs.mockitoCore)
         testImplementation(rootProject.libs.mockitoJunit)
         testImplementation("org.jetbrains.kotlin:kotlin-test")
+        testImplementation(rootProject.libs.dataFaker)
     }
 
     tasks.test {
@@ -51,13 +54,24 @@ subprojects {
 
     kotlin {
         jvmToolchain(jdkVersion = jdkVersion.get().toInt())
+        compilerOptions { freeCompilerArgs = listOf("-Xjvm-default=all") }
     }
 
     classDiagrams {
         @Suppress("UNCHECKED_CAST")
-        diagram("123",closureOf<ClassDiagramsExtension.ClassDiagram> {
+        diagram("classes",closureOf<ClassDiagramsExtension.ClassDiagram> {
             include(packages().recursive())
-            writeTo(file(project.layout.buildDirectory.file("cli.puml")))
+            writeTo(file(project.layout.buildDirectory.file("${project.name}.puml")))
         } as groovy.lang.Closure<ClassDiagramsExtension.ClassDiagram>)
+    }
+    tasks.test {
+        useJUnitPlatform()
+        minHeapSize = "4g"
+        maxParallelForks = Runtime.getRuntime().availableProcessors() * 2
+        maxHeapSize = "8g"
+        systemProperties["junit.jupiter.execution.parallel.enabled"] = true
+        systemProperties["junit.jupiter.execution.parallel.mode.default"] = "concurrent"
+        jvmArgs("-XX:+EnableDynamicAgentLoading")
+        maxParallelForks = Runtime.getRuntime().availableProcessors() * 2
     }
 }

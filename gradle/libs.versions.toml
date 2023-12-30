@@ -1,7 +1,7 @@
 [versions]
 jdkVersion = "21"
 detekt = "1.23.4"
-kotlin = "1.9.21"
+kotlin = "2.0.0-Beta2"
 ktlintGradle = "12.0.3"
 pluginPublish = "1.2.1"
 versionCheck = "0.50.0"
@@ -15,6 +15,7 @@ autoFactory = "1.1.0"
 lettuce = "6.3.0.RELEASE"
 hazelcast = "5.3.6"
 jmh = "0.7.2"
+datafaker = "2.0.2"
 
 [plugins]
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
@@ -36,3 +37,4 @@ caffine = { group = "com.github.ben-manes.caffeine", name = "caffeine", version.
 autoFactory = { group = "com.google.auto.factory", name = "auto-factory", version.ref = "autoFactory" }
 lettuceCore = { group = "io.lettuce", name = "lettuce-core", version.ref = "lettuce" }
 hazelcast = { group = "com.hazelcast", name = "hazelcast", version.ref = "hazelcast" }
+dataFaker={group="net.datafaker",name="datafaker",version.ref="datafaker"}

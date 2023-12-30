@@ -1,6 +1,6 @@
-# Nova
+# toolkit4j
 
-A Jvm platform site generator
+A toolkit for jvm
 
 ## Getting started
 

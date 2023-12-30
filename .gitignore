@@ -157,4 +157,16 @@ classes/
 deploy/
 javadoc/
 cwallet.sso.lck
-*.html
+*.htmldocs/_book
+test/
+.DS_*
+**/*.backup.*
+**/*.back.*
+node_modules
+*.sublime*
+psd
+thumb
+sketch
+dist/
+npm-debug.log
+yarn-error.log
