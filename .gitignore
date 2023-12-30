@@ -157,3 +157,4 @@ classes/
 deploy/
 javadoc/
 cwallet.sso.lck
+*.html

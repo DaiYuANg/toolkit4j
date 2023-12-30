@@ -65,12 +65,16 @@ gitHooks {
     //    createHooks()
 }
 
-rootProject.name = "Nova"
+rootProject.name = "toolkit4j"
 
-include("nova-compiler")
+include("kit:cache-api")
+include("kit:cache-caffine")
+include("kit:cache-hazelcast")
+include("kit:cache-redis")
+include("kit:collection")
+include("kit:dispatcher")
+include("kit:boxes")
+//include("kit:cache")
+//include("kit:cache")
+//include("kit:cache")
 
-include("nova-cli")
-include("nova-gradle-plugin")
-include("source-processor:nova-markdown-processor")
-include("source-processor:nova-asciidoc-processor")
-include("nova-base")

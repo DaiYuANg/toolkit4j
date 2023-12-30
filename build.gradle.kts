@@ -7,6 +7,7 @@ plugins {
     idea
     `java-library`
     kotlin("jvm")
+    alias(libs.plugins.jmh)
     id("io.freefair.lombok") version "8.4"
     id("com.palantir.git-version") version "3.0.0"
     id("io.gitlab.plunts.plantuml") version "2.1.3"
@@ -37,7 +38,7 @@ subprojects {
         testImplementation(platform(rootProject.libs.junitBom))
         testImplementation(rootProject.libs.junitJuiter)
         testImplementation(rootProject.libs.junitApi)
-        testRuntimeOnly(rootProject.libs.junitEngine)
+        testImplementation(rootProject.libs.junitEngine)
         testImplementation(rootProject.libs.junitInjectFile)
         testImplementation(rootProject.libs.mockitoCore)
         testImplementation(rootProject.libs.mockitoJunit)
