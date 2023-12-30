@@ -22,7 +22,5 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-noarg:${kotlinVersion}")
     implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}")
     implementation("org.jetbrains.kotlin:kotlin-allopen:${kotlinVersion}")
-//    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}")
-    implementation("com.diffplug.spotless:spotless-plugin-gradle:6.23.3")
     implementation("com.github.spotbugs.snom:spotbugs-gradle-plugin:6.0.2")
 }

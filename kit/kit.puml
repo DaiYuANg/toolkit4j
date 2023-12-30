@@ -1,0 +1,679 @@
+@startuml
+!pragma useIntermediatePackages false
+
+annotation "AutoFactory" as com.google.auto.factory.AutoFactory {
+  + {abstract}String className()
+  + {abstract}Class<?>[] implementing()
+  + {abstract}Class<?> extending()
+  + {abstract}boolean allowSubclasses()
+}
+annotation "CanIgnoreReturnValue" as com.google.errorprone.annotations.CanIgnoreReturnValue {
+}
+annotation "CompatibleWith" as com.google.errorprone.annotations.CompatibleWith {
+  + {abstract}String value()
+}
+annotation "Inject" as jakarta.inject.Inject {
+}
+interface "Function" as kotlin.Function<R> {
+}
+annotation "Metadata" as kotlin.Metadata {
+  + {abstract}int k()
+  + {abstract}int[] mv()
+  + {abstract}int[] bv()
+  + {abstract}String[] d1()
+  + {abstract}String[] d2()
+  + {abstract}String xs()
+  + {abstract}String pn()
+  + {abstract}int xi()
+}
+annotation "SinceKotlin" as kotlin.SinceKotlin {
+  + {abstract}String version()
+}
+enum "AnnotationRetention" as kotlin.annotation.AnnotationRetention {
+  SOURCE
+  BINARY
+  RUNTIME
+  __
+  + {static}EnumEntries<AnnotationRetention> getEntries()
+}
+enum "AnnotationTarget" as kotlin.annotation.AnnotationTarget {
+  CLASS
+  ANNOTATION_CLASS
+  TYPE_PARAMETER
+  PROPERTY
+  FIELD
+  LOCAL_VARIABLE
+  VALUE_PARAMETER
+  CONSTRUCTOR
+  FUNCTION
+  PROPERTY_GETTER
+  PROPERTY_SETTER
+  TYPE
+  EXPRESSION
+  FILE
+  TYPEALIAS
+  __
+  + {static}EnumEntries<AnnotationTarget> getEntries()
+}
+annotation "MustBeDocumented" as kotlin.annotation.MustBeDocumented {
+}
+annotation "Retention" as kotlin.annotation.Retention {
+  + {abstract}AnnotationRetention value()
+}
+annotation "Target" as kotlin.annotation.Target {
+  + {abstract}AnnotationTarget[] allowedTargets()
+}
+annotation "JvmName" as kotlin.jvm.JvmName {
+  + {abstract}String name()
+}
+annotation "JvmOverloads" as kotlin.jvm.JvmOverloads {
+}
+interface "Function0" as kotlin.jvm.functions.Function0<R> {
+  + {abstract}R invoke()
+}
+interface "Function1" as kotlin.jvm.functions.Function1<P1, R> {
+  + {abstract}R invoke(P1)
+}
+interface "Function2" as kotlin.jvm.functions.Function2<P1, P2, R> {
+  + {abstract}R invoke(P1, P2)
+}
+interface "FunctionBase" as kotlin.jvm.internal.FunctionBase<R> {
+  + {abstract}int getArity()
+}
+abstract class "Lambda" as kotlin.jvm.internal.Lambda<R> {
+  +int getArity()
+}
+annotation "SourceDebugExtension" as kotlin.jvm.internal.SourceDebugExtension {
+  + {abstract}String[] value()
+}
+interface "KMappedMarker" as kotlin.jvm.internal.markers.KMappedMarker {
+}
+interface "KMutableCollection" as kotlin.jvm.internal.markers.KMutableCollection {
+}
+interface "KMutableIterable" as kotlin.jvm.internal.markers.KMutableIterable {
+}
+interface "KMutableIterator" as kotlin.jvm.internal.markers.KMutableIterator {
+}
+interface "KMutableList" as kotlin.jvm.internal.markers.KMutableList {
+}
+annotation "NonNull" as lombok.NonNull {
+}
+annotation "Contract" as org.jetbrains.annotations.Contract {
+  + {abstract}String value()
+  + {abstract}boolean pure()
+  + {abstract}String mutates()
+}
+annotation "NonNls" as org.jetbrains.annotations.NonNls {
+}
+annotation "NotNull" as org.jetbrains.annotations.NotNull {
+  + {abstract}String value()
+  + {abstract}Class<? extends Exception> exception()
+}
+annotation "Nullable" as org.jetbrains.annotations.Nullable {
+  + {abstract}String value()
+}
+interface "Dispatcher" as org.nectar.dispatcher.Dispatcher {
+}
+class "RedisCacheAutoConfiguration" as org.toolkit.cache.redis.autoconfigure.RedisCacheAutoConfiguration {
+}
+class "RedisCache" as org.toolkit.cache.redis.cache.RedisCache<K, V> {
+}
+class "RedisCacheFactory" as org.toolkit.cache.redis.cache.RedisCacheFactory {
+  +RedisCache<K, V> create()
+}
+interface "Cache" as org.toolkit.spring.boot.cache.api.Cache<K, V> {
+  + {abstract}void put(K, V)
+  + {abstract}void put(K, V, Duration)
+  + {abstract}void put(K, V, long, TimeUnit)
+  + {abstract}void putAll(Map<? extends K, ? extends V>)
+  + {abstract}int size()
+  + {abstract}boolean isEmpty()
+  + {abstract}boolean containsKey(K)
+  + {abstract}boolean putIfAbsent(K, V)
+  + {abstract}void remove(K)
+  + {abstract}void removeAll(Collection<K>)
+  + {abstract}void clear()
+  + {abstract}Collection<K> keys()
+  + {abstract}Collection<V> values()
+  + {abstract}V compute(K, BiFunction<? super K, ? super V, ? extends V>)
+  +Optional<V> computeOptional(K, BiFunction<? super K, ? super V, ? extends V>)
+  + {abstract}V computeIfAbsent(K, Function<? super K, ? extends V>)
+  +Optional<V> computeIfAbsentOptional(K, Function<? super K, ? extends V>)
+  + {abstract}V computeIfPresent(K, Function<? super K, ? extends V>)
+  +Optional<V> computeIfPresentOptional(K, Function<? super K, ? extends V>)
+  + {abstract}boolean replace(K, V)
+  + {abstract}V get(K)
+  + {abstract}Map<? extends K, ? extends V> getAll()
+  +Optional<V> getOptional(K)
+  + {abstract}V getAndRemove(K)
+  +Optional<V> getAndRemoveOptional(K)
+  +V getOrDefault(K, V)
+  + {abstract}String getCacheName()
+}
+class "CacheConfig" as org.toolkit.spring.boot.cache.api.CacheConfig<K, V> {
+  + {static}CacheConfigBuilder builder()
+  +Function<K, Object> getKeyConvertor()
+  +boolean isEnableNullValue()
+  +CacheConfig<K, V> setKeyConvertor(Function<K, Object>)
+  +CacheConfig<K, V> setEnableNullValue(boolean)
+}
+class "CacheConfig$CacheConfigBuilder" as org.toolkit.spring.boot.cache.api.CacheConfig$CacheConfigBuilder<K, V> {
+  +CacheConfigBuilder keyConvertor(Function<K, Object>)
+  +CacheConfigBuilder enableNullValue(boolean)
+  +CacheConfig<K, V> build()
+}
+interface "CacheFactory" as org.toolkit.spring.boot.cache.api.CacheFactory<K, V> {
+  + {abstract}Cache<K, V> create(CacheConfig<K, V>)
+}
+interface "CacheManager" as org.toolkit.spring.boot.cache.api.CacheManager {
+  + {abstract}CacheType getCacheType()
+}
+enum "CacheType" as org.toolkit.spring.boot.cache.api.CacheType {
+  REDIS
+  CAFFINE
+  HZAELCAST
+  IMMUTABLE
+}
+class "MultiLevelCacheManager" as org.toolkit.spring.boot.cache.api.MultiLevelCacheManager {
+  __
+  +void createCache(String)
+}
+class "CaffineCache" as org.toolkit.spring.boot.cache.caffine.impl.CaffineCache<K, V> {
+}
+class "Main" as org.toolkit.spring.boot.cache.hazelcast.Main {
+  + {static}void main(String[])
+}
+class "TryOr" as org.toolkit4j.boxes.TryOr<T, E extends Throwable> {
+  +TryOr<T, E> execute()
+  +T getResult()
+  +E getError()
+  +boolean isSuccess()
+  +boolean isFailure()
+}
+interface "Container" as org.toolkit4j.boxes.api.Container {
+}
+interface "Streamable" as org.toolkit4j.boxes.base.Streamable<T> {
+  + {abstract}Stream<T> stream()
+}
+class "AnyContainer" as org.toolkit4j.boxes.container.AnyContainer<T extends Containerizeable> {
+  +AnyContainer<T> filter(Predicate<T>)
+  +AnyContainer<T> map(Function<? super T, U>)
+  +AnyContainer<T> flatMap(Function<? super T, ? extends Container<T, ? extends U>>)
+  +T orElseThrow()
+  +T get()
+  +boolean isValid()
+  +AnyContainer<T> or(Supplier<AnyContainer<T>>)
+  + {static}AnyContainer<T> of(T)
+  + {static}AnyContainer<T> empty()
+}
+abstract class "BasicContainer" as org.toolkit4j.boxes.container.BasicContainer<T, I extends BasicContainer<T, I>> {
+  +Stream<T> stream()
+  +Optional<T> toOptional()
+  +boolean isEmpty()
+  +CompletableFuture<T> toCompletableFuture()
+  +T orElseThrow(Class<ErrorException>)
+  +T orElseThrow(Supplier<? extends ErrorException>)
+  +T orElseThrow(ErrorException)
+  +T orElse(T)
+  +T orElseGet(Supplier<T>)
+  +void ifPresentOrElse(Consumer<T>, Runnable)
+  +T orElse(Supplier<T>)
+  +void ifPresent(Consumer<T>)
+  +boolean eq(Object)
+  +T nonNullable()
+  +boolean isValid()
+  +T getValue()
+}
+class "CollectionContainer" as org.toolkit4j.boxes.container.CollectionContainer<E> {
+  +CollectionContainer<E> filter(Predicate<Collection<E>>)
+  +CollectionContainer<E> map(Function<? super Collection<E>, U>)
+  +CollectionContainer<E> flatMap(Function<? super Collection<E>, ? extends Container<Collection<E>, ? extends U>>)
+  +CollectionContainer<E> or(Supplier<CollectionContainer<E>>)
+  + {static}CollectionContainer<E> of(Collection<E>)
+  +Stream<E> elementStream()
+  +Stream<E> elementParallelStream()
+  + {static}CollectionContainer<E> empty()
+  +Collection<E> orElseThrow()
+  +Collection<E> get()
+  +boolean isValid()
+}
+interface "Container" as org.toolkit4j.boxes.container.Container<Type, Implement extends Container<Type, Implement>> {
+  + {abstract}void ifPresent(Consumer<Type>)
+  + {abstract}Type orElse(Type)
+  + {abstract}Type orElseGet(Supplier<Type>)
+  + {abstract}void ifPresentOrElse(Consumer<Type>, Runnable)
+  + {abstract}boolean isEmpty()
+  + {abstract}Implement filter(Predicate<Type>)
+  + {abstract}Implement map(Function<? super Type, U>)
+  +Implement flatMap(Function<? super Type, ? extends Container<Type, ? extends U>>)
+  + {abstract}Type orElse(Supplier<Type>)
+  + {abstract}Type orElseThrow()
+  + {abstract}Type get()
+  + {abstract}Implement or(Supplier<Implement>)
+  + {abstract}Type orElseThrow(Class<ErrorException>)
+  + {abstract}Type orElseThrow(Supplier<? extends ErrorException>)
+  + {abstract}Type orElseThrow(ErrorException)
+  + {abstract}Optional<Type> toOptional()
+  + {abstract}CompletableFuture<Type> toCompletableFuture()
+  + {abstract}boolean eq(Object)
+  + {abstract}Type nonNullable()
+}
+interface "Containerizeable" as org.toolkit4j.boxes.container.Containerizeable {
+  + {abstract}Exception defaultThrow()
+  + {abstract}boolean isValid()
+}
+class "Either" as org.toolkit4j.boxes.container.Either<L, R> {
+  + {static}Either<L, R> left(L)
+  + {static}Either<L, R> right(R)
+  + {static}Either<L, R> of(R, Predicate<R>, L)
+  + {static}Either<L, R> of(R, Predicate<R>, Function<R, L>)
+  +boolean isLeft()
+  +L getLeft()
+  +R getRight()
+  +Stream<L> leftStream()
+  +Stream<R> rightStream()
+}
+class "NumberContainer" as org.toolkit4j.boxes.container.NumberContainer<T extends Number> {
+  +NumberContainer<T> filter(Predicate<T>)
+  +NumberContainer<T> map(Function<? super T, U>)
+  +T orElseThrow()
+  +T get()
+  +NumberContainer<T> or(Supplier<NumberContainer<T>>)
+}
+class "StringContainer" as org.toolkit4j.boxes.container.StringContainer {
+  +StringContainer filter(Predicate<CharSequence>)
+  +StringContainer map(Function<? super CharSequence, U>)
+  +StringContainer flatMap(Function<? super CharSequence, ? extends Container<CharSequence, ? extends U>>)
+  +boolean isEmpty()
+  + {static}StringContainer empty()
+  +CharSequence orElseThrow()
+  +CharSequence get()
+  +StringContainer or(Supplier<StringContainer>)
+  +StringContainer concat(String[])
+  +StringContainer reverse()
+  +long count(char)
+  +long count(CharSequence)
+  +StringContainer distinct()
+  +List<String> toList()
+  +StringContainer reduce(BinaryOperator<String>)
+  +String[] toArray()
+  + {static}StringContainer of(CharSequence)
+}
+interface "ThrowingConsumer" as org.toolkit4j.boxes.error.ThrowingConsumer<T, E extends Exception> {
+  + {abstract}void accept(T)
+}
+class "Try" as org.toolkit4j.boxes.error.Try<T extends Throwable> {
+  +void justThrow()
+  + {static}TryBuilder builder()
+  +TryBuilder toBuilder()
+}
+abstract class "Try$TryBuilder" as org.toolkit4j.boxes.error.Try$TryBuilder<T extends Throwable, C extends Try<T>, B extends TryBuilder<T, C, B>> {
+  +B exception(T)
+  + {abstract}C build()
+}
+class "Try$TryBuilderImpl" as org.toolkit4j.boxes.error.Try$TryBuilderImpl<T extends Throwable> {
+  +Try<T> build()
+}
+class "TryCatch" as org.toolkit4j.boxes.error.TryCatch<E extends Exception> {
+}
+class "TryOr" as org.toolkit4j.boxes.error.TryOr<T, E extends Exception> {
+  + {static}TryOr<T, E> attempt(Supplier<T>)
+  +void ifError(Consumer<Exception>)
+  +T orElse(T)
+  +TryOr<U, E> map(Function<T, U>)
+  +TryOr<U, E> flatMap(Function<T, TryOr<U, E>>)
+  +Optional<T> resultToOptional()
+  +Optional<E> exceptionToOptional()
+  +E exception()
+  + {static}TryOrBuilder b()
+  +TryOrBuilder toBuilder()
+}
+abstract class "TryOr$TryOrBuilder" as org.toolkit4j.boxes.error.TryOr$TryOrBuilder<T, E extends Exception, C extends TryOr<T, E>, B extends TryOrBuilder<T, E, C, B>> {
+  +B result(T)
+  + {abstract}C build()
+}
+class "TryOr$TryOrBuilderImpl" as org.toolkit4j.boxes.error.TryOr$TryOrBuilderImpl<T, E extends Exception> {
+  +TryOr<T, E> build()
+}
+class "EmptyCollection" as org.toolkit4j.boxes.exception.EmptyCollection {
+}
+class "StringEmptyOrBlank" as org.toolkit4j.boxes.exception.StringEmptyOrBlank {
+}
+class "Edge" as org.toolkit4j.collection.graph.Edge<T> {
+  +T getSource()
+  +T getTarget()
+  +Double getWeight()
+  +T component1()
+  +T component2()
+  +Double component3()
+  +Edge<T> copy(T, T, Double)
+}
+interface "Graph" as org.toolkit4j.collection.graph.Graph<T> {
+  + {abstract}void addVertex(T)
+  + {abstract}void addEdge(T, T, Double)
+  + {abstract}List<Edge<T>> getNeighbors(T)
+  + {abstract}void dfs(T, Set<T>)
+  + {abstract}void bfs(T)
+  + {abstract}void removeVertex(T)
+  + {abstract}void removeEdge(T, T)
+  + {abstract}boolean containsVertex(T)
+  + {abstract}Set<T> getAllVertices()
+  + {abstract}List<Edge<T>> getAllEdges()
+}
+class "UndirectedGraph" as org.toolkit4j.collection.graph.UndirectedGraph<T> {
+  +void addVertex(T)
+  +void addEdge(T, T, Double)
+  +List<Edge<T>> getNeighbors(T)
+  +void dfs(T, Set<T>)
+  +void bfs(T)
+  +void removeVertex(T)
+  +void removeEdge(T, T)
+  +boolean containsVertex(T)
+  +Set<T> getAllVertices()
+  +List<Edge<T>> getAllEdges()
+}
+class "UndirectedGraph$1" as org.toolkit4j.collection.graph.UndirectedGraph$addVertex$1 {
+  ..
+  + {static}1 INSTANCE
+  __
+  +List<Edge<T>> invoke(T)
+}
+class "UndirectedGraph$1" as org.toolkit4j.collection.graph.UndirectedGraph$removeEdge$1 {
+  +Boolean invoke(Edge<T>)
+}
+class "UndirectedGraph$2" as org.toolkit4j.collection.graph.UndirectedGraph$removeEdge$2 {
+  +Boolean invoke(Edge<T>)
+}
+class "UndirectedGraph$1" as org.toolkit4j.collection.graph.UndirectedGraph$removeVertex$1$1 {
+  +Boolean invoke(Edge<T>)
+}
+interface "PageableCollection" as org.toolkit4j.collection.pageable.PageableCollection<T, C extends Collection<? extends T>> {
+  + {abstract}int getPageNo()
+  + {abstract}void setPageNo(int)
+  + {abstract}int getPageSize()
+  + {abstract}void setPageSize(int)
+  + {abstract}C page(int, int)
+  +void checkPageArgument(int, int)
+  + {abstract}int totalPage(int)
+  + {abstract}int current()
+  + {abstract}int totalSize()
+  + {abstract}boolean hasNextPage()
+  + {abstract}boolean hasPreviousPage()
+  + {abstract}int getNextPage()
+  + {abstract}int getPreviousPage()
+}
+class "PageableList" as org.toolkit4j.collection.pageable.PageableList<T> {
+  +boolean add(T)
+  +void add(int, T)
+  +boolean addAll(int, Collection<? extends T>)
+  +boolean addAll(Collection<? extends T>)
+  +void clear()
+  +ListIterator<T> listIterator()
+  +ListIterator<T> listIterator(int)
+  +boolean remove(Object)
+  +boolean removeAll(Collection<? extends Object>)
+  +T removeAt(int)
+  +boolean retainAll(Collection<? extends Object>)
+  +T set(int, T)
+  +List<T> subList(int, int)
+  +boolean isEmpty()
+  +boolean contains(Object)
+  +Iterator<T> iterator()
+  +boolean containsAll(Collection<? extends Object>)
+  +T get(int)
+  +int indexOf(Object)
+  +int lastIndexOf(Object)
+  +int getSize()
+  +int getPageNo()
+  +void setPageNo(int)
+  +int getPageSize()
+  +void setPageSize(int)
+  +List<T> page(int, int)
+  +int totalPage(int)
+  +int current()
+  +int totalSize()
+  +boolean hasNextPage()
+  +boolean hasPreviousPage()
+  +int getNextPage()
+  +int getPreviousPage()
+  +int component2()
+  +int component3()
+  +PageableList<T> copy(List<T>, int, int)
+  +T remove(int)
+  +int size()
+  +T[] toArray(T[])
+  +Object[] toArray()
+}
+class "PageableSet" as org.toolkit4j.collection.pageable.PageableSet<T> {
+  +Comparator<? super T> comparator()
+  +SortedSet<T> subSet(T, T)
+  +SortedSet<T> headSet(T)
+  +SortedSet<T> tailSet(T)
+  +T first()
+  +T last()
+  +boolean add(T)
+  +boolean addAll(Collection<? extends T>)
+  +void clear()
+  +Iterator<T> iterator()
+  +boolean remove(Object)
+  +boolean removeAll(Collection<? extends Object>)
+  +boolean retainAll(Collection<? extends Object>)
+  +boolean isEmpty()
+  +boolean contains(Object)
+  +boolean containsAll(Collection<? extends Object>)
+  +int getSize()
+  +int getPageNo()
+  +void setPageNo(int)
+  +int getPageSize()
+  +void setPageSize(int)
+  +SortedSet<T> page(int, int)
+  +int totalPage(int)
+  +int current()
+  +int totalSize()
+  +boolean hasNextPage()
+  +boolean hasPreviousPage()
+  +int getNextPage()
+  +int getPreviousPage()
+  +int component2()
+  +int component3()
+  +PageableSet<T> copy(SortedSet<T>, int, int)
+  +int size()
+  +T[] toArray(T[])
+  +Object[] toArray()
+}
+class "Cell" as org.toolkit4j.collection.table.Cell<R, C, V> {
+  +Cell<R, C, V> copy(R, C, V)
+}
+class "ConcurrentHashTable" as org.toolkit4j.collection.table.ConcurrentHashTable<R, C, V> {
+  +boolean contains(R, C)
+  +boolean containsRow(R)
+  +boolean containsColumn(C)
+  +boolean containsValue(V)
+  +V get(R, C)
+  +boolean isEmpty()
+  +int size()
+  +void clear()
+  +Set<Cell<R, C, V>> cellSet()
+  +Set<R> rowKeySet()
+  +Set<C> columnKeySet()
+  +Collection<V> values()
+  +Map<R, Map<C, V>> rowMap()
+  +Map<C, Map<R, V>> columnMap()
+  +Map<R, V> column(C)
+  +Map<C, V> row(R)
+  +V remove(R, C)
+  +void putAll(Table<? extends R, ? extends C, ? extends V>)
+  +V put(R, C, V)
+}
+class "ConcurrentHashTable$1" as org.toolkit4j.collection.table.ConcurrentHashTable$contains$1 {
+  +Boolean invoke(ConcurrentMap<C, V>)
+}
+class "ConcurrentHashTable$1" as org.toolkit4j.collection.table.ConcurrentHashTable$containsColumn$1 {
+  +Boolean invoke(ConcurrentMap<C, V>)
+}
+class "ConcurrentHashTable$1" as org.toolkit4j.collection.table.ConcurrentHashTable$containsValue$1 {
+  +Boolean invoke(ConcurrentMap<C, V>)
+}
+class "ConcurrentHashTable$1" as org.toolkit4j.collection.table.ConcurrentHashTable$get$1 {
+  +V invoke(ConcurrentMap<C, V>)
+}
+class "ConcurrentHashTable$2" as org.toolkit4j.collection.table.ConcurrentHashTable$internal$2 {
+  + {static}2 INSTANCE
+  __
+  +ConcurrentHashMap<R, ConcurrentHashMap<C, V>> invoke()
+}
+class "ConcurrentHashTable$1" as org.toolkit4j.collection.table.ConcurrentHashTable$put$1 {
+  +ConcurrentHashMap<C, V> invoke(R, ConcurrentHashMap<C, V>)
+}
+class "ConcurrentHashTable$1" as org.toolkit4j.collection.table.ConcurrentHashTable$putAll$1$1 {
+  +ConcurrentHashMap<C, V> invoke(R, ConcurrentHashMap<C, V>)
+}
+class "ConcurrentHashTable$1" as org.toolkit4j.collection.table.ConcurrentHashTable$size$1 {
+  + {static}1 INSTANCE
+  __
+  +Integer invoke(ConcurrentMap<C, V>)
+}
+interface "ConcurrentTable" as org.toolkit4j.collection.table.ConcurrentTable<R, C, V> {
+  + {abstract}boolean contains(R, C)
+  + {abstract}boolean containsRow(R)
+  + {abstract}boolean containsColumn(C)
+  + {abstract}boolean containsValue(V)
+  + {abstract}V get(R, C)
+  +Optional<V> getOptional(R, C)
+  + {abstract}boolean isEmpty()
+  + {abstract}int size()
+  + {abstract}void clear()
+  + {abstract}V put(R, C, V)
+  + {abstract}void putAll(Table<? extends R, ? extends C, ? extends V>)
+  + {abstract}V remove(R, C)
+  + {abstract}Map<C, V> row(R)
+  + {abstract}Map<R, V> column(C)
+  + {abstract}Set<Cell<R, C, V>> cellSet()
+  + {abstract}Set<R> rowKeySet()
+  + {abstract}Set<C> columnKeySet()
+  + {abstract}Collection<V> values()
+  + {abstract}Map<R, Map<C, V>> rowMap()
+  + {abstract}Map<C, Map<R, V>> columnMap()
+}
+abstract class "AbstractTreeNode" as org.toolkit4j.collection.tree.AbstractTreeNode<T> {
+  +T getData()
+  +void setData(T)
+  +TreeNode<T> getParent()
+  +void setParent(TreeNode<T>)
+  +void addChild(TreeNode<T>)
+  +void addChildren(Collection<? extends TreeNode<T>>)
+  +void removeChild(TreeNode<T>)
+  +void walk(Consumer<TreeNode<T>>)
+  +void parallelWalk(Consumer<TreeNode<T>>)
+  +Iterator<TreeNode<T>> iterator()
+  +Stream<TreeNode<T>> stream()
+  +Stream<TreeNode<T>> parallelStream()
+}
+class "AbstractTreeNode$1" as org.toolkit4j.collection.tree.AbstractTreeNode$walkRecursive$1 {
+  +void invoke(TreeNode<T>)
+}
+class "ListTreeNode" as org.toolkit4j.collection.tree.ListTreeNode<T> {
+  +T getData()
+  +void setData(T)
+  +TreeNode<T> getParent()
+  +void setParent(TreeNode<T>)
+  +Collection<TreeNode<T>> getChildren()
+  +T component1()
+  +TreeNode<T> component2()
+  +Collection<TreeNode<T>> component3()
+  +ListTreeNode<T> copy(T, TreeNode<T>, Collection<TreeNode<T>>)
+}
+class "TreeIterator" as org.toolkit4j.collection.tree.TreeIterator<T> {
+  +boolean hasNext()
+  +TreeNode<T> next()
+  +void remove()
+}
+interface "TreeNode" as org.toolkit4j.collection.tree.TreeNode<T> {
+  + {abstract}T getData()
+  + {abstract}void setData(T)
+  + {abstract}TreeNode<T> getParent()
+  + {abstract}void setParent(TreeNode<T>)
+  + {abstract}Collection<TreeNode<T>> getChildren()
+  +boolean isRoot()
+  +boolean isLeaf()
+  + {abstract}void addChild(TreeNode<T>)
+  + {abstract}void addChildren(Collection<? extends TreeNode<T>>)
+  + {abstract}void removeChild(TreeNode<T>)
+  + {abstract}Stream<TreeNode<T>> stream()
+  + {abstract}Stream<TreeNode<T>> parallelStream()
+  + {abstract}void walk(Consumer<TreeNode<T>>)
+  + {abstract}void parallelWalk(Consumer<TreeNode<T>>)
+  + {abstract}Iterator<TreeNode<T>> iterator()
+}
+kotlin.jvm.functions.Function0 .u.|> kotlin.Function
+kotlin.jvm.functions.Function1 .u.|> kotlin.Function
+kotlin.jvm.functions.Function2 .u.|> kotlin.Function
+kotlin.jvm.internal.FunctionBase .u.|> kotlin.Function
+kotlin.jvm.internal.Lambda .u.|> kotlin.jvm.internal.FunctionBase
+kotlin.jvm.internal.Lambda .u.|> kotlin.Function
+kotlin.jvm.internal.markers.KMutableCollection .u.|> kotlin.jvm.internal.markers.KMutableIterable
+kotlin.jvm.internal.markers.KMutableCollection .u.|> kotlin.jvm.internal.markers.KMappedMarker
+kotlin.jvm.internal.markers.KMutableIterable .u.|> kotlin.jvm.internal.markers.KMappedMarker
+kotlin.jvm.internal.markers.KMutableIterator .u.|> kotlin.jvm.internal.markers.KMappedMarker
+kotlin.jvm.internal.markers.KMutableList .u.|> kotlin.jvm.internal.markers.KMutableCollection
+kotlin.jvm.internal.markers.KMutableList .u.|> kotlin.jvm.internal.markers.KMutableIterable
+kotlin.jvm.internal.markers.KMutableList .u.|> kotlin.jvm.internal.markers.KMappedMarker
+org.toolkit.spring.boot.cache.api.MultiLevelCacheManager --> org.toolkit.spring.boot.cache.api.CacheManager
+org.toolkit4j.boxes.TryOr --> kotlin.jvm.functions.Function0
+org.toolkit4j.boxes.container.AnyContainer -u-|> org.toolkit4j.boxes.container.BasicContainer
+org.toolkit4j.boxes.container.BasicContainer .u.|> org.toolkit4j.boxes.container.Container
+org.toolkit4j.boxes.container.BasicContainer .u.|> org.toolkit4j.boxes.base.Streamable
+org.toolkit4j.boxes.container.CollectionContainer -u-|> org.toolkit4j.boxes.container.BasicContainer
+org.toolkit4j.boxes.container.Container .u.|> org.toolkit4j.boxes.base.Streamable
+org.toolkit4j.boxes.container.NumberContainer -u-|> org.toolkit4j.boxes.container.BasicContainer
+org.toolkit4j.boxes.container.StringContainer -u-|> org.toolkit4j.boxes.container.BasicContainer
+org.toolkit4j.boxes.error.Try$TryBuilderImpl -u-|> org.toolkit4j.boxes.error.Try$TryBuilder
+org.toolkit4j.boxes.error.TryOr -u-|> org.toolkit4j.boxes.error.Try
+org.toolkit4j.boxes.error.TryOr$TryOrBuilder -u-|> org.toolkit4j.boxes.error.Try$TryBuilder
+org.toolkit4j.boxes.error.TryOr$TryOrBuilderImpl -u-|> org.toolkit4j.boxes.error.TryOr$TryOrBuilder
+org.toolkit4j.collection.graph.UndirectedGraph .u.|> org.toolkit4j.collection.graph.Graph
+org.toolkit4j.collection.graph.UndirectedGraph --> org.toolkit4j.collection.graph.Edge
+org.toolkit4j.collection.graph.UndirectedGraph$addVertex$1 -u-|> kotlin.jvm.internal.Lambda
+org.toolkit4j.collection.graph.UndirectedGraph$addVertex$1 .u.|> kotlin.jvm.functions.Function1
+org.toolkit4j.collection.graph.UndirectedGraph$addVertex$1 --> org.toolkit4j.collection.graph.UndirectedGraph$addVertex$1
+org.toolkit4j.collection.graph.UndirectedGraph$removeEdge$1 -u-|> kotlin.jvm.internal.Lambda
+org.toolkit4j.collection.graph.UndirectedGraph$removeEdge$1 .u.|> kotlin.jvm.functions.Function1
+org.toolkit4j.collection.graph.UndirectedGraph$removeEdge$2 -u-|> kotlin.jvm.internal.Lambda
+org.toolkit4j.collection.graph.UndirectedGraph$removeEdge$2 .u.|> kotlin.jvm.functions.Function1
+org.toolkit4j.collection.graph.UndirectedGraph$removeVertex$1$1 -u-|> kotlin.jvm.internal.Lambda
+org.toolkit4j.collection.graph.UndirectedGraph$removeVertex$1$1 .u.|> kotlin.jvm.functions.Function1
+org.toolkit4j.collection.pageable.PageableList .u.|> org.toolkit4j.collection.pageable.PageableCollection
+org.toolkit4j.collection.pageable.PageableList .u.|> kotlin.jvm.internal.markers.KMutableList
+org.toolkit4j.collection.pageable.PageableList .u.|> kotlin.jvm.internal.markers.KMutableCollection
+org.toolkit4j.collection.pageable.PageableList .u.|> kotlin.jvm.internal.markers.KMutableIterable
+org.toolkit4j.collection.pageable.PageableList .u.|> kotlin.jvm.internal.markers.KMappedMarker
+org.toolkit4j.collection.pageable.PageableSet .u.|> org.toolkit4j.collection.pageable.PageableCollection
+org.toolkit4j.collection.table.ConcurrentHashTable .u.|> org.toolkit4j.collection.table.ConcurrentTable
+org.toolkit4j.collection.table.ConcurrentHashTable$contains$1 -u-|> kotlin.jvm.internal.Lambda
+org.toolkit4j.collection.table.ConcurrentHashTable$contains$1 .u.|> kotlin.jvm.functions.Function1
+org.toolkit4j.collection.table.ConcurrentHashTable$containsColumn$1 -u-|> kotlin.jvm.internal.Lambda
+org.toolkit4j.collection.table.ConcurrentHashTable$containsColumn$1 .u.|> kotlin.jvm.functions.Function1
+org.toolkit4j.collection.table.ConcurrentHashTable$containsValue$1 -u-|> kotlin.jvm.internal.Lambda
+org.toolkit4j.collection.table.ConcurrentHashTable$containsValue$1 .u.|> kotlin.jvm.functions.Function1
+org.toolkit4j.collection.table.ConcurrentHashTable$get$1 -u-|> kotlin.jvm.internal.Lambda
+org.toolkit4j.collection.table.ConcurrentHashTable$get$1 .u.|> kotlin.jvm.functions.Function1
+org.toolkit4j.collection.table.ConcurrentHashTable$internal$2 -u-|> kotlin.jvm.internal.Lambda
+org.toolkit4j.collection.table.ConcurrentHashTable$internal$2 .u.|> kotlin.jvm.functions.Function0
+org.toolkit4j.collection.table.ConcurrentHashTable$internal$2 --> org.toolkit4j.collection.table.ConcurrentHashTable$internal$2
+org.toolkit4j.collection.table.ConcurrentHashTable$put$1 -u-|> kotlin.jvm.internal.Lambda
+org.toolkit4j.collection.table.ConcurrentHashTable$put$1 .u.|> kotlin.jvm.functions.Function2
+org.toolkit4j.collection.table.ConcurrentHashTable$putAll$1$1 -u-|> kotlin.jvm.internal.Lambda
+org.toolkit4j.collection.table.ConcurrentHashTable$putAll$1$1 .u.|> kotlin.jvm.functions.Function2
+org.toolkit4j.collection.table.ConcurrentHashTable$size$1 -u-|> kotlin.jvm.internal.Lambda
+org.toolkit4j.collection.table.ConcurrentHashTable$size$1 .u.|> kotlin.jvm.functions.Function1
+org.toolkit4j.collection.table.ConcurrentHashTable$size$1 --> org.toolkit4j.collection.table.ConcurrentHashTable$size$1
+org.toolkit4j.collection.tree.AbstractTreeNode .u.|> org.toolkit4j.collection.tree.TreeNode
+org.toolkit4j.collection.tree.AbstractTreeNode --> org.toolkit4j.collection.tree.TreeNode
+org.toolkit4j.collection.tree.AbstractTreeNode$walkRecursive$1 -u-|> kotlin.jvm.internal.Lambda
+org.toolkit4j.collection.tree.AbstractTreeNode$walkRecursive$1 .u.|> kotlin.jvm.functions.Function1
+org.toolkit4j.collection.tree.ListTreeNode -u-|> org.toolkit4j.collection.tree.AbstractTreeNode
+org.toolkit4j.collection.tree.ListTreeNode --> org.toolkit4j.collection.tree.TreeNode
+org.toolkit4j.collection.tree.TreeIterator .u.|> kotlin.jvm.internal.markers.KMutableIterator
+org.toolkit4j.collection.tree.TreeIterator .u.|> kotlin.jvm.internal.markers.KMappedMarker
+org.toolkit4j.collection.tree.TreeIterator --> org.toolkit4j.collection.tree.TreeNode
+@enduml

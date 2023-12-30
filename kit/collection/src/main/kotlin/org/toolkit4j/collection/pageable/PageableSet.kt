@@ -1,4 +1,4 @@
-package org.toolkit4j.collection.page
+package org.toolkit4j.collection.pageable
 
 import java.util.*
 import kotlin.math.min

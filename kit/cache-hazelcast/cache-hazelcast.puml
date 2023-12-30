@@ -1,0 +1,7 @@
+@startuml
+!pragma useIntermediatePackages false
+
+class "Main" as org.toolkit.spring.boot.cache.hazelcast.Main {
+  + {static}void main(String[])
+}
+@enduml

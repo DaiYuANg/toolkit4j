@@ -1,4 +1,4 @@
-package org.toolkit4j.collection.page
+package org.toolkit4j.collection.pageable
 
 interface PageableCollection<T, C : Collection<T>> {
     var pageNo: Int
