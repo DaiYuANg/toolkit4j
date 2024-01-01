@@ -51,6 +51,9 @@ Use the built-in continuous integration in GitLab.
         - [X] ConcurrentHashTable
     - tree
         - [ ] ListTreeNode
+- dispatcher
+- [ ] AllDone Dispatcher
+- [ ] Loop
 
 ## Project status
 

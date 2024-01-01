@@ -13,6 +13,7 @@ plugins {
   id("com.palantir.git-version") version "3.0.0"
   id("io.gitlab.plunts.plantuml") version "2.1.3"
   id("com.diffplug.spotless") version "6.23.3"
+  id("org.jetbrains.dokka") version "1.9.10"
 }
 
 val jdkVersion = libs.versions.jdkVersion
@@ -35,6 +36,7 @@ subprojects {
   apply<PlantUmlPlugin>()
   apply<JMHPlugin>()
   apply(plugin = "org.jetbrains.kotlin.jvm")
+  apply(plugin = "org.jetbrains.dokka")
 
   dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0-RC2")
@@ -48,6 +50,8 @@ subprojects {
     testImplementation(rootProject.libs.mockitoJunit)
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     testImplementation(rootProject.libs.dataFaker)
+    testImplementation("org.slf4j:slf4j-api:2.1.0-alpha0")
+    testImplementation("org.slf4j:slf4j-simple:2.1.0-alpha0")
   }
 
   tasks.test { useJUnitPlatform() }

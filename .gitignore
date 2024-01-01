@@ -158,7 +158,6 @@ deploy/
 javadoc/
 cwallet.sso.lck
 *.htmldocs/_book
-test/
 .DS_*
 **/*.backup.*
 **/*.back.*

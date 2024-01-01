@@ -7,16 +7,73 @@ annotation "AutoFactory" as com.google.auto.factory.AutoFactory {
   + {abstract}Class<?> extending()
   + {abstract}boolean allowSubclasses()
 }
+annotation "GwtCompatible" as com.google.common.annotations.GwtCompatible {
+  + {abstract}boolean serializable()
+  + {abstract}boolean emulated()
+}
+annotation "ElementTypesAreNonnullByDefault" as com.google.common.collect.ElementTypesAreNonnullByDefault {
+}
+annotation "ParametricNullness" as com.google.common.collect.ParametricNullness {
+}
+interface "Table" as com.google.common.collect.Table<R extends @Nullable Object, C extends @Nullable Object, V extends @Nullable Object> {
+  + {abstract}boolean contains(Object, Object)
+  + {abstract}boolean containsRow(Object)
+  + {abstract}boolean containsColumn(Object)
+  + {abstract}boolean containsValue(Object)
+  + {abstract}V get(Object, Object)
+  + {abstract}boolean isEmpty()
+  + {abstract}int size()
+  + {abstract}void clear()
+  + {abstract}V put(R, C, V)
+  + {abstract}void putAll(Table<? extends R, ? extends C, ? extends V>)
+  + {abstract}V remove(Object, Object)
+  + {abstract}Map<C, V> row(R)
+  + {abstract}Map<R, V> column(C)
+  + {abstract}Set<Cell<R, C, V>> cellSet()
+  + {abstract}Set<R> rowKeySet()
+  + {abstract}Set<C> columnKeySet()
+  + {abstract}Collection<V> values()
+  + {abstract}Map<R, Map<C, V>> rowMap()
+  + {abstract}Map<C, Map<R, V>> columnMap()
+}
+interface "Table$Cell" as com.google.common.collect.Table$Cell<R extends @Nullable Object, C extends @Nullable Object, V extends @Nullable Object> {
+  + {abstract}R getRowKey()
+  + {abstract}C getColumnKey()
+  + {abstract}V getValue()
+}
 annotation "CanIgnoreReturnValue" as com.google.errorprone.annotations.CanIgnoreReturnValue {
 }
 annotation "CompatibleWith" as com.google.errorprone.annotations.CompatibleWith {
   + {abstract}String value()
 }
+annotation "DoNotMock" as com.google.errorprone.annotations.DoNotMock {
+  + {abstract}String value()
+}
 annotation "Inject" as jakarta.inject.Inject {
+}
+annotation "CheckForNull" as javax.annotation.CheckForNull {
+}
+annotation "Nonnull" as javax.annotation.Nonnull {
+  + {abstract}When when()
+}
+annotation "TypeQualifier" as javax.annotation.meta.TypeQualifier {
+  + {abstract}Class<?> applicableTo()
+}
+annotation "TypeQualifierDefault" as javax.annotation.meta.TypeQualifierDefault {
+  + {abstract}ElementType[] value()
+}
+annotation "TypeQualifierNickname" as javax.annotation.meta.TypeQualifierNickname {
+}
+enum "When" as javax.annotation.meta.When {
+  ALWAYS
+  UNKNOWN
+  MAYBE
+  NEVER
 }
 interface "Function" as kotlin.Function<R> {
 }
 annotation "Metadata" as kotlin.Metadata {
+  __
   + {abstract}int k()
   + {abstract}int[] mv()
   + {abstract}int[] bv()
@@ -112,8 +169,6 @@ annotation "NotNull" as org.jetbrains.annotations.NotNull {
 annotation "Nullable" as org.jetbrains.annotations.Nullable {
   + {abstract}String value()
 }
-interface "Dispatcher" as org.nectar.dispatcher.Dispatcher {
-}
 class "RedisCacheAutoConfiguration" as org.toolkit.cache.redis.autoconfigure.RedisCacheAutoConfiguration {
 }
 class "RedisCache" as org.toolkit.cache.redis.cache.RedisCache<K, V> {
@@ -179,18 +234,6 @@ class "MultiLevelCacheManager" as org.toolkit.spring.boot.cache.api.MultiLevelCa
   +void createCache(String)
 }
 class "CaffineCache" as org.toolkit.spring.boot.cache.caffine.impl.CaffineCache<K, V> {
-}
-class "Main" as org.toolkit.spring.boot.cache.hazelcast.Main {
-  + {static}void main(String[])
-}
-class "TryOr" as org.toolkit4j.boxes.TryOr<T, E extends Throwable> {
-  +TryOr<T, E> execute()
-  +T getResult()
-  +E getError()
-  +boolean isSuccess()
-  +boolean isFailure()
-}
-interface "Container" as org.toolkit4j.boxes.api.Container {
 }
 interface "Streamable" as org.toolkit4j.boxes.base.Streamable<T> {
   + {abstract}Stream<T> stream()
@@ -339,6 +382,8 @@ class "EmptyCollection" as org.toolkit4j.boxes.exception.EmptyCollection {
 }
 class "StringEmptyOrBlank" as org.toolkit4j.boxes.exception.StringEmptyOrBlank {
 }
+class "HazelcastCache" as org.toolkit4j.cache.hazelcast.HazelcastCache {
+}
 class "Edge" as org.toolkit4j.collection.graph.Edge<T> {
   +T getSource()
   +T getTarget()
@@ -386,6 +431,50 @@ class "UndirectedGraph$2" as org.toolkit4j.collection.graph.UndirectedGraph$remo
 }
 class "UndirectedGraph$1" as org.toolkit4j.collection.graph.UndirectedGraph$removeVertex$1$1 {
   +Boolean invoke(Edge<T>)
+}
+class "HashQueueMap" as org.toolkit4j.collection.other.HashQueueMap<K, T> {
+  +boolean containsKey(Object)
+  +boolean containsValue(Queue<T>)
+  +Queue<T> get(K)
+  +boolean isEmpty()
+  +Set<Entry<K, Queue<T>>> getEntries()
+  +Set<K> getKeys()
+  +int getSize()
+  +Collection<Queue<T>> getValues()
+  +T element(K, T)
+  +T poll(K)
+  +void offer(K, T)
+  +void add(K, T)
+  +void peek(K)
+  +HashQueueMap<K, T> copy(HashMap<K, Queue<T>>)
+  +void clear()
+  +Queue<T> put(K, Queue<T>)
+  +void putAll(Map<? extends K, ? extends Queue<T>>)
+  +Queue<T> remove(Object)
+  +boolean remove(Object, Object)
+  +void replaceAll(BiFunction<? super K, ? super Queue<T>, ? extends Queue<T>>)
+  +Queue<T> putIfAbsent(K, Queue<T>)
+  +boolean replace(K, Queue<T>, Queue<T>)
+  +Queue<T> replace(K, Queue<T>)
+  +Queue<T> computeIfAbsent(K, Function<? super K, ? extends Queue<T>>)
+  +Queue<T> computeIfPresent(K, BiFunction<? super K, ? super Queue<T>, ? extends Queue<T>>)
+  +Queue<T> compute(K, BiFunction<? super K, ? super Queue<T>, ? extends Queue<T>>)
+  +Queue<T> merge(K, Queue<T>, BiFunction<? super Queue<T>, ? super Queue<T>, ? extends Queue<T>>)
+  +boolean containsValue(Object)
+  +Set<Entry<K, Queue<T>>> entrySet()
+  +Set<K> keySet()
+  +int size()
+  +Collection<Queue<T>> values()
+}
+class "HashQueueMap$1" as org.toolkit4j.collection.other.HashQueueMap$add$1$1 {
+  + {static}1 INSTANCE
+  __
+  +Queue<T> invoke(K)
+}
+class "HashQueueMap$1" as org.toolkit4j.collection.other.HashQueueMap$offer$1$1 {
+  + {static}1 INSTANCE
+  __
+  +Queue<T> invoke(K)
 }
 interface "PageableCollection" as org.toolkit4j.collection.pageable.PageableCollection<T, C extends Collection<? extends T>> {
   + {abstract}int getPageNo()
@@ -482,6 +571,9 @@ class "PageableSet" as org.toolkit4j.collection.pageable.PageableSet<T> {
   +Object[] toArray()
 }
 class "Cell" as org.toolkit4j.collection.table.Cell<R, C, V> {
+  +R getRowKey()
+  +C getColumnKey()
+  +V getValue()
   +Cell<R, C, V> copy(R, C, V)
 }
 class "ConcurrentHashTable" as org.toolkit4j.collection.table.ConcurrentHashTable<R, C, V> {
@@ -605,6 +697,59 @@ interface "TreeNode" as org.toolkit4j.collection.tree.TreeNode<T> {
   + {abstract}void parallelWalk(Consumer<TreeNode<T>>)
   + {abstract}Iterator<TreeNode<T>> iterator()
 }
+class "AllDoneDispatcher" as org.toolkit4j.dispatcher.AllDoneDispatcher {
+  +int batchTask(Collection<Task>)
+  +void startDispatcher(int, TaskPollVelocity, Runnable)
+  +void startDispatcher(TaskPollVelocity)
+  +void isDone(int)
+  +AllDoneDispatcher copy(ScheduledThreadPoolExecutor)
+}
+interface "Dispatcher" as org.toolkit4j.dispatcher.Dispatcher {
+}
+class "Loop" as org.toolkit4j.dispatcher.Loop {
+  +void block()
+  +void stop()
+}
+class "Task" as org.toolkit4j.dispatcher.Task {
+  +String getTaskName()
+  +Runnable getAction()
+  +Supplier<Boolean> getTryLock()
+  +String component1()
+  +Runnable component2()
+  +Supplier<Boolean> component3()
+  +Task copy(String, Runnable, Supplier<Boolean>)
+}
+class "TaskBatchStore" as org.toolkit4j.dispatcher.TaskBatchStore {
+  +int getBatchId()
+  +BlockingQueue<Task> getQueue()
+  +int component1()
+  +BlockingQueue<Task> component2()
+  +TaskBatchStore copy(int, BlockingQueue<Task>)
+}
+enum "TaskPollVelocity" as org.toolkit4j.dispatcher.TaskPollVelocity {
+  FAST
+  MEDIA
+  SLOW
+  __
+  +long getVelocity()
+  + {static}EnumEntries<TaskPollVelocity> getEntries()
+}
+annotation "KtSlf4j" as org.toolkit4j.ktslf4j.KtSlf4j {
+  ..
+  + {static}Companion Companion
+}
+class "KtSlf4j$Companion" as org.toolkit4j.ktslf4j.KtSlf4j$Companion {
+}
+class "Companion$KtSlf4j$1" as org.toolkit4j.ktslf4j.KtSlf4j$Companion$log$1 {
+  + {static}1 INSTANCE
+  __
+  +void invoke()
+}
+class "PureFuncKt" as org.toolkit4j.ktslf4j.PureFuncKt {
+}
+interface "Slf4jInterface" as org.toolkit4j.ktslf4j.Slf4jInterface {
+  +Logger logger()
+}
 kotlin.jvm.functions.Function0 .u.|> kotlin.Function
 kotlin.jvm.functions.Function1 .u.|> kotlin.Function
 kotlin.jvm.functions.Function2 .u.|> kotlin.Function
@@ -619,7 +764,6 @@ kotlin.jvm.internal.markers.KMutableList .u.|> kotlin.jvm.internal.markers.KMuta
 kotlin.jvm.internal.markers.KMutableList .u.|> kotlin.jvm.internal.markers.KMutableIterable
 kotlin.jvm.internal.markers.KMutableList .u.|> kotlin.jvm.internal.markers.KMappedMarker
 org.toolkit.spring.boot.cache.api.MultiLevelCacheManager --> org.toolkit.spring.boot.cache.api.CacheManager
-org.toolkit4j.boxes.TryOr --> kotlin.jvm.functions.Function0
 org.toolkit4j.boxes.container.AnyContainer -u-|> org.toolkit4j.boxes.container.BasicContainer
 org.toolkit4j.boxes.container.BasicContainer .u.|> org.toolkit4j.boxes.container.Container
 org.toolkit4j.boxes.container.BasicContainer .u.|> org.toolkit4j.boxes.base.Streamable
@@ -642,12 +786,20 @@ org.toolkit4j.collection.graph.UndirectedGraph$removeEdge$2 -u-|> kotlin.jvm.int
 org.toolkit4j.collection.graph.UndirectedGraph$removeEdge$2 .u.|> kotlin.jvm.functions.Function1
 org.toolkit4j.collection.graph.UndirectedGraph$removeVertex$1$1 -u-|> kotlin.jvm.internal.Lambda
 org.toolkit4j.collection.graph.UndirectedGraph$removeVertex$1$1 .u.|> kotlin.jvm.functions.Function1
+org.toolkit4j.collection.other.HashQueueMap .u.|> kotlin.jvm.internal.markers.KMappedMarker
+org.toolkit4j.collection.other.HashQueueMap$add$1$1 -u-|> kotlin.jvm.internal.Lambda
+org.toolkit4j.collection.other.HashQueueMap$add$1$1 .u.|> kotlin.jvm.functions.Function1
+org.toolkit4j.collection.other.HashQueueMap$add$1$1 --> org.toolkit4j.collection.other.HashQueueMap$add$1$1
+org.toolkit4j.collection.other.HashQueueMap$offer$1$1 -u-|> kotlin.jvm.internal.Lambda
+org.toolkit4j.collection.other.HashQueueMap$offer$1$1 .u.|> kotlin.jvm.functions.Function1
+org.toolkit4j.collection.other.HashQueueMap$offer$1$1 --> org.toolkit4j.collection.other.HashQueueMap$offer$1$1
 org.toolkit4j.collection.pageable.PageableList .u.|> org.toolkit4j.collection.pageable.PageableCollection
 org.toolkit4j.collection.pageable.PageableList .u.|> kotlin.jvm.internal.markers.KMutableList
 org.toolkit4j.collection.pageable.PageableList .u.|> kotlin.jvm.internal.markers.KMutableCollection
 org.toolkit4j.collection.pageable.PageableList .u.|> kotlin.jvm.internal.markers.KMutableIterable
 org.toolkit4j.collection.pageable.PageableList .u.|> kotlin.jvm.internal.markers.KMappedMarker
 org.toolkit4j.collection.pageable.PageableSet .u.|> org.toolkit4j.collection.pageable.PageableCollection
+org.toolkit4j.collection.table.Cell .u.|> com.google.common.collect.Table$Cell
 org.toolkit4j.collection.table.ConcurrentHashTable .u.|> org.toolkit4j.collection.table.ConcurrentTable
 org.toolkit4j.collection.table.ConcurrentHashTable$contains$1 -u-|> kotlin.jvm.internal.Lambda
 org.toolkit4j.collection.table.ConcurrentHashTable$contains$1 .u.|> kotlin.jvm.functions.Function1
@@ -676,4 +828,10 @@ org.toolkit4j.collection.tree.ListTreeNode --> org.toolkit4j.collection.tree.Tre
 org.toolkit4j.collection.tree.TreeIterator .u.|> kotlin.jvm.internal.markers.KMutableIterator
 org.toolkit4j.collection.tree.TreeIterator .u.|> kotlin.jvm.internal.markers.KMappedMarker
 org.toolkit4j.collection.tree.TreeIterator --> org.toolkit4j.collection.tree.TreeNode
+org.toolkit4j.dispatcher.AllDoneDispatcher --> org.toolkit4j.dispatcher.TaskBatchStore
+org.toolkit4j.dispatcher.TaskBatchStore --> org.toolkit4j.dispatcher.Task
+org.toolkit4j.ktslf4j.KtSlf4j --> org.toolkit4j.ktslf4j.KtSlf4j$Companion
+org.toolkit4j.ktslf4j.KtSlf4j$Companion$log$1 -u-|> kotlin.jvm.internal.Lambda
+org.toolkit4j.ktslf4j.KtSlf4j$Companion$log$1 .u.|> kotlin.jvm.functions.Function0
+org.toolkit4j.ktslf4j.KtSlf4j$Companion$log$1 --> org.toolkit4j.ktslf4j.KtSlf4j$Companion$log$1
 @enduml

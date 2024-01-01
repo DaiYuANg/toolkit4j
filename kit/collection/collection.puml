@@ -1,14 +1,71 @@
 @startuml
 !pragma useIntermediatePackages false
 
+annotation "GwtCompatible" as com.google.common.annotations.GwtCompatible {
+  + {abstract}boolean serializable()
+  + {abstract}boolean emulated()
+}
+annotation "ElementTypesAreNonnullByDefault" as com.google.common.collect.ElementTypesAreNonnullByDefault {
+}
+annotation "ParametricNullness" as com.google.common.collect.ParametricNullness {
+}
+interface "Table" as com.google.common.collect.Table<R extends @Nullable Object, C extends @Nullable Object, V extends @Nullable Object> {
+  + {abstract}boolean contains(Object, Object)
+  + {abstract}boolean containsRow(Object)
+  + {abstract}boolean containsColumn(Object)
+  + {abstract}boolean containsValue(Object)
+  + {abstract}V get(Object, Object)
+  + {abstract}boolean isEmpty()
+  + {abstract}int size()
+  + {abstract}void clear()
+  + {abstract}V put(R, C, V)
+  + {abstract}void putAll(Table<? extends R, ? extends C, ? extends V>)
+  + {abstract}V remove(Object, Object)
+  + {abstract}Map<C, V> row(R)
+  + {abstract}Map<R, V> column(C)
+  + {abstract}Set<Cell<R, C, V>> cellSet()
+  + {abstract}Set<R> rowKeySet()
+  + {abstract}Set<C> columnKeySet()
+  + {abstract}Collection<V> values()
+  + {abstract}Map<R, Map<C, V>> rowMap()
+  + {abstract}Map<C, Map<R, V>> columnMap()
+}
+interface "Table$Cell" as com.google.common.collect.Table$Cell<R extends @Nullable Object, C extends @Nullable Object, V extends @Nullable Object> {
+  + {abstract}R getRowKey()
+  + {abstract}C getColumnKey()
+  + {abstract}V getValue()
+}
 annotation "CanIgnoreReturnValue" as com.google.errorprone.annotations.CanIgnoreReturnValue {
 }
 annotation "CompatibleWith" as com.google.errorprone.annotations.CompatibleWith {
   + {abstract}String value()
 }
+annotation "DoNotMock" as com.google.errorprone.annotations.DoNotMock {
+  + {abstract}String value()
+}
+annotation "CheckForNull" as javax.annotation.CheckForNull {
+}
+annotation "Nonnull" as javax.annotation.Nonnull {
+  + {abstract}When when()
+}
+annotation "TypeQualifier" as javax.annotation.meta.TypeQualifier {
+  + {abstract}Class<?> applicableTo()
+}
+annotation "TypeQualifierDefault" as javax.annotation.meta.TypeQualifierDefault {
+  + {abstract}ElementType[] value()
+}
+annotation "TypeQualifierNickname" as javax.annotation.meta.TypeQualifierNickname {
+}
+enum "When" as javax.annotation.meta.When {
+  ALWAYS
+  UNKNOWN
+  MAYBE
+  NEVER
+}
 interface "Function" as kotlin.Function<R> {
 }
 annotation "Metadata" as kotlin.Metadata {
+  __
   + {abstract}int k()
   + {abstract}int[] mv()
   + {abstract}int[] bv()
@@ -145,6 +202,50 @@ class "UndirectedGraph$2" as org.toolkit4j.collection.graph.UndirectedGraph$remo
 class "UndirectedGraph$1" as org.toolkit4j.collection.graph.UndirectedGraph$removeVertex$1$1 {
   +Boolean invoke(Edge<T>)
 }
+class "HashQueueMap" as org.toolkit4j.collection.other.HashQueueMap<K, T> {
+  +boolean containsKey(Object)
+  +boolean containsValue(Queue<T>)
+  +Queue<T> get(K)
+  +boolean isEmpty()
+  +Set<Entry<K, Queue<T>>> getEntries()
+  +Set<K> getKeys()
+  +int getSize()
+  +Collection<Queue<T>> getValues()
+  +T element(K, T)
+  +T poll(K)
+  +void offer(K, T)
+  +void add(K, T)
+  +void peek(K)
+  +HashQueueMap<K, T> copy(HashMap<K, Queue<T>>)
+  +void clear()
+  +Queue<T> put(K, Queue<T>)
+  +void putAll(Map<? extends K, ? extends Queue<T>>)
+  +Queue<T> remove(Object)
+  +boolean remove(Object, Object)
+  +void replaceAll(BiFunction<? super K, ? super Queue<T>, ? extends Queue<T>>)
+  +Queue<T> putIfAbsent(K, Queue<T>)
+  +boolean replace(K, Queue<T>, Queue<T>)
+  +Queue<T> replace(K, Queue<T>)
+  +Queue<T> computeIfAbsent(K, Function<? super K, ? extends Queue<T>>)
+  +Queue<T> computeIfPresent(K, BiFunction<? super K, ? super Queue<T>, ? extends Queue<T>>)
+  +Queue<T> compute(K, BiFunction<? super K, ? super Queue<T>, ? extends Queue<T>>)
+  +Queue<T> merge(K, Queue<T>, BiFunction<? super Queue<T>, ? super Queue<T>, ? extends Queue<T>>)
+  +boolean containsValue(Object)
+  +Set<Entry<K, Queue<T>>> entrySet()
+  +Set<K> keySet()
+  +int size()
+  +Collection<Queue<T>> values()
+}
+class "HashQueueMap$1" as org.toolkit4j.collection.other.HashQueueMap$add$1$1 {
+  + {static}1 INSTANCE
+  __
+  +Queue<T> invoke(K)
+}
+class "HashQueueMap$1" as org.toolkit4j.collection.other.HashQueueMap$offer$1$1 {
+  + {static}1 INSTANCE
+  __
+  +Queue<T> invoke(K)
+}
 interface "PageableCollection" as org.toolkit4j.collection.pageable.PageableCollection<T, C extends Collection<? extends T>> {
   + {abstract}int getPageNo()
   + {abstract}void setPageNo(int)
@@ -240,6 +341,9 @@ class "PageableSet" as org.toolkit4j.collection.pageable.PageableSet<T> {
   +Object[] toArray()
 }
 class "Cell" as org.toolkit4j.collection.table.Cell<R, C, V> {
+  +R getRowKey()
+  +C getColumnKey()
+  +V getValue()
   +Cell<R, C, V> copy(R, C, V)
 }
 class "ConcurrentHashTable" as org.toolkit4j.collection.table.ConcurrentHashTable<R, C, V> {
@@ -387,12 +491,20 @@ org.toolkit4j.collection.graph.UndirectedGraph$removeEdge$2 -u-|> kotlin.jvm.int
 org.toolkit4j.collection.graph.UndirectedGraph$removeEdge$2 .u.|> kotlin.jvm.functions.Function1
 org.toolkit4j.collection.graph.UndirectedGraph$removeVertex$1$1 -u-|> kotlin.jvm.internal.Lambda
 org.toolkit4j.collection.graph.UndirectedGraph$removeVertex$1$1 .u.|> kotlin.jvm.functions.Function1
+org.toolkit4j.collection.other.HashQueueMap .u.|> kotlin.jvm.internal.markers.KMappedMarker
+org.toolkit4j.collection.other.HashQueueMap$add$1$1 -u-|> kotlin.jvm.internal.Lambda
+org.toolkit4j.collection.other.HashQueueMap$add$1$1 .u.|> kotlin.jvm.functions.Function1
+org.toolkit4j.collection.other.HashQueueMap$add$1$1 --> org.toolkit4j.collection.other.HashQueueMap$add$1$1
+org.toolkit4j.collection.other.HashQueueMap$offer$1$1 -u-|> kotlin.jvm.internal.Lambda
+org.toolkit4j.collection.other.HashQueueMap$offer$1$1 .u.|> kotlin.jvm.functions.Function1
+org.toolkit4j.collection.other.HashQueueMap$offer$1$1 --> org.toolkit4j.collection.other.HashQueueMap$offer$1$1
 org.toolkit4j.collection.pageable.PageableList .u.|> org.toolkit4j.collection.pageable.PageableCollection
 org.toolkit4j.collection.pageable.PageableList .u.|> kotlin.jvm.internal.markers.KMutableList
 org.toolkit4j.collection.pageable.PageableList .u.|> kotlin.jvm.internal.markers.KMutableCollection
 org.toolkit4j.collection.pageable.PageableList .u.|> kotlin.jvm.internal.markers.KMutableIterable
 org.toolkit4j.collection.pageable.PageableList .u.|> kotlin.jvm.internal.markers.KMappedMarker
 org.toolkit4j.collection.pageable.PageableSet .u.|> org.toolkit4j.collection.pageable.PageableCollection
+org.toolkit4j.collection.table.Cell .u.|> com.google.common.collect.Table$Cell
 org.toolkit4j.collection.table.ConcurrentHashTable .u.|> org.toolkit4j.collection.table.ConcurrentTable
 org.toolkit4j.collection.table.ConcurrentHashTable$contains$1 -u-|> kotlin.jvm.internal.Lambda
 org.toolkit4j.collection.table.ConcurrentHashTable$contains$1 .u.|> kotlin.jvm.functions.Function1

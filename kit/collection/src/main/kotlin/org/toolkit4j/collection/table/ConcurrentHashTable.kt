@@ -71,10 +71,10 @@ class ConcurrentHashTable<R : Any, C : Any, V : Any> : ConcurrentTable<R, C, V> 
         internal.clear()
     }
 
-    override fun cellSet(): Set<Cell<R, C, V>?> {
+    override fun cellSet(): MutableSet<Table.Cell<R, C, V>> {
         return internal.flatMap { (rowKey, rowMap) ->
             rowMap.entries.map { (columnKey, value) -> Cell(rowKey, columnKey, value) }
-        }.toSet()
+        }.toMutableSet()
     }
 
     override fun rowKeySet(): Set<R> {
@@ -105,7 +105,7 @@ class ConcurrentHashTable<R : Any, C : Any, V : Any> : ConcurrentTable<R, C, V> 
         TODO("Not yet implemented")
     }
 
-    override fun row(rowKey: R): Map<C, V>? {
+    override fun row(rowKey: R): MutableMap<C, V> {
         TODO("Not yet implemented")
     }
 

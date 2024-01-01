@@ -144,7 +144,7 @@ interface ConcurrentTable<R, C, V> {
      * @param rowKey key of row to search for in the table
      * @return the corresponding map from column keys to values
      */
-    fun row(rowKey: R): Map<C, V>?
+    fun row(rowKey: R): MutableMap<C, V>
 
     /**
      * Returns a view of all mappings that have the given column key. For each row key / column key /
@@ -166,7 +166,7 @@ interface ConcurrentTable<R, C, V> {
      *
      * @return set of table cells consisting of row key / column key / value triplets
      */
-    fun cellSet(): Set<Cell<R, C, V>?>?
+    fun cellSet(): MutableSet<Table.Cell<R, C, V>>
 
     /**
      * Returns a set of row keys that have one or more values in the table. Changes to the set will

@@ -1,5 +1,8 @@
 package org.toolkit4j.collection.graph
 
+/**
+ * Un directed graph
+ */
 class UndirectedGraph<T> : Graph<T> {
     private val adjacencyList: MutableMap<T, MutableList<Edge<T>>> = mutableMapOf()
 

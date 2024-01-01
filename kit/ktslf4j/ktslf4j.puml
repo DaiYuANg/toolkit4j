@@ -1,6 +1,8 @@
 @startuml
 !pragma useIntermediatePackages false
 
+interface "Function" as kotlin.Function<R> {
+}
 annotation "Metadata" as kotlin.Metadata {
   + {abstract}int k()
   + {abstract}int[] mv()
@@ -51,57 +53,44 @@ annotation "Target" as kotlin.annotation.Target {
 annotation "JvmName" as kotlin.jvm.JvmName {
   + {abstract}String name()
 }
-annotation "JvmOverloads" as kotlin.jvm.JvmOverloads {
+interface "Function0" as kotlin.jvm.functions.Function0<R> {
+  + {abstract}R invoke()
+}
+interface "FunctionBase" as kotlin.jvm.internal.FunctionBase<R> {
+  + {abstract}int getArity()
+}
+abstract class "Lambda" as kotlin.jvm.internal.Lambda<R> {
+  +int getArity()
 }
 annotation "SourceDebugExtension" as kotlin.jvm.internal.SourceDebugExtension {
   + {abstract}String[] value()
-}
-annotation "NonNls" as org.jetbrains.annotations.NonNls {
 }
 annotation "NotNull" as org.jetbrains.annotations.NotNull {
   + {abstract}String value()
   + {abstract}Class<? extends Exception> exception()
 }
-annotation "Nullable" as org.jetbrains.annotations.Nullable {
-  + {abstract}String value()
+annotation "KtSlf4j" as org.toolkit4j.ktslf4j.KtSlf4j {
+  ..
+  + {static}Companion Companion
 }
-class "AllDoneDispatcher" as org.toolkit4j.dispatcher.AllDoneDispatcher {
-  +int batchTask(Collection<Task>)
-  +void startDispatcher(int, TaskPollVelocity, Runnable)
-  +void startDispatcher(TaskPollVelocity)
-  +void isDone(int)
-  +AllDoneDispatcher copy(ScheduledThreadPoolExecutor)
+class "KtSlf4j$Companion" as org.toolkit4j.ktslf4j.KtSlf4j$Companion {
 }
-interface "Dispatcher" as org.toolkit4j.dispatcher.Dispatcher {
-}
-class "Loop" as org.toolkit4j.dispatcher.Loop {
-  +void block()
-  +void stop()
-}
-class "Task" as org.toolkit4j.dispatcher.Task {
-  +String getTaskName()
-  +Runnable getAction()
-  +Supplier<Boolean> getTryLock()
-  +String component1()
-  +Runnable component2()
-  +Supplier<Boolean> component3()
-  +Task copy(String, Runnable, Supplier<Boolean>)
-}
-class "TaskBatchStore" as org.toolkit4j.dispatcher.TaskBatchStore {
-  +int getBatchId()
-  +BlockingQueue<Task> getQueue()
-  +int component1()
-  +BlockingQueue<Task> component2()
-  +TaskBatchStore copy(int, BlockingQueue<Task>)
-}
-enum "TaskPollVelocity" as org.toolkit4j.dispatcher.TaskPollVelocity {
-  FAST
-  MEDIA
-  SLOW
+class "Companion$KtSlf4j$1" as org.toolkit4j.ktslf4j.KtSlf4j$Companion$log$1 {
+  + {static}1 INSTANCE
   __
-  +long getVelocity()
-  + {static}EnumEntries<TaskPollVelocity> getEntries()
+  +void invoke()
 }
-org.toolkit4j.dispatcher.AllDoneDispatcher --> org.toolkit4j.dispatcher.TaskBatchStore
-org.toolkit4j.dispatcher.TaskBatchStore --> org.toolkit4j.dispatcher.Task
+class "PureFuncKt" as org.toolkit4j.ktslf4j.PureFuncKt {
+}
+interface "Slf4jInterface" as org.toolkit4j.ktslf4j.Slf4jInterface {
+  +Logger logger()
+}
+kotlin.jvm.functions.Function0 .u.|> kotlin.Function
+kotlin.jvm.internal.FunctionBase .u.|> kotlin.Function
+kotlin.jvm.internal.Lambda .u.|> kotlin.jvm.internal.FunctionBase
+kotlin.jvm.internal.Lambda .u.|> kotlin.Function
+org.toolkit4j.ktslf4j.KtSlf4j --> org.toolkit4j.ktslf4j.KtSlf4j$Companion
+org.toolkit4j.ktslf4j.KtSlf4j$Companion$log$1 -u-|> kotlin.jvm.internal.Lambda
+org.toolkit4j.ktslf4j.KtSlf4j$Companion$log$1 .u.|> kotlin.jvm.functions.Function0
+org.toolkit4j.ktslf4j.KtSlf4j$Companion$log$1 --> org.toolkit4j.ktslf4j.KtSlf4j$Companion$log$1
 @enduml

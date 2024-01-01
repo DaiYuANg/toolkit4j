@@ -1,7 +1,60 @@
 @startuml
 !pragma useIntermediatePackages false
 
-class "Main" as org.toolkit.spring.boot.cache.hazelcast.Main {
-  + {static}void main(String[])
+annotation "Metadata" as kotlin.Metadata {
+  + {abstract}int k()
+  + {abstract}int[] mv()
+  + {abstract}int[] bv()
+  + {abstract}String[] d1()
+  + {abstract}String[] d2()
+  + {abstract}String xs()
+  + {abstract}String pn()
+  + {abstract}int xi()
+}
+annotation "SinceKotlin" as kotlin.SinceKotlin {
+  + {abstract}String version()
+}
+enum "AnnotationRetention" as kotlin.annotation.AnnotationRetention {
+  SOURCE
+  BINARY
+  RUNTIME
+  __
+  + {static}EnumEntries<AnnotationRetention> getEntries()
+}
+enum "AnnotationTarget" as kotlin.annotation.AnnotationTarget {
+  CLASS
+  ANNOTATION_CLASS
+  TYPE_PARAMETER
+  PROPERTY
+  FIELD
+  LOCAL_VARIABLE
+  VALUE_PARAMETER
+  CONSTRUCTOR
+  FUNCTION
+  PROPERTY_GETTER
+  PROPERTY_SETTER
+  TYPE
+  EXPRESSION
+  FILE
+  TYPEALIAS
+  __
+  + {static}EnumEntries<AnnotationTarget> getEntries()
+}
+annotation "MustBeDocumented" as kotlin.annotation.MustBeDocumented {
+}
+annotation "Retention" as kotlin.annotation.Retention {
+  + {abstract}AnnotationRetention value()
+}
+annotation "Target" as kotlin.annotation.Target {
+  + {abstract}AnnotationTarget[] allowedTargets()
+}
+annotation "JvmName" as kotlin.jvm.JvmName {
+  + {abstract}String name()
+}
+annotation "NotNull" as org.jetbrains.annotations.NotNull {
+  + {abstract}String value()
+  + {abstract}Class<? extends Exception> exception()
+}
+class "HazelcastCache" as org.toolkit4j.cache.hazelcast.HazelcastCache {
 }
 @enduml

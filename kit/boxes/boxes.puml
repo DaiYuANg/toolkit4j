@@ -1,56 +1,6 @@
 @startuml
 !pragma useIntermediatePackages false
 
-annotation "Metadata" as kotlin.Metadata {
-  + {abstract}int k()
-  + {abstract}int[] mv()
-  + {abstract}int[] bv()
-  + {abstract}String[] d1()
-  + {abstract}String[] d2()
-  + {abstract}String xs()
-  + {abstract}String pn()
-  + {abstract}int xi()
-}
-annotation "SinceKotlin" as kotlin.SinceKotlin {
-  + {abstract}String version()
-}
-enum "AnnotationRetention" as kotlin.annotation.AnnotationRetention {
-  SOURCE
-  BINARY
-  RUNTIME
-  __
-  + {static}EnumEntries<AnnotationRetention> getEntries()
-}
-enum "AnnotationTarget" as kotlin.annotation.AnnotationTarget {
-  CLASS
-  ANNOTATION_CLASS
-  TYPE_PARAMETER
-  PROPERTY
-  FIELD
-  LOCAL_VARIABLE
-  VALUE_PARAMETER
-  CONSTRUCTOR
-  FUNCTION
-  PROPERTY_GETTER
-  PROPERTY_SETTER
-  TYPE
-  EXPRESSION
-  FILE
-  TYPEALIAS
-  __
-  + {static}EnumEntries<AnnotationTarget> getEntries()
-}
-annotation "MustBeDocumented" as kotlin.annotation.MustBeDocumented {
-}
-annotation "Retention" as kotlin.annotation.Retention {
-  + {abstract}AnnotationRetention value()
-}
-annotation "Target" as kotlin.annotation.Target {
-  + {abstract}AnnotationTarget[] allowedTargets()
-}
-annotation "JvmName" as kotlin.jvm.JvmName {
-  + {abstract}String name()
-}
 annotation "NonNull" as lombok.NonNull {
 }
 annotation "Contract" as org.jetbrains.annotations.Contract {
@@ -66,15 +16,6 @@ annotation "NotNull" as org.jetbrains.annotations.NotNull {
 }
 annotation "Nullable" as org.jetbrains.annotations.Nullable {
   + {abstract}String value()
-}
-class "TryOr" as org.toolkit4j.boxes.TryOr<T, E extends Throwable> {
-  +TryOr<T, E> execute()
-  +T getResult()
-  +E getError()
-  +boolean isSuccess()
-  +boolean isFailure()
-}
-interface "Container" as org.toolkit4j.boxes.api.Container {
 }
 interface "Streamable" as org.toolkit4j.boxes.base.Streamable<T> {
   + {abstract}Stream<T> stream()
