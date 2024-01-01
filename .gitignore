@@ -169,3 +169,4 @@ sketch
 dist/
 npm-debug.log
 yarn-error.log
+.kotlin

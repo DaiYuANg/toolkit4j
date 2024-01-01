@@ -1,7 +1,7 @@
 [versions]
 jdkVersion = "21"
 detekt = "1.23.4"
-kotlin = "2.0.0-Beta2"
+kotlin = "1.9.22"
 ktlintGradle = "12.0.3"
 pluginPublish = "1.2.1"
 versionCheck = "0.50.0"
@@ -12,6 +12,7 @@ junitInjectFile = "0.3.3"
 mockito = "5.8.0"
 caffine = "3.1.8"
 autoFactory = "1.1.0"
+autoService = "1.1.1"
 lettuce = "6.3.0.RELEASE"
 hazelcast = "5.3.6"
 jmh = "0.7.2"
@@ -35,6 +36,7 @@ mockitoCore = { group = "org.mockito", name = "mockito-core", version.ref = "moc
 mockitoJunit = { group = "org.mockito", name = "mockito-junit-jupiter", version.ref = "mockito" }
 caffine = { group = "com.github.ben-manes.caffeine", name = "caffeine", version.ref = "caffine" }
 autoFactory = { group = "com.google.auto.factory", name = "auto-factory", version.ref = "autoFactory" }
+autoService = { group = "com.google.auto.service", name = "auto-service", version.ref = "autoService" }
 lettuceCore = { group = "io.lettuce", name = "lettuce-core", version.ref = "lettuce" }
 hazelcast = { group = "com.hazelcast", name = "hazelcast", version.ref = "hazelcast" }
 dataFaker={group="net.datafaker",name="datafaker",version.ref="datafaker"}

@@ -35,7 +35,6 @@ subprojects {
   apply<JavaLibraryPlugin>()
   apply<PlantUmlPlugin>()
   apply<JMHPlugin>()
-  apply(plugin = "org.jetbrains.kotlin.jvm")
   apply(plugin = "org.jetbrains.dokka")
 
   dependencies {
@@ -48,18 +47,14 @@ subprojects {
     testImplementation(rootProject.libs.junitInjectFile)
     testImplementation(rootProject.libs.mockitoCore)
     testImplementation(rootProject.libs.mockitoJunit)
-    testImplementation("org.jetbrains.kotlin:kotlin-test")
     testImplementation(rootProject.libs.dataFaker)
     testImplementation("org.slf4j:slf4j-api:2.1.0-alpha0")
     testImplementation("org.slf4j:slf4j-simple:2.1.0-alpha0")
+    testImplementation("com.github.noconnor:junitperf:1.35.0")
+    testImplementation("com.github.noconnor:junitperf-junit5:1.35.0")
   }
 
   tasks.test { useJUnitPlatform() }
-
-  kotlin {
-    jvmToolchain(jdkVersion = jdkVersion.get().toInt())
-    compilerOptions { freeCompilerArgs = listOf("-Xjvm-default=all") }
-  }
 
   classDiagrams {
     @Suppress("UNCHECKED_CAST")

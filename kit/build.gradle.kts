@@ -1,0 +1,10 @@
+dependencies{
+    api(projects.kit.cacheApi)
+    api(projects.kit.cacheRedis)
+    api(projects.kit.cacheCaffine)
+    api(projects.kit.cacheCaffine)
+    api(projects.kit.collection)
+    api(projects.kit.dispatcher)
+    api(projects.kit.ktslf4j)
+    api(projects.kit.boxes)
+}

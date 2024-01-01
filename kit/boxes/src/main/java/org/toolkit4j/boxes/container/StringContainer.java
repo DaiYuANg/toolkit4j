@@ -10,7 +10,9 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import lombok.val;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -25,152 +27,158 @@ import org.toolkit4j.boxes.exception.StringEmptyOrBlank;
  * @since 0.1
  */
 @EqualsAndHashCode(callSuper = true)
+@ToString
 public class StringContainer extends BasicContainer<CharSequence, StringContainer> {
 
-	private final StringBuilder reusableStringBuilder = new StringBuilder();
+    private final ThreadLocal<StringBuilder> reusableStringBuilder = new ThreadLocal<>();
 
-	/**
-	 * Constructs a StringContainer with the specified character sequence value.
-	 *
-	 * @param value The character sequence value.
-	 */
-	protected StringContainer(CharSequence value) {
-		super(value);
-	}
+    {
+        reusableStringBuilder.set(new StringBuilder());
+    }
 
-	@Override
-	public StringContainer filter(Predicate<CharSequence> predicate) {
-		return isEmpty() ? this : predicate.test(value) ? this : empty();
-	}
+    /**
+     * Constructs a StringContainer with the specified character sequence value.
+     *
+     * @param value The character sequence value.
+     */
+    protected StringContainer(CharSequence value) {
+        super(value);
+    }
 
-	@Override
-	public <U extends Container<CharSequence, ?>> StringContainer map(Function<? super CharSequence, U> mapper) {
-		return isEmpty() ? empty() : (StringContainer) mapper.apply(value);
-	}
+    @Override
+    public StringContainer filter(Predicate<CharSequence> predicate) {
+        return isEmpty() ? this : predicate.test(value) ? this : empty();
+    }
 
-	@Override
-	public <U> StringContainer flatMap(
-			Function<? super CharSequence, ? extends Container<CharSequence, ? extends U>> mapper) {
-		if (isEmpty()) {
-			return empty();
-		} else {
-			val r = mapper.apply(value);
-			return (StringContainer) r;
-		}
-	}
+    @Override
+    public <U extends Container<CharSequence, ?>> StringContainer map(Function<? super CharSequence, U> mapper) {
+        return isEmpty() ? empty() : (StringContainer) mapper.apply(value);
+    }
 
-	@Override
-	public boolean isEmpty() {
-		return super.isEmpty()
-				&& Objects.requireNonNull(value).isEmpty()
-				&& value.toString().isBlank();
-	}
+    @Override
+    public <U> StringContainer flatMap(
+            Function<? super CharSequence, ? extends Container<CharSequence, ? extends U>> mapper) {
+        if (isEmpty()) {
+            return empty();
+        } else {
+            val r = mapper.apply(value);
+            return (StringContainer) r;
+        }
+    }
 
-	@NotNull @Contract(" -> new")
-	public static StringContainer empty() {
-		return new StringContainer("");
-	}
+    @Override
+    public boolean isEmpty() {
+        return super.isEmpty()
+                && Objects.requireNonNull(value).isEmpty()
+                && value.toString().isBlank();
+    }
 
-	@Override
-	public CharSequence orElseThrow() {
-		if (isEmpty()) throw new StringEmptyOrBlank();
-		return value;
-	}
+    @NotNull
+    @Contract(" -> new")
+    public static StringContainer empty() {
+        return new StringContainer("");
+    }
 
-	@Override
-	public CharSequence get() throws StringEmptyOrBlank {
-		return orElseGet(() -> {
-			throw new StringEmptyOrBlank();
-		});
-	}
+    @Override
+    public CharSequence orElseThrow() {
+        if (isEmpty()) throw new StringEmptyOrBlank();
+        return value;
+    }
 
-	@Override
-	public StringContainer or(Supplier<StringContainer> supplier) {
-		return isEmpty() ? supplier.get() : this;
-	}
+    @Override
+    public CharSequence get() throws StringEmptyOrBlank {
+        return orElseGet(() -> {
+            throw new StringEmptyOrBlank();
+        });
+    }
 
-	/**
-	 * Concatenates the current container's value with the provided strings.
-	 *
-	 * @param concat The strings to concatenate.
-	 * @return A new StringContainer with the concatenated value.
-	 */
-	public StringContainer concat(String... concat) {
-		StringBuilder result = new StringBuilder(Objects.requireNonNull(value).toString());
-		Arrays.stream(concat).forEach(result::append);
-		return StringContainer.of(result.toString());
-	}
+    @Override
+    public StringContainer or(Supplier<StringContainer> supplier) {
+        return isEmpty() ? supplier.get() : this;
+    }
 
-	/**
-	 * Reverses the characters of the current container's value.
-	 *
-	 * @return A new StringContainer with the reversed value.
-	 */
-	public StringContainer reverse() {
-		reusableStringBuilder.setLength(0);
-		reusableStringBuilder.append(value);
-		return StringContainer.of(reusableStringBuilder.reverse().toString());
-	}
+    /**
+     * Concatenates the current container's value with the provided strings.
+     *
+     * @param concat The strings to concatenate.
+     * @return A new StringContainer with the concatenated value.
+     */
+    public StringContainer concat(String... concat) {
+        StringBuilder result = new StringBuilder(Objects.requireNonNull(value).toString());
+        Arrays.stream(concat).forEach(result::append);
+        return StringContainer.of(result.toString());
+    }
 
-	/**
-	 * Counts the occurrences of a specific character in the container's value.
-	 *
-	 * @param charSequence The character to count.
-	 * @return The count of occurrences.
-	 */
-	public long count(char charSequence) {
-		return nonNullable().chars().filter(c -> c == charSequence).count();
-	}
+    /**
+     * Reverses the characters of the current container's value.
+     *
+     * @return A new StringContainer with the reversed value.
+     */
+    public StringContainer reverse() {
+        reusableStringBuilder.get().setLength(0);
+        reusableStringBuilder.get().append(value);
+        return StringContainer.of(reusableStringBuilder.get().reverse().toString());
+    }
 
-	/**
-	 * Counts the occurrences of a specific character sequence in the container's value.
-	 *
-	 * @param target The character sequence to count.
-	 * @return The count of occurrences.
-	 */
-	public long count(@NotNull CharSequence target) {
-		int count;
-		int targetLength = target.length();
-		count = (int) IntStream.rangeClosed(0, Objects.requireNonNull(value).length() - targetLength)
-				.filter(i -> value.subSequence(i, i + targetLength).equals(target))
-				.count();
-		return count;
-	}
+    /**
+     * Counts the occurrences of a specific character in the container's value.
+     *
+     * @param charSequence The character to count.
+     * @return The count of occurrences.
+     */
+    public long count(char charSequence) {
+        return nonNullable().chars().filter(c -> c == charSequence).count();
+    }
 
-	/**
-	 * Returns a new StringContainer with the distinctive characters of the current container's value.
-	 *
-	 * @return A new StringContainer with distinctive characters.
-	 */
-	public StringContainer distinct() {
-		val distinctive =
-				nonNullable().chars().distinct().mapToObj(String::valueOf).collect(Collectors.joining());
-		return StringContainer.of(distinctive);
-	}
+    /**
+     * Counts the occurrences of a specific character sequence in the container's value.
+     *
+     * @param target The character sequence to count.
+     * @return The count of occurrences.
+     */
+    public long count(@NotNull CharSequence target) {
+        int count;
+        int targetLength = target.length();
+        count = (int) IntStream.rangeClosed(0, Objects.requireNonNull(value).length() - targetLength)
+                .filter(i -> value.subSequence(i, i + targetLength).equals(target))
+                .count();
+        return count;
+    }
 
-	public List<String> toList() {
-		return nonNullable().chars().mapToObj(String::valueOf).toList();
-	}
+    /**
+     * Returns a new StringContainer with the distinctive characters of the current container's value.
+     *
+     * @return A new StringContainer with distinctive characters.
+     */
+    public StringContainer distinct() {
+        val distinctive =
+                nonNullable().chars().distinct().mapToObj(String::valueOf).collect(Collectors.joining());
+        return StringContainer.of(distinctive);
+    }
 
-	public StringContainer reduce(BinaryOperator<String> accumulator) {
-		return StringContainer.of(nonNullable()
-				.chars()
-				.mapToObj(String::valueOf)
-				.reduce(accumulator)
-				.orElse(""));
-	}
+    public List<String> toList() {
+        return nonNullable().chars().mapToObj(String::valueOf).toList();
+    }
 
-	public String[] toArray() {
-		return nonNullable().chars().mapToObj(String::valueOf).toArray(String[]::new);
-	}
+    public StringContainer reduce(BinaryOperator<String> accumulator) {
+        return StringContainer.of(nonNullable()
+                .chars()
+                .mapToObj(String::valueOf)
+                .reduce(accumulator)
+                .orElse(""));
+    }
 
-	@Contract("_ -> new")
-	@NotNull public static StringContainer of(@Nullable CharSequence value) {
-		return new StringContainer(value);
-	}
+    public String[] toArray() {
+        return nonNullable().chars().mapToObj(String::valueOf).toArray(String[]::new);
+    }
 
-	@Override
-	public String toString() {
-		return nonNullable().toString();
-	}
+    @Contract("_ -> new")
+    @NotNull
+    public static StringContainer of(@Nullable CharSequence value) {
+        return new StringContainer(value);
+    }
+
+    public StringContainer join(CharSequence separator) {
+        return StringContainer.of(stream().collect(Collectors.joining(separator)));
+    }
 }

@@ -1,5 +1,5 @@
 /* (C)2023*/
-package org.toolkit.spring.boot.cache.api;
+package org.toolkit4j.cache.api;
 
 import java.util.concurrent.CopyOnWriteArraySet;
 import lombok.ToString;

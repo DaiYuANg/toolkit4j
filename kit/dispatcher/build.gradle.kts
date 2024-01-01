@@ -4,9 +4,10 @@ plugins {
 }
 
 dependencies {
+    testImplementation(kotlin("test"))
 }
 
 kotlin {
-    jvmToolchain(21)
+    jvmToolchain(jdkVersion = libs.versions.jdkVersion.get().toInt())
     compilerOptions { freeCompilerArgs = listOf("-Xjvm-default=all") }
 }

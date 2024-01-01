@@ -3,7 +3,6 @@ package org.toolkit4j.dispatcher
 import java.util.*
 import java.util.concurrent.*
 import java.util.concurrent.atomic.AtomicInteger
-import java.util.function.Supplier
 
 
 private data class TaskBatchStore(
@@ -19,7 +18,7 @@ enum class TaskPollVelocity(val velocity: Long) {
     SLOW(1000);
 }
 
-data class AllDoneDispatcher @JvmOverloads constructor(
+data class AllDoneLockedTaskDispatcher @JvmOverloads constructor(
     private var scheduledThreadPoolExecutor: ScheduledThreadPoolExecutor? = null,
 ) {
     private val autoincrementIdForBatchStore = AtomicInteger(0)
