@@ -4,96 +4,135 @@ import io.gitlab.plunts.gradle.plantuml.plugin.PlantUmlPlugin
 import me.champeau.jmh.JMHPlugin
 
 plugins {
-  `version-catalog`
-  idea
-  `java-library`
-  kotlin("jvm")
-  alias(libs.plugins.jmh)
-  id("io.freefair.lombok") version "8.4"
-  id("com.palantir.git-version") version "3.0.0"
-  id("io.gitlab.plunts.plantuml") version "2.1.3"
-  id("com.diffplug.spotless") version "6.23.3"
-  id("org.jetbrains.dokka") version "1.9.10"
+    `version-catalog`
+    idea
+    `java-library`
+    kotlin("jvm")
+    `maven-publish`
+    alias(libs.plugins.jmh)
+    id("io.freefair.lombok") version "8.4"
+    id("com.palantir.git-version") version "3.0.0"
+    id("io.gitlab.plunts.plantuml") version "2.1.3"
+    id("com.diffplug.spotless") version "6.23.3"
+    id("org.jetbrains.dokka") version "1.9.10"
 }
+
+val versionDetails: groovy.lang.Closure<com.palantir.gradle.gitversion.VersionDetails> by extra
+val details = versionDetails()
+
+group = "org.toolkit4j"
+version = details.gitHash
 
 val jdkVersion = libs.versions.jdkVersion
 val plantUMLSuffix = "puml"
 
 allprojects {
-  repositories {
-    maven { setUrl("https://repo.spring.io/snapshot") }
-    maven { setUrl("https://repo.spring.io/milestone") }
-    mavenLocal()
-    mavenCentral()
-    gradlePluginPortal()
-    google()
-  }
+    repositories {
+        maven { setUrl("https://repo.spring.io/snapshot") }
+        maven { setUrl("https://repo.spring.io/milestone") }
+        mavenLocal()
+        mavenCentral()
+        gradlePluginPortal()
+        google()
+    }
 }
 
 subprojects {
-  apply<LombokPlugin>()
-  apply<JavaLibraryPlugin>()
-  apply<PlantUmlPlugin>()
-  apply<JMHPlugin>()
-  apply(plugin = "org.jetbrains.dokka")
+    apply<LombokPlugin>()
+    apply<JavaLibraryPlugin>()
+    apply<PlantUmlPlugin>()
+    apply<JMHPlugin>()
+    apply<PublishingPlugin>()
+    apply<MavenPublishPlugin>()
+    apply(plugin = "org.jetbrains.dokka")
 
-  dependencies {
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0-RC2")
-    runtimeOnly("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.8.0-RC2")
-    testImplementation(platform(rootProject.libs.junitBom))
-    testImplementation(rootProject.libs.junitJuiter)
-    testImplementation(rootProject.libs.junitApi)
-    testImplementation(rootProject.libs.junitEngine)
-    testImplementation(rootProject.libs.junitInjectFile)
-    testImplementation(rootProject.libs.mockitoCore)
-    testImplementation(rootProject.libs.mockitoJunit)
-    testImplementation(rootProject.libs.dataFaker)
-    testImplementation("org.slf4j:slf4j-api:2.1.0-alpha0")
-    testImplementation("org.slf4j:slf4j-simple:2.1.0-alpha0")
-    testImplementation("com.github.noconnor:junitperf:1.35.0")
-    testImplementation("com.github.noconnor:junitperf-junit5:1.35.0")
-  }
+    group = rootProject.group
+    version = rootProject.version
 
-  tasks.test { useJUnitPlatform() }
+    dependencies {
+        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0-RC2")
+        runtimeOnly("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.8.0-RC2")
+        testImplementation(platform(rootProject.libs.junitBom))
+        testImplementation(rootProject.libs.junitJuiter)
+        testImplementation(rootProject.libs.junitApi)
+        testImplementation(rootProject.libs.junitEngine)
+        testImplementation(rootProject.libs.junitInjectFile)
+        testImplementation(rootProject.libs.mockitoCore)
+        testImplementation(rootProject.libs.mockitoJunit)
+        testImplementation(rootProject.libs.dataFaker)
+        testImplementation("org.slf4j:slf4j-api:2.1.0-alpha0")
+        testImplementation("org.slf4j:slf4j-simple:2.1.0-alpha0")
+        testImplementation("com.github.noconnor:junitperf:1.35.0")
+        testImplementation("com.github.noconnor:junitperf-junit5:1.35.0")
+    }
 
-  classDiagrams {
-    @Suppress("UNCHECKED_CAST")
-    diagram(
-        "classes",
-        closureOf<ClassDiagramsExtension.ClassDiagram> {
-          include(packages().recursive())
-          writeTo(file(project.layout.projectDirectory.file("${project.name}.$plantUMLSuffix")))
+    tasks.test { useJUnitPlatform() }
+
+    classDiagrams {
+        @Suppress("UNCHECKED_CAST")
+        diagram(
+            "classes",
+            closureOf<ClassDiagramsExtension.ClassDiagram> {
+                include(packages().recursive())
+                writeTo(file(project.layout.projectDirectory.file("${project.name}.$plantUMLSuffix")))
+            }
+                    as groovy.lang.Closure<ClassDiagramsExtension.ClassDiagram>,
+        )
+    }
+
+    java {
+        withJavadocJar()
+        withSourcesJar()
+    }
+
+    tasks.test {
+        useJUnitPlatform()
+        minHeapSize = "4g"
+        maxParallelForks = Runtime.getRuntime().availableProcessors() * 2
+        maxHeapSize = "8g"
+        systemProperties["junit.jupiter.execution.parallel.enabled"] = true
+        systemProperties["junit.jupiter.execution.parallel.mode.default"] = "concurrent"
+        jvmArgs("-XX:+EnableDynamicAgentLoading")
+        maxParallelForks = Runtime.getRuntime().availableProcessors() * 2
+    }
+
+    publishing {
+        publications {
+            create<MavenPublication>("maven") {
+                groupId = project.group.toString()
+                artifactId = project.name
+                version = project.version.toString()
+
+                from(components["java"])
+
+                pom {
+                    developers {
+                        developer {
+                            id = "DaiYuANg"
+                            name = "DaiYuANg"
+                        }
+                    }
+                }
+            }
         }
-            as groovy.lang.Closure<ClassDiagramsExtension.ClassDiagram>,
-    )
-  }
-  tasks.test {
-    useJUnitPlatform()
-    minHeapSize = "4g"
-    maxParallelForks = Runtime.getRuntime().availableProcessors() * 2
-    maxHeapSize = "8g"
-    systemProperties["junit.jupiter.execution.parallel.enabled"] = true
-    systemProperties["junit.jupiter.execution.parallel.mode.default"] = "concurrent"
-    jvmArgs("-XX:+EnableDynamicAgentLoading")
-    maxParallelForks = Runtime.getRuntime().availableProcessors() * 2
-  }
+    }
 }
 
 spotless {
-  java {
-    importOrder()
-    removeUnusedImports()
-    formatAnnotations()
-    eclipse()
-  }
-  kotlin {
-    ktfmt()
-    ktlint()
-    diktat()
-  }
-  kotlinGradle {
-    target("*.gradle.kts")
-    ktlint()
-    ktfmt()
-  }
+    java {
+        importOrder()
+        removeUnusedImports()
+        formatAnnotations()
+        eclipse()
+    }
+    kotlin {
+        ktfmt()
+        ktlint()
+        diktat()
+    }
+    kotlinGradle {
+        target("*.gradle.kts")
+        ktlint()
+        ktfmt()
+    }
 }

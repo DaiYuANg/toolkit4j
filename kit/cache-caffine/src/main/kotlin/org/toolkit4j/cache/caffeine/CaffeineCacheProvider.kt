@@ -6,7 +6,7 @@ import org.toolkit4j.cache.api.Cache
 import org.toolkit4j.cache.api.CacheConfig
 import java.util.concurrent.TimeUnit
 
-class CaffeineCacheProvider : CacheProvider {
+class CaffeineCacheProvider  {
     //    override fun create(config: CacheConfig<Any, Any?>): Cache<Any, Any> {
 //        if (config is CaffeineCacheConfig<*, *>) {
 //            val caffineCache = Caffeine.newBuilder()

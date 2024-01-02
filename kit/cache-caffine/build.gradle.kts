@@ -1,6 +1,7 @@
 plugins {
     kotlin("jvm")
     kotlin("kapt")
+    kotlin("plugin.lombok")
 }
 
 group = "org.toolkit.spring.boot.cache.caffine"

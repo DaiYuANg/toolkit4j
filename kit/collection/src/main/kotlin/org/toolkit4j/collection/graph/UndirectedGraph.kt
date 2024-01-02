@@ -3,9 +3,10 @@ package org.toolkit4j.collection.graph
 /**
  * Un directed graph
  */
-class UndirectedGraph<T> : Graph<T> {
+@JvmInline
+value class UndirectedGraph<T>(
     private val adjacencyList: MutableMap<T, MutableList<Edge<T>>> = mutableMapOf()
-
+) : Graph<T> {
     override fun addVertex(vertex: T) {
         // 添加顶点，如果图中不包含该顶点
         adjacencyList.computeIfAbsent(vertex) { mutableListOf() }
