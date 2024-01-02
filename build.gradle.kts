@@ -8,6 +8,7 @@ plugins {
     idea
     `java-library`
     kotlin("jvm")
+    kotlin("kapt")
     `maven-publish`
     alias(libs.plugins.jmh)
     id("io.freefair.lombok") version "8.4"
@@ -21,6 +22,7 @@ val versionDetails: groovy.lang.Closure<com.palantir.gradle.gitversion.VersionDe
 val details = versionDetails()
 
 group = "org.toolkit4j"
+
 version = details.gitHash
 
 val jdkVersion = libs.versions.jdkVersion
@@ -45,12 +47,17 @@ subprojects {
     apply<PublishingPlugin>()
     apply<MavenPublishPlugin>()
     apply(plugin = "org.jetbrains.dokka")
+    apply(plugin = "org.jetbrains.kotlin.jvm")
+    apply(plugin = "org.jetbrains.kotlin.plugin.allopen")
+    apply(plugin = "org.jetbrains.kotlin.plugin.lombok")
+    apply(plugin = "org.jetbrains.kotlin.kapt")
 
     group = rootProject.group
     version = rootProject.version
 
     dependencies {
         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0-RC2")
+        implementation(kotlin("stdlib"))
         runtimeOnly("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.8.0-RC2")
         testImplementation(platform(rootProject.libs.junitBom))
         testImplementation(rootProject.libs.junitJuiter)
@@ -61,9 +68,9 @@ subprojects {
         testImplementation(rootProject.libs.mockitoJunit)
         testImplementation(rootProject.libs.dataFaker)
         testImplementation("org.slf4j:slf4j-api:2.1.0-alpha0")
-        testImplementation("org.slf4j:slf4j-simple:2.1.0-alpha0")
         testImplementation("com.github.noconnor:junitperf:1.35.0")
         testImplementation("com.github.noconnor:junitperf-junit5:1.35.0")
+        testImplementation(kotlin("test"))
     }
 
     tasks.test { useJUnitPlatform() }
@@ -83,6 +90,28 @@ subprojects {
     java {
         withJavadocJar()
         withSourcesJar()
+        modularity.inferModulePath.set(true)
+    }
+
+
+    kapt {
+        keepJavacAnnotationProcessors = true
+    }
+
+    kotlin {
+        jvmToolchain(jdkVersion = rootProject.libs.versions.jdkVersion.get().toInt())
+        compilerOptions {
+            freeCompilerArgs = listOf("-Xjvm-default=all")
+        }
+    }
+
+    val moduleName = "${project.group}.${project.name}"
+
+    tasks.compileJava {
+        options.compilerArgumentProviders.add(CommandLineArgumentProvider {
+            // Provide compiled Kotlin classes to javac – needed for Java/Kotlin mixed sources to work
+            listOf("--patch-module", "$moduleName=${sourceSets["main"].output.asPath}")
+        })
     }
 
     tasks.test {
@@ -94,6 +123,18 @@ subprojects {
         systemProperties["junit.jupiter.execution.parallel.mode.default"] = "concurrent"
         jvmArgs("-XX:+EnableDynamicAgentLoading")
         maxParallelForks = Runtime.getRuntime().availableProcessors() * 2
+    }
+
+    tasks.register<Jar>("dokkaHtmlJar") {
+        dependsOn(tasks.dokkaHtml)
+        from(tasks.dokkaHtml.flatMap { it.outputDirectory })
+        archiveClassifier.set("html-docs")
+    }
+
+    tasks.register<Jar>("dokkaJavadocJar") {
+        dependsOn(tasks.dokkaJavadoc)
+        from(tasks.dokkaJavadoc.flatMap { it.outputDirectory })
+        archiveClassifier.set("javadoc")
     }
 
     publishing {
@@ -136,3 +177,5 @@ spotless {
         ktfmt()
     }
 }
+
+project("website") { tasks.build { dependsOn(":kit:dokkaGfmMultiModule") } }

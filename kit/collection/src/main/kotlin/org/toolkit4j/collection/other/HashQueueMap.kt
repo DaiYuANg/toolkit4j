@@ -4,11 +4,9 @@ import java.util.Queue
 import java.util.concurrent.LinkedBlockingQueue
 import kotlin.collections.HashMap
 
-@JvmInline
-value class HashQueueMap<K, T> @JvmOverloads constructor(
-    private val internal: HashMap<K, Queue<T>> = HashMap()
-) : Map<K, Queue<T>> by internal {
-
+data class HashQueueMap<K, T> @JvmOverloads constructor(
+    private val internal: HashMap<K, Queue<T>> = HashMap(),
+) : MutableMap<K, Queue<T>> by internal {
     fun element(key: K?, value: T): T? {
         return internal[key]?.element()
     }

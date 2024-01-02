@@ -7,7 +7,7 @@ public class HashQueueTest {
 
     @Test
     void testHashQueue() {
-        val t = new HashQueueMap<>();
+        val t = new HashQueueMap<String, String>();
         t.offer("test", "v");
         System.err.println(t);
         System.err.println(t.poll("test"));

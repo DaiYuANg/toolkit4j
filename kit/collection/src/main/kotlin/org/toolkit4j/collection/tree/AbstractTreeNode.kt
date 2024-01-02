@@ -6,10 +6,10 @@ import java.util.function.Consumer
 import java.util.stream.Stream
 import java.util.stream.StreamSupport
 
-abstract class AbstractTreeNode<T>
+abstract class AbstractTreeNode<T : Any>
     @JvmOverloads
     constructor(
-        override var data: T? = null,
+        override var data: T,
         override var parent: TreeNode<T>? = null,
     ) :
     TreeNode<T> {

@@ -5,12 +5,12 @@ import java.util.Objects
 import java.util.function.Consumer
 import java.util.stream.Stream
 
-interface TreeNode<T> {
-    var data: T?
+interface TreeNode<T:Any> {
+    var data: T
 
     var parent: TreeNode<T>?
 
-    val children: MutableCollection<TreeNode<T>?>
+    val children: MutableCollection<out TreeNode<T>?>
 
     fun isRoot(): Boolean {
         return Objects.isNull(parent)

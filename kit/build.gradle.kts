@@ -1,10 +1,10 @@
 dependencies{
-    api(projects.kit.cacheApi)
-    api(projects.kit.cacheRedis)
-    api(projects.kit.cacheCaffine)
-    api(projects.kit.cacheCaffine)
-    api(projects.kit.collection)
-    api(projects.kit.dispatcher)
-    api(projects.kit.ktslf4j)
-    api(projects.kit.boxes)
+    compileOnly(projects.kit.cacheApi)
+    compileOnly(projects.kit.cacheRedis)
+    compileOnly(projects.kit.cacheCaffine)
+    compileOnly(projects.kit.cacheCaffine)
+    compileOnly(projects.kit.collection)
+    compileOnly(projects.kit.dispatcher)
+    compileOnly(projects.kit.ktslf4j)
+    compileOnly(projects.kit.boxes)
 }

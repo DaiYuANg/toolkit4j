@@ -43,6 +43,16 @@ const config: Config = {
         },
       };
     },
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'javadoc',
+        path: 'javadoc',
+        routeBasePath: 'javadoc',
+        // sidebarPath: 'sidebars.ts',
+        // ... other options
+      },
+    ],
   ],
 
   presets: [

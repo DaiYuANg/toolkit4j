@@ -1,4 +1,4 @@
-package org.toolkit4j.dispatcher
+package org.toolkit4j.dispatcher.flow
 
 import java.util.UUID
 import java.util.function.Supplier

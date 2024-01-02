@@ -14,12 +14,12 @@ public class CaffineCacheProvider<K, V> implements CacheProvider<K, V> {
     @Override
     public Cache<K, V> create(CacheConfig<K, V> config) {
         if (config instanceof CaffineCacheConfig<K, V>) {
-            val caffineCache = Caffeine.newBuilder()
+            com.github.benmanes.caffeine.cache.Cache<K,V> caffineCache = Caffeine.newBuilder()
                     .expireAfterWrite(10, TimeUnit.MINUTES)
                     .maximumSize(10_000)
-                    .<K, V>build();
+                    .build();
 
-            return new CaffineCache<>(caffineCache);
+            return new CaffineCache<K,V>(caffineCache);
         }
         throw new IllegalArgumentException("Invalid configuration for Caffine cache.");
     }

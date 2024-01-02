@@ -1,4 +1,4 @@
-package org.toolkit4j.dispatcher
+package org.toolkit4j.dispatcher.flow
 
 import java.util.*
 import java.util.concurrent.*
@@ -10,7 +10,7 @@ private data class TaskBatchStore(
     val queue: BlockingQueue<Task>
 )
 
-enum class TaskPollVelocity(val velocity: Long) {
+public enum class TaskPollVelocity(val velocity: Long) {
     FAST(10),
 
     MEDIA(100),
@@ -18,7 +18,7 @@ enum class TaskPollVelocity(val velocity: Long) {
     SLOW(1000);
 }
 
-data class AllDoneLockedTaskDispatcher @JvmOverloads constructor(
+public data class AllDoneLockedTaskDispatcher @JvmOverloads constructor(
     private var scheduledThreadPoolExecutor: ScheduledThreadPoolExecutor? = null,
 ) {
     private val autoincrementIdForBatchStore = AtomicInteger(0)

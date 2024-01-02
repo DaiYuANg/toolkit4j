@@ -3,6 +3,10 @@ package org.toolkit4j.collection.graph
 data class Edge<T>(val source: T, val target: T, val weight: Double? = null)
 
 interface Graph<T> {
+
+    /**
+     * @param vertex Vertex of graph
+     */
     fun addVertex(vertex: T)
     fun addEdge(from: T, to: T, weight: Double? = null)
     fun getNeighbors(vertex: T): List<Edge<T>>

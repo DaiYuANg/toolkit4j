@@ -21,6 +21,7 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 public class CaffineCache<K, V> implements Cache<K, V> {
 
+    @NonNull
     private final com.github.benmanes.caffeine.cache.Cache<K, V> caffeineCache;
 
     @Override
