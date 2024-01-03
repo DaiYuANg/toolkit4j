@@ -2,6 +2,7 @@ import io.freefair.gradle.plugins.lombok.LombokPlugin
 import io.gitlab.plunts.gradle.plantuml.plugin.ClassDiagramsExtension
 import io.gitlab.plunts.gradle.plantuml.plugin.PlantUmlPlugin
 import me.champeau.jmh.JMHPlugin
+import org.jetbrains.dokka.gradle.DokkaPlugin
 
 plugins {
     `version-catalog`
@@ -46,7 +47,7 @@ subprojects {
     apply<JMHPlugin>()
     apply<PublishingPlugin>()
     apply<MavenPublishPlugin>()
-    apply(plugin = "org.jetbrains.dokka")
+    apply<DokkaPlugin>()
     apply(plugin = "org.jetbrains.kotlin.jvm")
     apply(plugin = "org.jetbrains.kotlin.plugin.allopen")
     apply(plugin = "org.jetbrains.kotlin.plugin.lombok")
@@ -72,8 +73,6 @@ subprojects {
         testImplementation("com.github.noconnor:junitperf-junit5:1.35.0")
         testImplementation(kotlin("test"))
     }
-
-    tasks.test { useJUnitPlatform() }
 
     classDiagrams {
         @Suppress("UNCHECKED_CAST")
