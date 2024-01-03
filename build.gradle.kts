@@ -58,7 +58,7 @@ subprojects {
     dependencies {
         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0-RC2")
         implementation(kotlin("stdlib"))
-        runtimeOnly("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.8.0-RC2")
+        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.8.0-RC2")
         testImplementation(platform(rootProject.libs.junitBom))
         testImplementation(rootProject.libs.junitJuiter)
         testImplementation(rootProject.libs.junitApi)
@@ -93,6 +93,11 @@ subprojects {
         modularity.inferModulePath.set(true)
     }
 
+    tasks.jar {
+        manifest {
+            attributes("Version" to project.version)
+        }
+    }
 
     kapt {
         keepJavacAnnotationProcessors = true

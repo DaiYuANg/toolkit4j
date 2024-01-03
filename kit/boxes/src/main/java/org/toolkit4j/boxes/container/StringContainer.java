@@ -28,7 +28,7 @@ import org.toolkit4j.boxes.exception.StringEmptyOrBlank;
  */
 @EqualsAndHashCode(callSuper = true)
 @ToString
-public class StringContainer extends BasicContainer<CharSequence, StringContainer> {
+public class StringContainer extends BasicContainer<String, StringContainer> {
 
     private final ThreadLocal<StringBuilder> reusableStringBuilder = new ThreadLocal<>();
 
@@ -41,23 +41,23 @@ public class StringContainer extends BasicContainer<CharSequence, StringContaine
      *
      * @param value The character sequence value.
      */
-    protected StringContainer(CharSequence value) {
+    protected StringContainer(String value) {
         super(value);
     }
 
     @Override
-    public StringContainer filter(Predicate<CharSequence> predicate) {
+    public StringContainer filter(Predicate<String> predicate) {
         return isEmpty() ? this : predicate.test(value) ? this : empty();
     }
 
     @Override
-    public <U extends Container<CharSequence, ?>> StringContainer map(Function<? super CharSequence, U> mapper) {
+    public <U extends Container<String, ?>> StringContainer map(Function<? super String, U> mapper) {
         return isEmpty() ? empty() : (StringContainer) mapper.apply(value);
     }
 
     @Override
     public <U> StringContainer flatMap(
-            Function<? super CharSequence, ? extends Container<CharSequence, ? extends U>> mapper) {
+            Function<? super String, ? extends Container<String, ? extends U>> mapper) {
         if (isEmpty()) {
             return empty();
         } else {
@@ -70,7 +70,7 @@ public class StringContainer extends BasicContainer<CharSequence, StringContaine
     public boolean isEmpty() {
         return super.isEmpty()
                 && Objects.requireNonNull(value).isEmpty()
-                && value.toString().isBlank();
+                && value.isBlank();
     }
 
     @NotNull
@@ -80,13 +80,13 @@ public class StringContainer extends BasicContainer<CharSequence, StringContaine
     }
 
     @Override
-    public CharSequence orElseThrow() {
+    public String orElseThrow() {
         if (isEmpty()) throw new StringEmptyOrBlank();
         return value;
     }
 
     @Override
-    public CharSequence get() throws StringEmptyOrBlank {
+    public String get() throws StringEmptyOrBlank {
         return orElseGet(() -> {
             throw new StringEmptyOrBlank();
         });
@@ -104,7 +104,7 @@ public class StringContainer extends BasicContainer<CharSequence, StringContaine
      * @return A new StringContainer with the concatenated value.
      */
     public StringContainer concat(String... concat) {
-        StringBuilder result = new StringBuilder(Objects.requireNonNull(value).toString());
+        StringBuilder result = new StringBuilder(Objects.requireNonNull(value));
         Arrays.stream(concat).forEach(result::append);
         return StringContainer.of(result.toString());
     }
@@ -123,11 +123,11 @@ public class StringContainer extends BasicContainer<CharSequence, StringContaine
     /**
      * Counts the occurrences of a specific character in the container's value.
      *
-     * @param charSequence The character to count.
+     * @param chat The character to count.
      * @return The count of occurrences.
      */
-    public long count(char charSequence) {
-        return nonNullable().chars().filter(c -> c == charSequence).count();
+    public long count(char chat) {
+        return nonNullable().chars().filter(c -> Objects.equals(chat, c)).count();
     }
 
     /**
@@ -136,7 +136,7 @@ public class StringContainer extends BasicContainer<CharSequence, StringContaine
      * @param target The character sequence to count.
      * @return The count of occurrences.
      */
-    public long count(@NotNull CharSequence target) {
+    public long count(@NotNull String target) {
         int count;
         int targetLength = target.length();
         count = (int) IntStream.rangeClosed(0, Objects.requireNonNull(value).length() - targetLength)
@@ -174,11 +174,11 @@ public class StringContainer extends BasicContainer<CharSequence, StringContaine
 
     @Contract("_ -> new")
     @NotNull
-    public static StringContainer of(@Nullable CharSequence value) {
+    public static StringContainer of(@Nullable String value) {
         return new StringContainer(value);
     }
 
-    public StringContainer join(CharSequence separator) {
+    public StringContainer join(String separator) {
         return StringContainer.of(stream().collect(Collectors.joining(separator)));
     }
 }

@@ -5,12 +5,12 @@ import java.util.Objects
 import java.util.function.Consumer
 import java.util.stream.Stream
 
-interface TreeNode<T:Any> {
+interface TreeNode<T, out C : MutableCollection<T>> {
     var data: T
 
-    var parent: TreeNode<T>?
+    var parent: TreeNode<T, @UnsafeVariance C>?
 
-    val children: MutableCollection<out TreeNode<T>?>
+    val children: MutableCollection<TreeNode<T, @UnsafeVariance C>?>
 
     fun isRoot(): Boolean {
         return Objects.isNull(parent)
@@ -20,19 +20,19 @@ interface TreeNode<T:Any> {
         return children.isEmpty()
     }
 
-    fun addChild(child: TreeNode<T>?)
+    fun addChild(child: TreeNode<T, @UnsafeVariance C>?)
 
-    fun addChildren(children: Collection<TreeNode<T>?>?)
+    fun addChildren(children: Collection<TreeNode<T, @UnsafeVariance C>?>)
 
-    fun removeChild(child: TreeNode<T>?)
+    fun removeChild(child: TreeNode<T, @UnsafeVariance C>)
 
-    fun stream(): Stream<TreeNode<T>?>?
+    fun stream(): Stream<TreeNode<T, @UnsafeVariance C>?>
 
-    fun parallelStream(): Stream<TreeNode<T>?>?
+    fun parallelStream(): Stream<TreeNode<T, @UnsafeVariance C>?>
 
-    fun walk(action: Consumer<TreeNode<T>?>)
+    fun walk(action: Consumer<TreeNode<T, @UnsafeVariance C>?>)
 
-    fun parallelWalk(action: Consumer<TreeNode<T>?>)
+    fun parallelWalk(action: Consumer<TreeNode<T, @UnsafeVariance C>?>)
 
-    fun iterator(): Iterator<TreeNode<T>?>
+    fun iterator(): Iterator<TreeNode<T, C>?>
 }
