@@ -1,6 +1,0 @@
-@startuml
-!pragma useIntermediatePackages false
-
-class "CaffineCache" as org.toolkit.spring.boot.cache.caffine.impl.CaffineCache<K, V> {
-}
-@enduml

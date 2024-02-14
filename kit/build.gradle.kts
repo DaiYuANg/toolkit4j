@@ -1,8 +1,4 @@
 dependencies{
-    compileOnly(projects.kit.cacheApi)
-    compileOnly(projects.kit.cacheRedis)
-    compileOnly(projects.kit.cacheCaffine)
-    compileOnly(projects.kit.cacheCaffine)
     compileOnly(projects.kit.collection)
     compileOnly(projects.kit.dispatcher)
     compileOnly(projects.kit.ktslf4j)

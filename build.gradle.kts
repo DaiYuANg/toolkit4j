@@ -17,6 +17,7 @@ plugins {
     id("io.gitlab.plunts.plantuml") version "2.1.3"
     id("com.diffplug.spotless") version "6.23.3"
     id("org.jetbrains.dokka") version "1.9.10"
+    id ("com.github.ben-manes.versions") version "0.51.0"
 }
 
 val versionDetails: groovy.lang.Closure<com.palantir.gradle.gitversion.VersionDetails> by extra
@@ -80,7 +81,7 @@ subprojects {
             "classes",
             closureOf<ClassDiagramsExtension.ClassDiagram> {
                 include(packages().recursive())
-                writeTo(file(project.layout.projectDirectory.file("${project.name}.$plantUMLSuffix")))
+                writeTo(file(project.layout.buildDirectory.file("${project.name}.$plantUMLSuffix")))
             }
                     as groovy.lang.Closure<ClassDiagramsExtension.ClassDiagram>,
         )

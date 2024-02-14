@@ -19,7 +19,6 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-lombok:${kotlinVersion}")
     implementation("org.jetbrains.kotlin:kotlin-serialization:${kotlinVersion}")
     implementation("org.jetbrains.kotlin:kotlin-noarg:${kotlinVersion}")
-    implementation("org.jetbrains.kotlin:kotlin-noarg:${kotlinVersion}")
     implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}")
     implementation("org.jetbrains.kotlin:kotlin-allopen:${kotlinVersion}")
     implementation("com.github.spotbugs.snom:spotbugs-gradle-plugin:6.0.2")

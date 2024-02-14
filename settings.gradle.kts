@@ -67,19 +67,21 @@ gitHooks {
 
 rootProject.name = "toolkit4j"
 
-include("kit:cache-api")
+include("cache:cache-api")
 
-include("kit:cache-caffine")
+include("cache:cache-caffine")
 
-include("kit:cache-hazelcast")
+include("cache:cache-hazelcast")
 
-include("kit:cache-redis")
+include("cache:cache-redis")
 
 include("kit:collection")
 
 include("kit:dispatcher")
 
 include("kit:boxes")
+
+include("kit:jfa")
 
 include("website")
 
