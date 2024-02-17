@@ -11,7 +11,7 @@ version = "1.0-SNAPSHOT"
 dependencies {
     compileOnly(libs.autoService)
     annotationProcessor(libs.autoService)
-//    implementation(projects.kit.cacheApi)
+    implementation(projects.cache.cacheApi)
     implementation(libs.caffine)
 }
 
