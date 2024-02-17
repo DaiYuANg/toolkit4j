@@ -1,4 +1,5 @@
 module org.toolkit4j.collection {
-    requires kotlin.stdlib;
-    requires com.google.common;
+    requires transitive kotlin.stdlib;
+    requires transitive com.google.common;
+    requires transitive it.unimi.dsi.fastutil;
 }

@@ -11,28 +11,28 @@ version = "unspecified"
 tasks.jar { manifest { "JavaFxVersion" to libs.versions.javafxVersion.get() } }
 
 dependencies {
-  api(libs.oshi)
-  api(projects.module.visualShared)
-  api(libs.fontawesome5)
-  api(libs.ikonliJavafx)
-  api(libs.fluentuiIcon)
-  api(libs.simpleicon)
-  api(libs.controlfx)
-  api(libs.materialIcons)
-  api(projects.libs.jfa)
-  api(libs.atlantafx)
-  api(libs.devicons)
-  api(libs.apacheCommonPool)
-  api(libs.animated)
-  api(libs.flowless)
-  api(projects.ui.visualI18n)
-  api(libs.apacheCommonIO)
-  implementation(projects.libs.fonts)
-  testImplementation(projects.libs.fonts)
+//  api(libs.oshi)
+//  api(projects.module.visualShared)
+//  api(libs.fontawesome5)
+//  api(libs.ikonliJavafx)
+//  api(libs.fluentuiIcon)
+//  api(libs.simpleicon)
+//  api(libs.controlfx)
+//  api(libs.materialIcons)
+//  api(projects.libs.jfa)
+//  api(libs.atlantafx)
+//  api(libs.devicons)
+//  api(libs.apacheCommonPool)
+//  api(libs.animated)
+//  api(libs.flowless)
+//  api(projects.ui.visualI18n)
+//  api(libs.apacheCommonIO)
+//  implementation(projects.libs.fonts)
+//  testImplementation(projects.libs.fonts)
 }
 
 tasks.compileSass {
-  dependsOn(tasks.spotlessApply)
+//  dependsOn(tasks.spotlessApply)
   sourceDir = project.layout.projectDirectory.file("src/main/sass").asFile
   sourceMap = none
 }

@@ -15,6 +15,7 @@ repositories {
 val kotlinVersion = libs.versions.kotlin.get();
 
 dependencies {
+    implementation(files(libs.javaClass.superclass.protectionDomain.codeSource.location))
     implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}")
     implementation("org.jetbrains.kotlin:kotlin-lombok:${kotlinVersion}")
     implementation("org.jetbrains.kotlin:kotlin-serialization:${kotlinVersion}")

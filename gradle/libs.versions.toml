@@ -1,12 +1,12 @@
 [versions]
 jdkVersion = "21"
 detekt = "1.23.4"
-kotlin = "2.0.0-Beta4"
+kotlin = "1.9.22"
 ktlintGradle = "12.0.3"
 pluginPublish = "1.2.1"
 versionCheck = "0.50.0"
 guice = "7.0.0"
-koin="3.5.2-RC1"
+koin = "3.5.2-RC1"
 junit = "5.9.3"
 junitInjectFile = "0.3.3"
 mockito = "5.8.0"
@@ -17,6 +17,7 @@ lettuce = "6.3.0.RELEASE"
 hazelcast = "5.3.6"
 jmh = "0.7.2"
 datafaker = "2.0.2"
+javafxVersion = "21.0.2"
 
 [plugins]
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
@@ -31,7 +32,7 @@ junitBom = { group = "org.junit", name = "junit-bom", version.ref = "junit" }
 junitJuiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junit" }
 junitApi = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "junit" }
 junitEngine = { group = "org.junit.jupiter", name = "junit-jupiter-engine", version.ref = "junit" }
-junitInjectFile = {group="io.hosuaby",name="inject-resources-junit-jupiter",version.ref="junitInjectFile"}
+junitInjectFile = { group = "io.hosuaby", name = "inject-resources-junit-jupiter", version.ref = "junitInjectFile" }
 mockitoCore = { group = "org.mockito", name = "mockito-core", version.ref = "mockito" }
 mockitoJunit = { group = "org.mockito", name = "mockito-junit-jupiter", version.ref = "mockito" }
 caffine = { group = "com.github.ben-manes.caffeine", name = "caffeine", version.ref = "caffine" }
@@ -39,4 +40,6 @@ autoFactory = { group = "com.google.auto.factory", name = "auto-factory", versio
 autoService = { group = "com.google.auto.service", name = "auto-service", version.ref = "autoService" }
 lettuceCore = { group = "io.lettuce", name = "lettuce-core", version.ref = "lettuce" }
 hazelcast = { group = "com.hazelcast", name = "hazelcast", version.ref = "hazelcast" }
-dataFaker={group="net.datafaker",name="datafaker",version.ref="datafaker"}
+dataFaker = { group = "net.datafaker", name = "datafaker", version.ref = "datafaker" }
+fastutil = { group = "it.unimi.dsi", name = "fastutil", version = "8.5.12" }
+guice = { group = "com.google.inject", name = "guice", version.ref = "guice" }

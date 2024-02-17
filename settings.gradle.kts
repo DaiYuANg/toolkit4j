@@ -79,10 +79,14 @@ include("kit:collection")
 
 include("kit:dispatcher")
 
-include("kit:boxes")
+include("kit:fp4j")
 
 include("kit:jfa")
 
 include("website")
 
 include("kit:ktslf4j")
+
+include("fx:fx-component")
+
+include("fx:fx-debugger")
