@@ -81,6 +81,6 @@ include("kit:dispatcher")
 
 include("kit:fp4j")
 
-include("kit:jfa")
+include("kit:core")
 
 include("website")

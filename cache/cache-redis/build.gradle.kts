@@ -1,6 +1,6 @@
 group = "org.toolkit.spring.boot.cache.redis"
 
-version = "1.0-SNAPSHOT"
+apply<KotlinSetting>()
 
 dependencies {
   implementation("jakarta.inject:jakarta.inject-api:2.0.1")

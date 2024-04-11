@@ -1,10 +1,6 @@
-plugins {
-    kotlin("jvm")
-    kotlin("kapt")
-    kotlin("plugin.lombok")
-}
+apply<KotlinSetting>()
 
-group = "org.toolkit.spring.boot.cache.caffine"
+group = "org.toolkit.spring.boot.cache.caffeine"
 
 version = "1.0-SNAPSHOT"
 

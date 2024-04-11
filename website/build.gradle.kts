@@ -1,20 +1,43 @@
 plugins {
-    id("org.siouan.frontend-jdk17") version "8.0.0"
+    alias(libs.plugins.asciidoctorPdf)
+    alias(libs.plugins.asciidoctorJvm)
+    alias(libs.plugins.asciidoctorEpub)
+    alias(libs.plugins.asciidoctorEditconfig)
+    alias(libs.plugins.asciidoctorGem)
+    idea
 }
 
-frontend{
-    nodeVersion.set("20.9.0")
+//repositories {
+//    ruby {
+//        gems()
+//    }
+//}
+
+asciidoctorj {
+    modules {
+        diagram.use()
+    }
 }
 
+tasks.asciidoctor {
+    parallelMode = true
+    languages("en", "zh")
+    jvm {
+        jvmArgs(
+            "--add-opens",
+            "java.base/sun.nio.ch=ALL-UNNAMED",
+            "--add-opens",
+            "java.base/java.io=ALL-UNNAMED",
+        )
+    }
+}
 
-tasks.register("copyDocumentation") {
-    doLast {
-        // 拷贝 kit 项目生成的文档到指定目录
-        project(":kit").tasks.getByName("dokkaGfmMultiModule").outputs.files.forEach { documentationFile ->
-            copy {
-                from(documentationFile)
-                into("${project.layout.projectDirectory}/javadoc/") // 你希望拷贝到的目录
-            }
-        }
+tasks.build {
+    dependsOn(tasks.asciidoctor)
+}
+
+idea {
+    module {
+        sourceDirs = project.tasks.asciidoctor.get().sourceFileTree.toMutableSet()
     }
 }

@@ -7,7 +7,7 @@ import org.toolkit4j.collection.table.ConcurrentHashTable;
 
 public class TestConcurrentHashTable {
 
-	private ConcurrentHashTable<String, Integer, Integer> concurrentHashTable = new ConcurrentHashTable<>();
+	private final ConcurrentHashTable<String, Integer, Integer> concurrentHashTable = new ConcurrentHashTable<>();
 
 	@Test
 	void testPut() {

@@ -1,16 +1,11 @@
-plugins {
-  `kotlin-project`
-}
-
+apply<KotlinSetting>()
 group = "org.toolkit.collection"
 
-version = "1.0-SNAPSHOT"
-
 dependencies {
-  api("org.eclipse.collections:eclipse-collections-api:11.1.0")
-  api("org.eclipse.collections:eclipse-collections:11.1.0")
-  api("com.google.guava:guava:33.0.0-jre")
+  api(libs.guava)
+  api(libs.jgrapht)
+  api(libs.eclipseCollections)
+  api(libs.eclipseCollectionsAPI)
   api("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.6")
   api(libs.fastutil)
-  testImplementation(kotlin("test"))
 }

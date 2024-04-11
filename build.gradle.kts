@@ -1,7 +1,7 @@
-import io.freefair.gradle.plugins.lombok.LombokPlugin
 import io.gitlab.plunts.gradle.plantuml.plugin.ClassDiagramsExtension
 import io.gitlab.plunts.gradle.plantuml.plugin.PlantUmlPlugin
 import me.champeau.jmh.JMHPlugin
+import name.remal.gradle_plugins.lombok.LombokPlugin
 import org.jetbrains.dokka.gradle.DokkaPlugin
 
 plugins {
@@ -12,12 +12,12 @@ plugins {
     kotlin("kapt")
     `maven-publish`
     alias(libs.plugins.jmh)
-    id("io.freefair.lombok") version "8.4"
+    alias(libs.plugins.versionCheck)
+    alias(libs.plugins.lombok)
     id("com.palantir.git-version") version "3.0.0"
     id("io.gitlab.plunts.plantuml") version "2.1.3"
     id("com.diffplug.spotless") version "6.25.0"
-    id("org.jetbrains.dokka") version "1.9.10"
-    id("com.github.ben-manes.versions") version "0.51.0"
+    id("org.jetbrains.dokka") version "1.9.20"
     id("co.uzzu.dotenv.gradle") version "4.0.0"
 }
 
@@ -27,6 +27,7 @@ val details = versionDetails()
 group = "org.toolkit4j"
 
 version = details.gitHash
+val rlibs = rootProject.libs;
 
 val jdkVersion = libs.versions.jdkVersion
 val plantUMLSuffix = "puml"
@@ -51,29 +52,21 @@ subprojects {
         apply<PublishingPlugin>()
         apply<MavenPublishPlugin>()
         apply<DokkaPlugin>()
-        apply(plugin = "org.jetbrains.kotlin.jvm")
-        apply(plugin = "org.jetbrains.kotlin.plugin.allopen")
-        apply(plugin = "org.jetbrains.kotlin.plugin.lombok")
-        apply(plugin = "org.jetbrains.kotlin.kapt")
 
         group = rootProject.group
         version = rootProject.version
 
         dependencies {
-            implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0-RC2")
-            implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.8.0-RC2")
-            testImplementation(platform(rootProject.libs.junitBom))
-            testImplementation(rootProject.libs.junitJuiter)
-            testImplementation(rootProject.libs.junitApi)
-            testImplementation(rootProject.libs.junitEngine)
-            testImplementation(rootProject.libs.junitInjectFile)
-            testImplementation(rootProject.libs.mockitoCore)
-            testImplementation(rootProject.libs.mockitoJunit)
-            testImplementation(rootProject.libs.dataFaker)
-            testImplementation("org.slf4j:slf4j-api:2.1.0-alpha0")
-            testImplementation("com.github.noconnor:junitperf:1.35.0")
-            testImplementation("com.github.noconnor:junitperf-junit5:1.35.0")
-            testImplementation(kotlin("test"))
+            compileOnly(rlibs.jetbrainsAnnotation)
+            testImplementation(platform(rlibs.junitBom))
+            testImplementation(rlibs.junitJuiter)
+            testImplementation(rlibs.junitApi)
+            testImplementation(rlibs.junitEngine)
+            testImplementation(rlibs.junitInjectFile)
+            testImplementation(rlibs.mockitoCore)
+            testImplementation(rlibs.mockitoJunit)
+            testImplementation(rlibs.dataFaker)
+            testImplementation(rlibs.slf4j)
         }
 
         classDiagrams {
@@ -99,26 +92,6 @@ subprojects {
                 attributes("Version" to project.version)
             }
             duplicatesStrategy = DuplicatesStrategy.INCLUDE
-        }
-
-        kapt {
-            keepJavacAnnotationProcessors = true
-        }
-
-        kotlin {
-            jvmToolchain(jdkVersion = rootProject.libs.versions.jdkVersion.get().toInt())
-            compilerOptions {
-                freeCompilerArgs = listOf("-Xjvm-default=all")
-            }
-        }
-
-        val moduleName = "${project.group}.${project.name}"
-
-        tasks.compileJava {
-            options.compilerArgumentProviders.add(CommandLineArgumentProvider {
-                // Provide compiled Kotlin classes to javac – needed for Java/Kotlin mixed sources to work
-                listOf("--patch-module", "$moduleName=${sourceSets["main"].output.asPath}")
-            })
         }
 
         tasks.test {
@@ -199,4 +172,3 @@ spotless {
     }
 }
 
-//project("website") { tasks.build { dependsOn(":kit:dokkaGfmMultiModule") } }

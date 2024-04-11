@@ -1,6 +1,2 @@
-plugins {
-    kotlin("jvm")
-    kotlin("plugin.allopen")
-}
-
+apply<KotlinSetting>()
 dependencies {}
