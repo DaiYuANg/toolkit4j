@@ -84,9 +84,3 @@ include("kit:fp4j")
 include("kit:jfa")
 
 include("website")
-
-include("kit:ktslf4j")
-
-include("fx:fx-component")
-
-include("fx:fx-debugger")

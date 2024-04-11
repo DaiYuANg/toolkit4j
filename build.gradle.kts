@@ -15,9 +15,9 @@ plugins {
     id("io.freefair.lombok") version "8.4"
     id("com.palantir.git-version") version "3.0.0"
     id("io.gitlab.plunts.plantuml") version "2.1.3"
-    id("com.diffplug.spotless") version "6.23.3"
+    id("com.diffplug.spotless") version "6.25.0"
     id("org.jetbrains.dokka") version "1.9.10"
-    id ("com.github.ben-manes.versions") version "0.51.0"
+    id("com.github.ben-manes.versions") version "0.51.0"
     id("co.uzzu.dotenv.gradle") version "4.0.0"
 }
 
@@ -41,9 +41,9 @@ allprojects {
         google()
     }
 }
-val gitLabPrivateToken:String by project
+val gitLabPrivateToken: String by project
 subprojects {
-    if (project.name != "website"){
+    if (project.name != "website") {
         apply<LombokPlugin>()
         apply<JavaLibraryPlugin>()
         apply<PlantUmlPlugin>()

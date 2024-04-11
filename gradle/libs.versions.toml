@@ -1,7 +1,7 @@
 [versions]
 jdkVersion = "21"
 detekt = "1.23.4"
-kotlin = "1.9.22"
+kotlin = "2.0.0-RC1"
 ktlintGradle = "12.0.3"
 pluginPublish = "1.2.1"
 versionCheck = "0.50.0"
@@ -17,7 +17,6 @@ lettuce = "6.3.0.RELEASE"
 hazelcast = "5.3.6"
 jmh = "0.7.2"
 datafaker = "2.0.2"
-javafxVersion = "21.0.2"
 
 [plugins]
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
