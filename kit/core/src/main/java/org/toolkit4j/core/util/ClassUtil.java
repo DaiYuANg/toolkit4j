@@ -8,20 +8,20 @@ import java.util.Set;
 @UtilityClass
 public class ClassUtil {
 
-    public final Set<Class<?>> PRIMITIVE_WRAPPER = Set.of(
-        Boolean.class,
-        Byte.class,
-        Character.class,
-        Short.class,
-        Integer.class,
-        Long.class,
-        Float.class,
-        Double.class,
-        Void.class
-    );
+  public final Set<Class<?>> PRIMITIVE_WRAPPER = Set.of(
+    Boolean.class,
+    Byte.class,
+    Character.class,
+    Short.class,
+    Integer.class,
+    Long.class,
+    Float.class,
+    Double.class,
+    Void.class
+  );
 
-    private boolean isPrimitiveOrWrapper(@NotNull Class<?> type) {
-        return type.isPrimitive() ||
-            PRIMITIVE_WRAPPER.contains(type);
-    }
+  public boolean isPrimitiveOrWrapper(@NotNull Class<?> type) {
+    return type.isPrimitive() ||
+      PRIMITIVE_WRAPPER.contains(type);
+  }
 }

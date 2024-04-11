@@ -57,7 +57,7 @@ subprojects {
     version = rootProject.version
 
     dependencies {
-      compileOnly(rlibs.jetbrainsAnnotation)
+      implementation(rlibs.jetbrainsAnnotation)
       testImplementation(platform(rlibs.junitBom))
       testImplementation(rlibs.junitJuiter)
       testImplementation(rlibs.junitApi)
