@@ -12,8 +12,5 @@ dependencies {
   api("com.google.guava:guava:33.0.0-jre")
   api("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.6")
   api(libs.fastutil)
-  testImplementation(projects.kit.ktslf4j)
   testImplementation(kotlin("test"))
 }
-
-
