@@ -79,7 +79,7 @@ include("kit:collection")
 
 include("kit:dispatcher")
 
-include("kit:fp4j")
+include("kit:fp")
 
 include("kit:core")
 
