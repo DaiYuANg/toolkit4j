@@ -5,7 +5,7 @@ import java.util.Set;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
 
-public class ConcurrentHashTable implements Table{
+public class HashTable implements Table{
   @Override
   public Object get(Object rowKey, Object columnKey) {
     return null;

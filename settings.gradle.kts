@@ -44,6 +44,6 @@ include("libs:dispatcher")
 
 include("libs:fp")
 
-include("libs:core")
+include("libs:util")
 
 include("document")

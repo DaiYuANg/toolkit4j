@@ -2,6 +2,7 @@ package org.toolkit4j.collection.pageable;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.Data;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
