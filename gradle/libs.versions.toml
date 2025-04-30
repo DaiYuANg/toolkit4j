@@ -1,37 +1,26 @@
 [versions]
 jdkVersion = "21"
-detekt = "1.23.4"
-kotlin = "2.0.0-RC1"
-ktlintGradle = "12.0.3"
-pluginPublish = "1.2.1"
 guice = "7.0.0"
 junit = "5.10.0"
 junitInjectFile = "0.3.3"
-mockito = "5.8.0"
+mockito = "5.17.0"
 caffine = "3.1.8"
 autoFactory = "1.1.0"
 autoService = "1.1.1"
 lettuce = "6.3.0.RELEASE"
 hazelcast = "5.3.6"
-asciidoctor = "4.0.2"
-eclipseCollections = "12.0.0.M3"
 slf4j = "2.1.0-alpha1"
 
 [plugins]
-detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
-kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlintGradle" }
-pluginPublish = { id = "com.gradle.plugin-publish", version.ref = "pluginPublish" }
-jmh = { id = "me.champeau.jmh", version = "0.7.2" }
-versionCheck = { id = "com.github.ben-manes.versions", version = "0.51.0" }
-lombok = { id = "name.remal.lombok", version = "2.2.5" }
-asciidoctorJvm = { id = "org.asciidoctor.jvm.convert", version.ref = "asciidoctor" }
-asciidoctorGem = { id = "org.asciidoctor.jvm.gems", version.ref = "asciidoctor" }
-asciidoctorEpub = { id = "org.asciidoctor.jvm.epub", version.ref = "asciidoctor" }
-asciidoctorPdf = { id = "org.asciidoctor.jvm.pdf", version.ref = "asciidoctor" }
-asciidoctorRevealjs = { id = "org.asciidoctor.jvm.revealjs", version = "4.0.0-alpha.1" }
-asciidoctorEditconfig = { id = "org.asciidoctor.editorconfig", version.ref = "asciidoctor" }
-
+jmh = { id = "me.champeau.jmh", version = "0.7.3" }
+versionCheck = { id = "com.github.ben-manes.versions", version = "0.52.0" }
+lombok = { id = "name.remal.lombok", version = "3.0.1" }
+spotless = { id = "com.diffplug.spotless", version = "7.0.3" }
+dokka = { id = "org.jetbrains.dokka", version = "2.0.0" }
+git = { id = "com.xenoterracide.gradle.git", version = "0.12.1" }
+plantuml = { id = "io.gitlab.plunts.plantuml", version = "2.2.1" }
+maven-publish = { id = "com.vanniktech.maven.publish", version = "0.31.0" }
+mkdocs = { id = "ru.vyarus.mkdocs", version = "4.0.1" }
 
 [libraries]
 junitBom = { group = "org.junit", name = "junit-bom", version.ref = "junit" }
@@ -58,21 +47,8 @@ apacheCommonIO = { group = "commons-io", name = "commons-io", version = "2.14.0"
 apacheCommonLang3 = { group = "org.apache.commons", name = "commons-lang3", version = "3.14.0" }
 apacheCommonPool = { group = "org.apache.commons", name = "commons-pool2", version = "2.12.0" }
 apacheDBUtil = { group = "commons-dbutils", name = "commons-dbutils", version = "1.8.1" }
-directories = { group = "dev.dirs", name = "directories", version = "26" }
 dataFaker = { group = "net.datafaker", name = "datafaker", version = "2.1.0" }
 
 jgrapht = { group = "org.jgrapht", name = "jgrapht-core", version = "1.5.2" }
-fastutil = { group = "it.unimi.dsi", name = "fastutil", version = "8.5.13" }
-jetbrainsAnnotation = { group = "org.jetbrains", name = "annotations", version = "24.1.0" }
-
-eclipseCollectionsAPI = { group = "org.eclipse.collections", name = "eclipse-collections-api", version.ref = "eclipseCollections" }
-eclipseCollections = { group = "org.eclipse.collections", name = "eclipse-collections", version.ref = "eclipseCollections" }
-eclipseCollectionsForkjoin = { group = "org.eclipse.collections", name = "eclipse-collections-forkjoin", version.ref = "eclipseCollections" }
-eclipseCollectionsTestUtil = { group = "org.eclipse.collections", name = "eclipse-collections-testutils", version.ref = "eclipseCollections" }
-
-kotlinGradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
-kotlinGradleLombokPlugin = { group = "org.jetbrains.kotlin", name = "kotlin-lombok", version.ref = "kotlin" }
-kotlinGradleSerializationPlugin = { group = "org.jetbrains.kotlin", name = "kotlin-serialization", version.ref = "kotlin" }
-kotlinGradleNoArgPlugin = { group = "org.jetbrains.kotlin", name = "kotlin-noarg", version.ref = "kotlin" }
-kotlinGradleAllOpenPlugin = { group = "org.jetbrains.kotlin", name = "kotlin-allopen", version.ref = "kotlin" }
-kotlinLogging = { group = "io.github.oshai", name = "kotlin-logging-jvm", version = "6.0.3" }
+fastutil = { group = "it.unimi.dsi", name = "fastutil", version = "8.5.15" }
+jetbrainsAnnotation = { group = "org.jetbrains", name = "annotations", version = "26.0.2" }

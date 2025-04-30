@@ -1,86 +1,49 @@
 pluginManagement {
-    repositories {
-        maven { setUrl("https://repo.spring.io/snapshot") }
-        maven { setUrl("https://repo.spring.io/milestone") }
-        mavenLocal()
-        mavenCentral()
-        gradlePluginPortal()
-        google()
-    }
-
-    plugins {
-        val gitPluginVersion: String by settings
-        val spotbugsBaseVersion: String by settings
-        val spotlessPluginVersion: String by settings
-        val dependencycheckVersion: String by settings
-        val jmhPluginVersion: String by settings
-        val jreleaserVersion: String by settings
-        val lombokPluginVersion: String by settings
-        val nodePluginVersion: String by settings
-        val springBootVersion: String by settings
-        val springDependencyManagementVersion: String by settings
-        val gradlePreCommitGitGooksVersion: String by settings
-        val webjarVersion: String by settings
-        val kotlinVersion: String by settings
-        id("org.danilopianini.gradle-pre-commit-git-hooks") version "1.1.9"
-        id("com.gradle.enterprise") version "3.13.4"
-        id("com.palantir.git-version") version gitPluginVersion
-        id("org.owasp.dependencycheck") version dependencycheckVersion
-        id("me.champeau.jmh") version jmhPluginVersion
-        id("io.freefair.lombok") version lombokPluginVersion
-        id("org.jreleaser") version jreleaserVersion
-        id("com.github.node-gradle.node") version nodePluginVersion
-        id("com.github.ben-manes.versions") version "0.47.0"
-        id("org.gradle.toolchains.foojay-resolver-convention") version "0.7.0"
-        id("org.danilopianini.gradle-pre-commit-git-hooks") version gradlePreCommitGitGooksVersion
-    }
+  repositories {
+    mavenLocal()
+    mavenCentral()
+    gradlePluginPortal()
+    google()
+  }
 }
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 plugins {
-    id("com.gradle.enterprise")
-    id("org.danilopianini.gradle-pre-commit-git-hooks")
-    id("org.gradle.toolchains.foojay-resolver-convention") version "0.5.0"
+  id("org.gradle.toolchains.foojay-resolver-convention") version "0.5.0"
+  id("org.danilopianini.gradle-pre-commit-git-hooks") version "2.0.2"
+  id("com.gradle.enterprise") version "3.13.4"
 }
 
 buildCache {
-    local {
-        isEnabled = true
-        directory = File(rootProject.projectDir, ".gradle/build-cache")
-    }
+  local {
+    isEnabled = true
+    directory = File(rootProject.projectDir, ".gradle/build-cache")
+  }
 }
 
 gradleEnterprise {
-    buildScan {
-        termsOfServiceUrl = "https://gradle.com/terms-of-service"
-        termsOfServiceAgree = "yes"
-    }
+  buildScan {
+    termsOfServiceUrl = "https://gradle.com/terms-of-service"
+    termsOfServiceAgree = "yes"
+  }
 }
 
 gitHooks {
-    //    preCommit {
-    //        logger.log(LogLevel.INFO,"pre commit")
-    //    }
-    //    createHooks()
+  //    preCommit {
+  //        logger.log(LogLevel.INFO,"pre commit")
+  //    }
+  //    createHooks()
 }
 
 rootProject.name = "toolkit4j"
 
-include("cache:cache-api")
+include("libs:collection")
 
-include("cache:cache-caffine")
+include("libs:dispatcher")
 
-include("cache:cache-hazelcast")
+include("libs:fp")
 
-include("cache:cache-redis")
+include("libs:core")
 
-include("kit:collection")
-
-include("kit:dispatcher")
-
-include("kit:fp")
-
-include("kit:core")
-
-include("website")
+include("document")
