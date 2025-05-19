@@ -2,7 +2,7 @@
 jdkVersion = "21"
 guice = "7.0.0"
 junit = "5.10.0"
-junitInjectFile = "0.3.3"
+junitInjectFile = "1.0.0"
 mockito = "5.17.0"
 caffine = "3.1.8"
 autoFactory = "1.1.0"
@@ -10,6 +10,7 @@ autoService = "1.1.1"
 lettuce = "6.3.0.RELEASE"
 hazelcast = "5.3.6"
 slf4j = "2.1.0-alpha1"
+hutool = "5.8.38"
 
 [plugins]
 jmh = { id = "me.champeau.jmh", version = "0.7.3" }
@@ -44,11 +45,19 @@ slf4jJdkPlatform = { group = "org.slf4j", name = "slf4j-jdk-platform-logging", v
 slf4jJulBridage = { group = "org.slf4j", name = "jul-to-slf4j", version.ref = "slf4j" }
 
 apacheCommonIO = { group = "commons-io", name = "commons-io", version = "2.14.0" }
-apacheCommonLang3 = { group = "org.apache.commons", name = "commons-lang3", version = "3.14.0" }
+apacheCommonLang3 = { group = "org.apache.commons", name = "commons-lang3", version = "3.17.0" }
 apacheCommonPool = { group = "org.apache.commons", name = "commons-pool2", version = "2.12.0" }
 apacheDBUtil = { group = "commons-dbutils", name = "commons-dbutils", version = "1.8.1" }
-dataFaker = { group = "net.datafaker", name = "datafaker", version = "2.1.0" }
+dataFaker = { group = "net.datafaker", name = "datafaker", version = "2.4.3" }
 
 jgrapht = { group = "org.jgrapht", name = "jgrapht-core", version = "1.5.2" }
 fastutil = { group = "it.unimi.dsi", name = "fastutil", version = "8.5.15" }
 jetbrainsAnnotation = { group = "org.jetbrains", name = "annotations", version = "26.0.2" }
+
+hutool-bom = { group = "cn.hutool", name = "hutool-bom", version.ref = "hutool" }
+hutool-core = { group = "cn.hutool", name = "hutool-core" }
+hutool-http = { group = "cn.hutool", name = "hutool-http" }
+hutool-json = { group = "cn.hutool", name = "hutool-json" }
+hutool-extra = { group = "cn.hutool", name = "hutool-extra" }
+hutool-captcha = { group = "cn.hutool", name = "hutool-captcha" }
+hutool-crypto = { group = "cn.hutool", name = "hutool-crypto" }
