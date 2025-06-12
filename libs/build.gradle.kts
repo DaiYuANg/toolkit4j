@@ -18,11 +18,12 @@ subprojects {
 
   dependencies {
     implementation(rlibs.jetbrainsAnnotation)
-    testImplementation(platform(rlibs.junitBom))
+    testImplementation(enforcedPlatform(rlibs.junitBom))
     testImplementation(rlibs.junitJuiter)
     testImplementation(rlibs.junitApi)
     testImplementation(rlibs.junitEngine)
     testImplementation(rlibs.junitInjectFile)
+    testRuntimeOnly(rlibs.junit.platform.launcher)
     testImplementation(rlibs.mockitoCore)
     testImplementation(rlibs.mockitoJunit)
     testImplementation(rlibs.dataFaker)

@@ -6,21 +6,8 @@ plugins {
   alias(libs.plugins.spotless)
   alias(libs.plugins.dokka)
   alias(libs.plugins.git)
-//  id("com.palantir.git-version") version "3.0.0"
-//  id("io.gitlab.plunts.plantuml") version "2.1.3"
-//  id("com.diffplug.spotless") version "6.25.0"
-//  id("org.jetbrains.dokka") version "1.9.20"
-//  id("co.uzzu.dotenv.gradle") version "4.0.0"
 }
-
-//val versionDetails: groovy.lang.Closure<com.palantir.gradle.gitversion.VersionDetails> by extra
-//val details = versionDetails()
-
 group = "org.toolkit4j"
-
-//version = details.gitHash
-
-val jdkVersion = libs.versions.jdkVersion
 
 allprojects {
   repositories {
@@ -31,13 +18,7 @@ allprojects {
   }
 }
 subprojects {
-  if (project.name != "website") {
-//    apply<LombokPlugin>()
-//    apply<PlantUmlPlugin>()
-//    apply<JMHPlugin>()
-//    apply<PublishingPlugin>()
-//    apply<MavenPublishPlugin>()
-//    apply<DokkaPlugin>()
+  if (project.name != "document") {
 
     group = rootProject.group
     version = rootProject.version
@@ -54,23 +35,3 @@ subprojects {
 //    }
   }
 }
-
-//spotless {
-//  java {
-//    importOrder()
-//    removeUnusedImports()
-//    formatAnnotations()
-//    eclipse()
-//  }
-//  kotlin {
-//    ktfmt()
-//    ktlint()
-//    diktat()
-//  }
-//  kotlinGradle {
-//    target("*.gradle.kts")
-//    ktlint()
-//    ktfmt()
-//  }
-//}
-//

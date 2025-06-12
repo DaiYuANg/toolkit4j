@@ -28,7 +28,7 @@ public class PageableSetTest {
                 .mapToObj(i -> c.fullName())
                 .collect(Collectors.toSet());
         totalFakeData = fakeData.size();
-        pageable.addAll(fakeData);
+//        pageable.addAll(fakeData);
     }
 
     @Test

@@ -1,4 +1,9 @@
 package org.toolkit4j.collection.tree;
 
-public interface TreeNode {
+import java.util.List;
+
+public interface TreeNode<ID, ParentId> {
+  ID getId();
+
+  ParentId getParentId();
 }
