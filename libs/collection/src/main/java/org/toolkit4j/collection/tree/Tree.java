@@ -2,6 +2,7 @@ package org.toolkit4j.collection.tree;
 
 import lombok.experimental.UtilityClass;
 import lombok.val;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @UtilityClass
+@ApiStatus.Experimental
 public class Tree {
   public <T, ID> List<TreeNodeWrapper<T>> buildWrappedTree(
     @NotNull List<T> nodes,

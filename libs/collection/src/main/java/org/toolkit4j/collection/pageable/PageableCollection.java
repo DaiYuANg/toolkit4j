@@ -2,12 +2,15 @@ package org.toolkit4j.collection.pageable;
 
 import java.util.Collection;
 
+@SuppressWarnings("unused")
 public interface PageableCollection<T, C extends Collection<T>> {
 
   int getPageNo();
+
   void setPageNo(int pageNo);
 
   int getPageSize();
+
   void setPageSize(int pageSize);
 
   C page(int pageNo, int pageSize);

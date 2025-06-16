@@ -28,6 +28,7 @@ subprojects {
     testImplementation(rlibs.mockitoJunit)
     testImplementation(rlibs.dataFaker)
     testImplementation(rlibs.slf4j)
+    testImplementation(rlibs.slf4j.simple)
   }
 
   java {

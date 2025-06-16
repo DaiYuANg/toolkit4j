@@ -48,3 +48,5 @@ include("document")
 
 include("libs:sensitive")
 include("libs:validator")
+include("libs:id")
+include("libs:lang")

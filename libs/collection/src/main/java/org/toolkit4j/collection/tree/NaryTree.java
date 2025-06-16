@@ -4,6 +4,7 @@ import io.soabase.recordbuilder.core.RecordBuilder;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.val;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.List;
 import java.util.function.BiConsumer;
@@ -17,6 +18,7 @@ import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toMap;
 
 @RecordBuilder
+@ApiStatus.Experimental
 public record NaryTree<T, ID>(
   List<T> nodes,
   Function<T, ID> idGetter,
