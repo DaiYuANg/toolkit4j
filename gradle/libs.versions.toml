@@ -10,18 +10,18 @@ autoService = "1.1.1"
 lettuce = "6.3.0.RELEASE"
 hazelcast = "5.3.6"
 slf4j = "2.1.0-alpha1"
-record-builder = "47"
-eclipse-collection = "12.0.0.M20.JDK17"
+record-builder = "51"
+eclipse-collection = "13.0.0"
 
 [plugins]
 jmh = { id = "me.champeau.jmh", version = "0.7.3" }
-versionCheck = { id = "com.github.ben-manes.versions", version = "0.52.0" }
-lombok = { id = "name.remal.lombok", version = "3.0.1" }
-spotless = { id = "com.diffplug.spotless", version = "7.0.4" }
-dokka = { id = "org.jetbrains.dokka", version = "2.0.0" }
+versionCheck = { id = "com.github.ben-manes.versions", version = "0.53.0" }
+lombok = { id = "name.remal.lombok", version = "3.1.5" }
+spotless = { id = "com.diffplug.spotless", version = "8.0.0" }
+dokka = { id = "org.jetbrains.dokka", version = "2.1.0" }
 git = { id = "com.xenoterracide.gradle.git", version = "0.12.1" }
 plantuml = { id = "io.gitlab.plunts.plantuml", version = "2.3.0" }
-maven-publish = { id = "com.vanniktech.maven.publish", version = "0.32.0" }
+maven-publish = { id = "com.vanniktech.maven.publish", version = "0.35.0" }
 mkdocs = { id = "ru.vyarus.mkdocs", version = "4.0.1" }
 
 [libraries]
@@ -48,13 +48,13 @@ slf4jJdkPlatform = { group = "org.slf4j", name = "slf4j-jdk-platform-logging", v
 slf4jJulBridage = { group = "org.slf4j", name = "jul-to-slf4j", version.ref = "slf4j" }
 
 apacheCommonIO = { group = "commons-io", name = "commons-io", version = "2.14.0" }
-apacheCommonLang3 = { group = "org.apache.commons", name = "commons-lang3", version = "3.17.0" }
+apacheCommonLang3 = { group = "org.apache.commons", name = "commons-lang3", version = "3.19.0" }
 apacheCommonPool = { group = "org.apache.commons", name = "commons-pool2", version = "2.12.0" }
 apacheDBUtil = { group = "commons-dbutils", name = "commons-dbutils", version = "1.8.1" }
-dataFaker = { group = "net.datafaker", name = "datafaker", version = "2.4.3" }
+dataFaker = { group = "net.datafaker", name = "datafaker", version = "2.5.3" }
 
 jgrapht = { group = "org.jgrapht", name = "jgrapht-core", version = "1.5.2" }
-fastutil = { group = "it.unimi.dsi", name = "fastutil", version = "8.5.15" }
+fastutil = { group = "it.unimi.dsi", name = "fastutil", version = "8.5.18" }
 jetbrainsAnnotation = { group = "org.jetbrains", name = "annotations", version = "26.0.2" }
 
 record-builder-processor = { group = "io.soabase.record-builder", name = "record-builder-processor", version.ref = "record-builder" }
@@ -66,4 +66,4 @@ validation-api = { group = "jakarta.validation", name = "jakarta.validation-api"
 
 eclipse-collections = { group = "org.eclipse.collections", name = "eclipse-collections", version.ref = "eclipse-collection" }
 eclipse-collections-api = { group = "org.eclipse.collections", name = "eclipse-collections-api", version.ref = "eclipse-collection" }
-agrona = { group = "org.agrona", name = "agrona", version = "2.2.2" }
+agrona = { group = "org.agrona", name = "agrona", version = "2.3.2" }

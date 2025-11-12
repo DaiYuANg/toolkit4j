@@ -1,0 +1,9 @@
+# improve gradle build speed
+org.gradle.jvmargs=-Xmx8192m -Dfile.encoding=UTF-8
+org.gradle.daemon=true
+org.gradle.parallel=true
+org.gradle.caching=true
+systemProp.http.proxyHost=127.0.0.1
+systemProp.http.proxyPort=
+systemProp.https.proxyHost=127.0.0.1
+systemProp.https.proxyPort=

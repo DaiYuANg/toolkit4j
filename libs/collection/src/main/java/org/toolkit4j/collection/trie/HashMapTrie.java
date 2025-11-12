@@ -21,7 +21,7 @@ public class HashMapTrie<K, V> implements Trie<K, V> {
   }
 
   @Override
-  public void insert(Iterable<K> keySequence, V value) {
+  public void insert(@NotNull Iterable<K> keySequence, V value) {
     var node = root;
     for (K key : keySequence) {
       var child = node.getChild(key);
