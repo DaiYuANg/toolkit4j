@@ -1,4 +1,4 @@
-package org.toolkit4j.dispatcher;
+package org.toolkit4j.net;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;

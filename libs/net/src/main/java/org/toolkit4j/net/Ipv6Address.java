@@ -1,0 +1,86 @@
+package org.toolkit4j.net;
+
+import lombok.SneakyThrows;
+import lombok.val;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+
+import java.math.BigInteger;
+import java.net.InetAddress;
+import java.util.Objects;
+
+/**
+ * IPv6 地址
+ */
+public final class Ipv6Address implements IpAddress {
+  private final BigInteger address; // 128位
+
+  private Ipv6Address(@NotNull BigInteger address) {
+    if (address.signum() < 0 || address.bitLength() > 128) {
+      throw new IllegalArgumentException("Invalid IPv6 value");
+    }
+    this.address = address;
+  }
+
+  @Contract("_ -> new")
+  public static @NotNull Ipv6Address of(String ip) {
+    Objects.requireNonNull(ip, "IP address cannot be null");
+    String[] parts = ip.split(":", -1);
+    if (parts.length < 3 || parts.length > 8) {
+      throw new IllegalArgumentException("Invalid IPv6 address: " + ip);
+    }
+
+    // 使用标准 Java 方法解析简化
+    InetAddress inet;
+    try {
+      inet = java.net.InetAddress.getByName(ip);
+    } catch (Exception e) {
+      throw new IllegalArgumentException("Invalid IPv6 address: " + ip, e);
+    }
+    val bytes = inet.getAddress();
+    if (bytes.length != 16) {
+      throw new IllegalArgumentException("Not a valid IPv6 address: " + ip);
+    }
+    return new Ipv6Address(new BigInteger(1, bytes));
+  }
+
+  @Override
+  public byte @NotNull [] bytes() {
+    byte[] arr = address.toByteArray();
+    if (arr.length == 16) return arr;
+    // 补零到16字节
+    byte[] res = new byte[16];
+    System.arraycopy(arr, 0, res, 16 - arr.length, arr.length);
+    return res;
+  }
+
+  @Override
+  public boolean isLoopback() {
+    return address.equals(BigInteger.ONE);
+  }
+
+  @Override
+  public boolean isPrivate() {
+    // IPv6 私网: fc00::/7
+    val prefix = address.shiftRight(121); // 128-7=121
+    return prefix.intValue() == 0b1111110; // fc00::/7
+  }
+
+  @SneakyThrows
+  @Override
+  public String toString() {
+    java.net.InetAddress inet = java.net.InetAddress.getByAddress(bytes());
+    return inet.getHostAddress();
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    return o instanceof Ipv6Address other && this.address.equals(other.address);
+  }
+
+  @Override
+  public int hashCode() {
+    return address.hashCode();
+  }
+}
+

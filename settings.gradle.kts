@@ -40,7 +40,7 @@ rootProject.name = "toolkit4j"
 
 include("libs:collection")
 
-include("libs:dispatcher")
+include("libs:net")
 
 include("libs:fp")
 

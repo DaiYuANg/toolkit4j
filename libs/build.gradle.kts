@@ -17,7 +17,7 @@ subprojects {
   apply<com.vanniktech.maven.publish.MavenPublishPlugin>()
 
   dependencies {
-    implementation(rlibs.jetbrainsAnnotation)
+    compileOnly(rlibs.jetbrainsAnnotation)
     testImplementation(enforcedPlatform(rlibs.junitBom))
     testImplementation(rlibs.junitJuiter)
     testImplementation(rlibs.junitApi)

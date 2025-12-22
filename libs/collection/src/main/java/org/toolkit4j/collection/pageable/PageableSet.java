@@ -1,12 +1,8 @@
 package org.toolkit4j.collection.pageable;
 
-import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
 import lombok.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static java.util.Collections.emptySet;
 
@@ -24,7 +20,7 @@ public class PageableSet<T> implements PageableCollection<T, Set<T>> {
     val fromIndex = Math.max(0, (pageNo - 1) * pageSize);
     val toIndex = Math.min(list.size(), fromIndex + pageSize);
     if (fromIndex >= list.size()) return emptySet();
-    return new ObjectLinkedOpenHashSet<>(list.subList(fromIndex, toIndex));
+    return new HashSet<>(list.subList(fromIndex, toIndex));
   }
 
   @Override

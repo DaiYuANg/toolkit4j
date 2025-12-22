@@ -1,0 +1,96 @@
+package org.toolkit4j.net;
+
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
+
+/*
+ * IPv4 地址实现
+ */
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+public final class Ipv4Address implements IpAddress {
+  private final int address; // IPv4 4字节整数表示
+
+  /** 构造方法：从字符串解析，例如 "192.168.1.1" */
+  @Contract("_ -> new")
+  public static @NotNull Ipv4Address of(String ip) {
+    Objects.requireNonNull(ip, "IP address cannot be null");
+    String[] parts = ip.split("\\.");
+    if (parts.length != 4) {
+      throw new IllegalArgumentException("Invalid IPv4 address: " + ip);
+    }
+    int addr = 0;
+    for (int i = 0; i < 4; i++) {
+      int octet;
+      try {
+        octet = Integer.parseInt(parts[i]);
+      } catch (NumberFormatException e) {
+        throw new IllegalArgumentException("Invalid IPv4 address: " + ip, e);
+      }
+      if (octet < 0 || octet > 255) {
+        throw new IllegalArgumentException("Invalid IPv4 address: " + ip);
+      }
+      addr |= (octet << ((3 - i) * 8));
+    }
+    return new Ipv4Address(addr);
+  }
+
+  /** 构造方法：从整数表示 */
+  @Contract(value = "_ -> new", pure = true)
+  public static @NotNull Ipv4Address of(int address) {
+    return new Ipv4Address(address);
+  }
+
+  @Contract(value = " -> new", pure = true)
+  @Override
+  public byte @NotNull [] bytes() {
+    return new byte[]{
+      (byte) (address >> 24),
+      (byte) (address >> 16),
+      (byte) (address >> 8),
+      (byte) address
+    };
+  }
+
+  @Override
+  public boolean isLoopback() {
+    return (address >>> 24) == 127;
+  }
+
+  @Override
+  public boolean isPrivate() {
+    int first = (address >>> 24) & 0xFF;
+    int second = (address >>> 16) & 0xFF;
+    return (first == 10) ||
+      (first == 172 && second >= 16 && second <= 31) ||
+      (first == 192 && second == 168);
+  }
+
+  /** 转换成标准点分十进制字符串 */
+  @Override
+  public String toString() {
+    return String.format("%d.%d.%d.%d",
+      (address >> 24) & 0xFF,
+      (address >> 16) & 0xFF,
+      (address >> 8) & 0xFF,
+      address & 0xFF);
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    return o instanceof Ipv4Address other && this.address == other.address;
+  }
+
+  @Override
+  public int hashCode() {
+    return Integer.hashCode(address);
+  }
+
+  /** 内部方法：返回整数形式 */
+  int toInt() {
+    return address;
+  }
+}

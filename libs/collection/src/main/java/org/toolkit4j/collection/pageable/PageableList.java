@@ -1,11 +1,11 @@
 package org.toolkit4j.collection.pageable;
 
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -20,7 +20,7 @@ public class PageableList<T> implements PageableCollection<T, List<T>> {
     checkPageArgument(pageNo, pageSize);
     val fromIndex = (pageNo - 1) * pageSize;
     val toIndex = Math.min(fromIndex + pageSize, data.size());
-    return new ObjectArrayList<>(data.subList(fromIndex, toIndex));
+    return new ArrayList<>(data.subList(fromIndex, toIndex));
   }
 
   @Override

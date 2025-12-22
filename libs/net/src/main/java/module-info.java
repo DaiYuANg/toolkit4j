@@ -1,5 +1,6 @@
-module org.toolkit4j.collection {
+module org.toolkit4j.net {
   requires static lombok;
   requires static org.jetbrains.annotations;
-  requires java.compiler;
+
+  exports org.toolkit4j.net;
 }

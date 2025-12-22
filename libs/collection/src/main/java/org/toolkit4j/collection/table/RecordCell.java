@@ -1,8 +1,5 @@
 package org.toolkit4j.collection.table;
 
-import io.soabase.recordbuilder.core.RecordBuilder;
-
-@RecordBuilder
 public record RecordCell<R, C, V>(
   R rowKey,
   C columnKey,

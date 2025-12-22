@@ -88,12 +88,11 @@ public abstract class AbstractTable<R, C, V> implements Table<R, C, V> {
   public Set<Cell<R, C, V>> cellSet() {
     return getBackingMap().entrySet().stream()
       .flatMap(rowEntry -> rowEntry.getValue().entrySet().stream()
-        .map(cellEntry ->
-          RecordCellBuilder.<R, C, V>builder()
-            .rowKey(rowEntry.getKey())
-            .columnKey(cellEntry.getKey())
-            .value(cellEntry.getValue())
-            .build())
+        .map(cellEntry -> new RecordCell<>(
+          rowEntry.getKey(),
+          cellEntry.getKey(),
+          cellEntry.getValue()
+        ))
       )
       .collect(Collectors.toSet());
   }
