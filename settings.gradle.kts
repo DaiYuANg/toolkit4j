@@ -42,11 +42,10 @@ include("libs:collection")
 
 include("libs:net")
 
-include("libs:fp")
+include("libs:data-model")
 
-include("document")
+include("libs:web-data-model")
 
-include("libs:sensitive")
-include("libs:validator")
-include("libs:id")
-include("libs:lang")
+include("libs:hibernate-snowflake-id")
+
+include("libs:distributed")
