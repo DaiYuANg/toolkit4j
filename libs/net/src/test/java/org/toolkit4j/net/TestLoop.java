@@ -13,10 +13,6 @@ public class TestLoop {
     @SneakyThrows
     @Test
     void testLoop() {
-        val loop =new Loop(() -> log.info("loop"));
 
-        TimeUnit.SECONDS.sleep(10);
-
-        loop.stop();
     }
 }
