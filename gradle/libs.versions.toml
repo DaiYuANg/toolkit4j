@@ -66,3 +66,6 @@ eclipse-collections = { group = "org.eclipse.collections", name = "eclipse-colle
 eclipse-collections-api = { group = "org.eclipse.collections", name = "eclipse-collections-api", version.ref = "eclipse-collection" }
 agrona = { group = "org.agrona", name = "agrona", version = "2.3.2" }
 vavr = { group = "io.vavr", name = "vavr", version.ref = "vavr" }
+
+hibernate-orm = { group = "org.hibernate.orm", name = "hibernate-core", version = "7.2.7.Final" }
+jakarta-persistence-api = { group = "jakarta.persistence", name = "jakarta.persistence-api", version = "3.2.0" }

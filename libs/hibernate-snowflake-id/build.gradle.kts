@@ -10,5 +10,5 @@ dependencies {
   compileOnly("jakarta.persistence:jakarta.persistence-api:3.2.0")
   implementation(libs.agrona)
   implementation(libs.vavr)
-  implementation(projects.libs.distributed)
+  implementation(libs.apacheCommonLang3)
 }

@@ -10,7 +10,6 @@ import org.hibernate.generator.GeneratorCreationContext;
 import org.hibernate.id.Configurable;
 import org.hibernate.id.IdentifierGenerator;
 import org.jetbrains.annotations.NotNull;
-import org.toolkit4j.distributed.DistributedNodeUtil;
 
 import java.util.Properties;
 

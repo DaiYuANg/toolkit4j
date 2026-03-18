@@ -1,4 +1,4 @@
-package org.toolkit4j.distributed;
+package org.toolkit4j.integration.hibernate.snowflake.id;
 
 import io.vavr.control.Try;
 import lombok.experimental.UtilityClass;
