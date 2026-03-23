@@ -1,66 +1,153 @@
-# Toolkit4j Collection Package
-
-这是一个基于 JVM 的通用集合数据结构工具包，旨在补充标准库和常用第三方库中不完善或缺失的数据结构实现，提供高效、灵活、易用的集合组件。
+# Toolkit4j Collection Package / toolkit4j 集合模块
 
 ---
 
-## 已实现的数据结构
+## 中文
 
-### 1. NaryTree（N叉树）
-- 多叉树结构，支持任意数量子节点。
-- 适用于树形数据建模，如组织架构、分类层级。
+基于 JVM 的轻量级集合与数据结构工具包，补充 JDK 标准库中不完善或缺失的实现。
 
-### 2. Table（表结构）
-- 类似二维映射结构，支持通过行和列键访问值。
-- 适合数据交叉索引和复杂二维数据存储。
+### 模块定位
 
-### 3. PageableCollection（分页集合）
-- 支持分页访问的集合，方便分页查询和数据切片处理。
-- 适合大数据量场景，提升分页性能和代码清晰度。
+- **轻量级**：最小化依赖，优先使用 JDK 能力
+- **JPMS 支持**：支持 Java Platform Module System
+- **JDK 25**：基线版本
+
+### 已实现
+
+#### Table（二维表）
+- `HashTable`、`TreeTable`、`ConcurrentHashTable`、`WeakTable`
+- 支持 `stream()`、`rowKeyStream()`、`columnKeyStream()`、`valueStream()`
+- `getOrDefault`、`putAll` 等便捷方法
+
+#### PageableCollection（分页集合）
+- `PageableList`、`PageableSet`
+- 支持 `stream()`、`first()`、`last()`、`slice(from, to)`
+
+#### Trie（前缀树）
+- `HashMapTrie`，支持 insert、search、startsWith、keysWithPrefix 等
+- ⚠️ **试验性 API**：`HashMapTrie` 标注为 `@ApiStatus.Experimental`，后续版本可能调整
+
+#### Tree（树形结构）
+- 接口：`Tree`、`ListTree`、`SetTree`、`LinkedTree`、`SortedTree`、`TreeNode`、`ListTreeNode`、`SetTreeNode`、`SortedTreeNode`、`LinkedTreeNode`
+- 构建：`Trees.build()` / `buildList()` / `buildSet()` / `buildLinked()` / `buildSorted()`
+- `stream()`、`breadthFirst()`、`find()`、`pathTo()` 等
+
+#### CollectionUtil
+- `merge`、`mergeDistinct`、`intersection` 等集合操作
+
+### 依赖
+
+- Lombok（static）
+- JetBrains Annotations（static）
+- Gson（仅测试）
+
+### 使用示例
+
+```java
+// Table
+var table = new HashTable<String, String, Integer>();
+table.put("r1", "c1", 100);
+table.rowKeyStream().forEach(System.out::println);
+
+// PageableList
+var list = new PageableList<>(List.of(1, 2, 3, 4, 5));
+var page = list.page(1, 2);  // [1, 2]
+var first = list.first();    // Optional[1]
+
+// Tree (flat list implements FlatNode)
+record Node(Long id, Long parentId) implements FlatNode<Long> {}
+var flat = List.of(new Node(1L, null), new Node(2L, 1L));
+var tree = Trees.build(flat);
+tree.stream().forEach(n -> System.out.println(n.data().id()));
+```
+
+### 基准测试 / Benchmarks
+
+JMH 微基准覆盖：Table（HashTable vs ConcurrentHashTable 单线程/多线程）、Trie、Tree 构建、PageableList/PageableSet。
+
+```bash
+./gradlew :libs:collection:jmh
+# 运行单个 benchmark：-Pjmh.includes='.*TableBenchmark.*'
+```
+
+### 单元测试 / Tests
+
+```bash
+./gradlew :libs:collection:test
+```
 
 ---
 
-## 推荐待实现的数据结构
+## English
 
-### 1. Trie（前缀树）
-- 高效字符串前缀查询结构，支持自动补全和模糊匹配。
-- 适合搜索引擎、词典和文本处理应用。
+A lightweight JVM collection and data structure toolkit that complements the JDK standard library where it is incomplete or lacking.
 
-### 3. SkipList（跳表）
-- 支持快速有序数据插入、删除和范围查询。
-- 可用于实现高效有序集合和索引。
+### Module Overview
 
-### 4. Interval Tree（区间树）
-- 用于存储和查询区间重叠关系的数据结构。
-- 适合时间区间冲突检测、范围查询等场景。
+- **Lightweight**: Minimal dependencies, JDK-first
+- **JPMS support**: Java Platform Module System compatible
+- **JDK 25**: Baseline version
 
-### 8. Suffix Tree / Suffix Array（后缀树/数组）
-- 用于快速字符串匹配和全文搜索。
-- 应用于生物信息学、文本检索等。
+### Implemented
 
-### 9. Graph（图结构）
-- 支持有向、无向图和加权图，提供遍历和路径搜索算法。
-- 适合复杂关系建模，如社交网络、地图路径。
+#### Table (2D mapping)
+- `HashTable`, `TreeTable`, `ConcurrentHashTable`, `WeakTable`
+- `stream()`, `rowKeyStream()`, `columnKeyStream()`, `valueStream()`
+- Convenience methods: `getOrDefault`, `putAll`, etc.
 
-### 10. Deque & RingBuffer（双端队列与环形缓冲区）
-- 高性能双端访问队列及循环缓冲区。
-- 用于流处理、消息队列和数据流缓存。
+#### PageableCollection
+- `PageableList`, `PageableSet`
+- `stream()`, `first()`, `last()`, `slice(from, to)`
 
-### 11. Bloom Filter / Cuckoo Filter（概率型集合）
-- 通过概率判断元素存在性，节省空间，允许少量误判。
-- 用于缓存过滤、去重和快速集合判定。
+#### Trie (prefix tree)
+- `HashMapTrie` with insert, search, startsWith, keysWithPrefix, etc.
+- ⚠️ **Experimental API**: `HashMapTrie` is annotated with `@ApiStatus.Experimental`; API may change in future releases
 
-### 12. MultiMap / MultiSet（多值映射、多重集合）
-- 支持一个键对应多个值或多个重复元素。
-- 常用在统计、分组等场景。
+#### Tree (hierarchical structure)
+- Interfaces: `Tree`, `ListTree`, `SetTree`, `LinkedTree`, `SortedTree`, `TreeNode`, `ListTreeNode`, `SetTreeNode`, `SortedTreeNode`, `LinkedTreeNode`
+- Build: `Trees.build()` / `buildList()` / `buildSet()` / `buildLinked()` / `buildSorted()`
+- `stream()`, `breadthFirst()`, `find()`, `pathTo()`, etc.
 
----
+#### CollectionUtil
+- `merge`, `mergeDistinct`, `intersection` for collection operations
 
-## 未来计划
+### Dependencies
 
-- 持续完善现有结构，提升性能和易用性。
-- 优化 API 设计，支持泛型和多种配置方式。
-- 增加更多常用算法支持，如排序、查找、路径搜索等。
-- 提供详细文档和使用示例，便于快速上手。
+- Lombok (static)
+- JetBrains Annotations (static)
+- Gson (test only)
 
----
+### Usage Example
+
+```java
+// Table
+var table = new HashTable<String, String, Integer>();
+table.put("r1", "c1", 100);
+table.rowKeyStream().forEach(System.out::println);
+
+// PageableList
+var list = new PageableList<>(List.of(1, 2, 3, 4, 5));
+var page = list.page(1, 2);  // [1, 2]
+var first = list.first();    // Optional[1]
+
+// Tree (flat list implements FlatNode)
+record Node(Long id, Long parentId) implements FlatNode<Long> {}
+var flat = List.of(new Node(1L, null), new Node(2L, 1L));
+var tree = Trees.build(flat);
+tree.stream().forEach(n -> System.out.println(n.data().id()));
+```
+
+### Benchmarks
+
+JMH micro-benchmarks for: Table (HashTable vs ConcurrentHashTable, single/multi-thread), Trie, Tree build, PageableList/PageableSet.
+
+```bash
+./gradlew :libs:collection:jmh
+# Run single benchmark: -Pjmh.includes='.*TableBenchmark.*'
+```
+
+### Tests
+
+```bash
+./gradlew :libs:collection:test
+```

@@ -1,8 +1,10 @@
 package org.toolkit4j.collection.table;
 
+import lombok.val;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -143,5 +145,84 @@ class HashTableTest {
 
     long count = table.stream().count();
     assertEquals(2, count);
+  }
+
+  @Test
+  void testStreamExtensions() {
+    table.put("r1", "c1", 100);
+    table.put("r1", "c2", 200);
+    table.put("r2", "c1", 300);
+
+    val rowKeys = table.rowKeyStream().toList();
+    assertEquals(2, rowKeys.size());
+    assertTrue(rowKeys.containsAll(List.of("r1", "r2")));
+
+    val colKeys = table.columnKeyStream().toList();
+    assertEquals(2, colKeys.size());
+    assertTrue(colKeys.containsAll(List.of("c1", "c2")));
+
+    val values = table.valueStream().toList();
+    assertEquals(3, values.size());
+    assertTrue(values.containsAll(List.of(100, 200, 300)));
+  }
+
+  @Test
+  void testGetOrDefault() {
+    table.put("r1", "c1", 100);
+    assertEquals(100, table.getOrDefault("r1", "c1", -1));
+    assertEquals(-1, table.getOrDefault("r1", "c2", -1));
+    assertEquals(-1, table.getOrDefault("r2", "c1", -1));
+  }
+
+  @Test
+  void testPutAll() {
+    table.put("r1", "c1", 100);
+    val other = new HashTable<String, String, Integer>();
+    other.put("r1", "c2", 200);
+    other.put("r2", "c1", 300);
+
+    table.putAll(other);
+    assertEquals(3, table.size());
+    assertEquals(100, table.get("r1", "c1"));
+    assertEquals(200, table.get("r1", "c2"));
+    assertEquals(300, table.get("r2", "c1"));
+  }
+
+  // --- filter / mapValues 边界情况 ---
+  @Test
+  void testFilter_onEmptyTable() {
+    Table<String, String, Integer> filtered = table.filter((r, c) -> true);
+    assertTrue(filtered.isEmpty());
+  }
+
+  @Test
+  void testFilter_allExcluded() {
+    table.put("r1", "c1", 100);
+    table.put("r2", "c2", 200);
+    Table<String, String, Integer> filtered = table.filter((r, c) -> false);
+    assertTrue(filtered.isEmpty());
+  }
+
+  @Test
+  void testFilter_allIncluded() {
+    table.put("r1", "c1", 100);
+    table.put("r2", "c2", 200);
+    Table<String, String, Integer> filtered = table.filter((r, c) -> true);
+    assertEquals(2, filtered.size());
+  }
+
+  @Test
+  void testMapValues_onEmptyTable() {
+    Table<String, String, String> mapped = table.mapValues(Object::toString);
+    assertTrue(mapped.isEmpty());
+  }
+
+  @Test
+  void testMapValues_mapperReturnsNull() {
+    table.put("r1", "c1", 100);
+    table.put("r1", "c2", 200);
+    Table<String, String, Integer> mapped = table.mapValues(v -> v > 150 ? null : v);
+    assertEquals(100, mapped.get("r1", "c1"));
+    assertNull(mapped.get("r1", "c2"));
   }
 }

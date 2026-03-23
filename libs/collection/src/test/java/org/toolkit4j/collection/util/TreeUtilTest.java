@@ -1,9 +1,10 @@
 package org.toolkit4j.collection.util;
 
 import org.junit.jupiter.api.Test;
-import org.toolkit4j.collection.tree.TreeBuilder;
+import lombok.val;
+import org.toolkit4j.collection.tree.ListTree;
 import org.toolkit4j.collection.tree.TreeNode;
-import org.toolkit4j.collection.tree.TreeUtil;
+import org.toolkit4j.collection.tree.Trees;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,61 +16,45 @@ class TreeUtilBigDataTest {
 
   @Test
   void testLargeTree() {
-    // 使用 Faker 生成大数据量
     int totalNodes = 100000;
     Random rand = new Random(42);
     List<Dept> allDepts = new ArrayList<>(totalNodes);
 
-    // 根节点
     allDepts.add(new Dept(1L, null, 0));
-
-    // 随机生成子节点
     for (long i = 2; i <= totalNodes; i++) {
-      // 随机选择已有节点作为 parentId，保证树结构
       long parentId = 1 + rand.nextInt((int) Math.min(i - 1, 1000));
       int weight = rand.nextInt(10);
       allDepts.add(new Dept(i, parentId, weight));
     }
 
-    // 构建树
-    List<Dept> roots = TreeBuilder.build(allDepts);
+    ListTree<Dept> tree = Trees.build(allDepts);
 
-    // 测试根节点数量
-    assertEquals(1, roots.size());
-    assertTrue(roots.getFirst().isRoot());
+    assertEquals(1, tree.roots().size());
 
-    // 测试 DFS
-    List<Dept> dfsList = TreeUtil.dfs(roots.getFirst());
+    val dfsList = tree.stream().toList();
     assertEquals(totalNodes, dfsList.size());
+    assertEquals(1L, dfsList.getFirst().data().id());
 
-    // DFS 中首个节点应该是根节点
-    assertEquals(1L, dfsList.getFirst().id());
-
-    // 测试 BFS
-    List<Dept> bfsList = TreeUtil.bfs(roots.getFirst());
+    val bfsList = tree.breadthFirst().toList();
     assertEquals(totalNodes, bfsList.size());
-    assertEquals(1L, bfsList.getFirst().id());
+    assertEquals(1L, bfsList.getFirst().data().id());
 
-    // 检查 BFS 的第二层节点 id 是否在合理范围
-    List<Long> secondLevelIds = roots.getFirst().children().stream()
-      .map(TreeNode::id)
-      .toList();
+    val secondLevelIds = tree.roots().getFirst().children().stream()
+        .map(n -> n.data().id())
+        .toList();
     assertFalse(secondLevelIds.isEmpty());
-    assertTrue(secondLevelIds.contains(bfsList.get(1).id()));
+    assertTrue(secondLevelIds.contains(bfsList.get(1).data().id()));
 
-    // 扁平化整个树
-    List<Dept> flat = TreeUtil.flatten(roots);
+    val flat = tree.stream().map(TreeNode::data).toList();
     assertEquals(totalNodes, flat.size());
 
-    // 获取叶子节点
-    List<Dept> leaves = TreeUtil.getLeaves(roots);
+    val leaves = tree.stream().filter(TreeNode::isLeaf).toList();
     assertFalse(leaves.isEmpty());
-    leaves.forEach(dept -> assertTrue(dept.isLeaf()));
+    leaves.forEach(n -> assertTrue(n.isLeaf()));
 
-    // 测试 pathToNode
-    Dept randomNode = flat.get(rand.nextInt(flat.size()));
-    List<Dept> path = TreeUtil.pathToNode(roots.getFirst(), n -> n.id().equals(randomNode.id()));
+    Dept randomDept = flat.get(rand.nextInt(flat.size()));
+    val path = tree.pathTo(d -> d.id().equals(randomDept.id()));
     assertFalse(path.isEmpty());
-    assertEquals(randomNode.id(), path.getLast().id());
+    assertEquals(randomDept.id(), path.getLast().data().id());
   }
 }

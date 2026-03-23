@@ -3,6 +3,8 @@ package org.toolkit4j.collection.trie;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
+import lombok.val;
+
 import java.util.*;
 import java.util.function.Supplier;
 
@@ -50,21 +52,24 @@ public class HashMapTrie<K, V> implements Trie<K, V> {
 
   @Override
   public boolean delete(Iterable<K> keySequence) {
-    return delete(root, keySequence.iterator());
+    val found = new boolean[1];
+    delete(root, keySequence.iterator(), found);
+    return found[0];
   }
 
-  private boolean delete(TrieNode<K, V> current, Iterator<K> iterator) {
+  private boolean delete(TrieNode<K, V> current, Iterator<K> iterator, boolean[] found) {
     if (!iterator.hasNext()) {
       if (!current.isEnd()) return false;
       current.setEnd(false);
       current.setValue(null);
+      found[0] = true;
       return current.getChildren().isEmpty();
     }
     K key = iterator.next();
-    var child = current.getChild(key);
+    val child = current.getChild(key);
     if (child == null) return false;
 
-    boolean shouldDeleteChild = delete(child, iterator);
+    boolean shouldDeleteChild = delete(child, iterator, found);
 
     if (shouldDeleteChild) {
       current.getChildren().remove(key);
@@ -76,12 +81,14 @@ public class HashMapTrie<K, V> implements Trie<K, V> {
 
   @Override
   public Set<List<K>> keysWithPrefix(Iterable<K> prefixSequence) {
-    return traverse(prefixSequence)
+    List<K> prefixList = new ArrayList<>();
+    for (K k : prefixSequence) {
+      prefixList.add(k);
+    }
+    return traverse(prefixList)
       .map(node -> {
-        LinkedList<K> prefixList = new LinkedList<>();
-        prefixSequence.forEach(prefixList::add);
         Set<List<K>> results = new HashSet<>();
-        collect(node, prefixList, results);
+        collect(node, new LinkedList<>(prefixList), results);
         return results;
       })
       .orElseGet(Collections::emptySet);

@@ -5,41 +5,58 @@ import net.datafaker.Faker;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.spy;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class PageableSetTest {
+class PageableSetTest {
 
-    private final PageableList<String> pageable = spy(new PageableList<>(List.of()));
+  private PageableSet<String> pageable;
+  private final Faker faker = new Faker();
 
-    private final Faker faker = new Faker();
+  @BeforeEach
+  void setup() {
+    Set<String> fakeData = IntStream.range(0, 1000)
+      .mapToObj(i -> faker.name().fullName())
+      .collect(Collectors.toSet());
+    pageable = new PageableSet<>(fakeData);
+  }
 
-    private int totalFakeData;
+  @Test
+  void testPage() {
+    val pageSize = 50;
+    val paged = pageable.page(2, pageSize);
+    assertEquals(pageSize, paged.size());
+  }
 
-    @BeforeEach
-    void setup() {
-        val c = faker.name();
-        val fakeData = IntStream.range(0, 10000)
-                .mapToObj(i -> c.fullName())
-                .collect(Collectors.toSet());
-        totalFakeData = fakeData.size();
-//        pageable.addAll(fakeData);
-    }
+  @Test
+  void testZeroPageNo() {
+    assertThrows(IllegalArgumentException.class, () -> pageable.page(0, 10));
+  }
 
-    @Test
-    void testPage() {
-        val pageSize = 50;
-        val paged = pageable.page(2, pageSize);
-        assertEquals(paged.size(), pageSize);
-    }
+  @Test
+  void testInvalidPageSize() {
+    assertThrows(IllegalArgumentException.class, () -> pageable.page(1, 0));
+  }
 
-    @Test
-    void testZeroPageNo() {
-        assertThrows(IllegalArgumentException.class, () -> pageable.page(0, 10));
-    }
+  @Test
+  void testStream() {
+    assertEquals(pageable.totalSize(), pageable.stream().count());
+  }
+
+  @Test
+  void testFirstAndLast() {
+    assertTrue(pageable.first().isPresent());
+    assertTrue(pageable.last().isPresent());
+  }
+
+  @Test
+  void testSlice() {
+    val slice = pageable.slice(10, 20);
+    assertEquals(10, slice.size());
+  }
 }

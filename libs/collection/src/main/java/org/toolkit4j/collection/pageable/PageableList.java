@@ -7,6 +7,7 @@ import lombok.val;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 @RequiredArgsConstructor
 @Data
@@ -24,8 +25,8 @@ public class PageableList<T> implements PageableCollection<T, List<T>> {
   }
 
   @Override
-  public int totalPage(int size) {
-    return (int) Math.ceil((double) data.size() / size);
+  public int totalPage(int pageSize) {
+    return (int) Math.ceil((double) data.size() / pageSize);
   }
 
   @Override
@@ -56,5 +57,18 @@ public class PageableList<T> implements PageableCollection<T, List<T>> {
   @Override
   public int getPreviousPage() {
     return hasPreviousPage() ? pageNo - 1 : pageNo;
+  }
+
+  @Override
+  public Stream<T> stream() {
+    return data.stream();
+  }
+
+  @Override
+  public List<T> slice(int fromIndex, int toIndex) {
+    if (fromIndex < 0 || toIndex > data.size() || fromIndex > toIndex) {
+      throw new IndexOutOfBoundsException("fromIndex=%d, toIndex=%d, size=%d".formatted(fromIndex, toIndex, data.size()));
+    }
+    return new ArrayList<>(data.subList(fromIndex, toIndex));
   }
 }

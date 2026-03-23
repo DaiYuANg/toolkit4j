@@ -36,11 +36,11 @@ class CollectionUtilTest {
 
   @Test
   void testMerge_emptyInput() {
-    var merged = CollectionUtil.<Integer>merge();
+    val merged = CollectionUtil.<Integer>merge();
     assertTrue(merged.isEmpty());
 
-    merged = CollectionUtil.merge((Collection<Integer>[]) null);
-    assertTrue(merged.isEmpty());
+    val mergedNull = CollectionUtil.merge((Collection<Integer>[]) null);
+    assertTrue(mergedNull.isEmpty());
   }
 
   @Test

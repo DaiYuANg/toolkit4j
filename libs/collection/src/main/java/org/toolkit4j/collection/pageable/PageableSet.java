@@ -3,6 +3,7 @@ package org.toolkit4j.collection.pageable;
 import lombok.*;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 import static java.util.Collections.emptySet;
 
@@ -16,6 +17,7 @@ public class PageableSet<T> implements PageableCollection<T, Set<T>> {
 
   @Override
   public Set<T> page(int pageNo, int pageSize) {
+    checkPageArgument(pageNo, pageSize);
     val list = new ArrayList<>(set);
     val fromIndex = Math.max(0, (pageNo - 1) * pageSize);
     val toIndex = Math.min(list.size(), fromIndex + pageSize);
@@ -24,8 +26,8 @@ public class PageableSet<T> implements PageableCollection<T, Set<T>> {
   }
 
   @Override
-  public int totalPage(int size) {
-    return (int) Math.ceil((double) size / pageSize);
+  public int totalPage(int pageSize) {
+    return (int) Math.ceil((double) set.size() / pageSize);
   }
 
   @Override
@@ -40,7 +42,7 @@ public class PageableSet<T> implements PageableCollection<T, Set<T>> {
 
   @Override
   public boolean hasNextPage() {
-    return pageNo < totalPage(set.size());
+    return pageNo < totalPage(pageSize);
   }
 
   @Override
@@ -56,5 +58,19 @@ public class PageableSet<T> implements PageableCollection<T, Set<T>> {
   @Override
   public int getPreviousPage() {
     return hasPreviousPage() ? pageNo - 1 : pageNo;
+  }
+
+  @Override
+  public Stream<T> stream() {
+    return set.stream();
+  }
+
+  @Override
+  public Set<T> slice(int fromIndex, int toIndex) {
+    val list = new ArrayList<>(set);
+    if (fromIndex < 0 || toIndex > list.size() || fromIndex > toIndex) {
+      throw new IndexOutOfBoundsException("fromIndex=%d, toIndex=%d, size=%d".formatted(fromIndex, toIndex, list.size()));
+    }
+    return new HashSet<>(list.subList(fromIndex, toIndex));
   }
 }

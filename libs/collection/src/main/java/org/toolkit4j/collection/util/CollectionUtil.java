@@ -9,6 +9,13 @@ import java.util.stream.Stream;
 
 import static java.util.Collections.emptyList;
 
+/**
+ * 多集合合并与交集操作。
+ * Multi-collection merge and intersection operations.
+ *
+ * <p>职责限定为：合并多个集合、求交集。避免添加无关方法。
+ * Responsibility: merge multiple collections, intersection. Avoid adding unrelated methods.
+ */
 @UtilityClass
 public class CollectionUtil {
   @SafeVarargs

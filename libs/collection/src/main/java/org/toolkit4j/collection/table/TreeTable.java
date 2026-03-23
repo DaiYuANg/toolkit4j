@@ -7,13 +7,15 @@ import java.util.TreeMap;
 @SuppressWarnings("unused")
 public class TreeTable<R extends Comparable<R>, C extends Comparable<C>, V> extends AbstractTable<R, C, V> {
 
+  private final Comparator<R> rowComparator;
   private final Map<R, Map<C, V>> backingMap;
 
   public TreeTable() {
-    this.backingMap = new TreeMap<>();
+    this(null);
   }
 
   public TreeTable(Comparator<R> rowComparator) {
+    this.rowComparator = rowComparator;
     this.backingMap = new TreeMap<>(rowComparator);
   }
 
@@ -23,7 +25,13 @@ public class TreeTable<R extends Comparable<R>, C extends Comparable<C>, V> exte
   }
 
   @Override
+  protected Map<C, V> createColumnMap() {
+    return new TreeMap<>();
+  }
+
+  @Override
+  @SuppressWarnings("unchecked")
   protected <V2> AbstractTable<R, C, V2> createInstance() {
-    return new TreeTable<>();
+    return rowComparator == null ? new TreeTable<>() : new TreeTable<>(rowComparator);
   }
 }

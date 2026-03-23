@@ -1,66 +1,31 @@
 package org.toolkit4j.collection.tree;
 
-import lombok.val;
-
 import java.util.Collection;
-import java.util.Objects;
+import java.util.stream.Stream;
 
-public interface TreeNode<ID> {
+/**
+ * 树节点接口。TreeNode interface.
+ *
+ * <p>子类可细化 children 的集合类型，如 ListTreeNode、SetTreeNode。
+ * Sub-interfaces may narrow children to List or Set.
+ *
+ * @param <T> 节点数据类型
+ */
+public interface TreeNode<T> {
 
-  ID id();
+  /** 节点数据。Node data. */
+  T data();
 
-  ID parentId();
+  /** 子节点集合。Children collection. 实现可为 List 或 Set 等。 */
+  Collection<TreeNode<T>> children();
 
-  Collection<? extends TreeNode<ID>> children();
-
-  /**
-   * 排序权重，越小越靠前
-   */
-  default Integer weight() {
-    return 0;
-  }
-
-  /**
-   * 路径缓存，如：1/11/111
-   */
-  default String path() {
-    return "";
-  }
-
-  /**
-   * 返回带新 children 的节点，如果实现不可变，则返回新对象
-   */
-  default TreeNode<ID> withChildren(Collection<? extends TreeNode<ID>> children) {
-    throw new UnsupportedOperationException();
-  }
-
-  /**
-   * 返回带新 path 的节点，如果实现不可变，则返回新对象
-   */
-  default TreeNode<ID> withPath(String path) {
-    throw new UnsupportedOperationException();
-  }
-
-  /**
-   * 是否是根节点
-   */
-  default boolean isRoot() {
-    return Objects.isNull(parentId());
-  }
-
-  /**
-   * 是否是叶子节点
-   */
+  /** 是否叶子节点。True if no children. */
   default boolean isLeaf() {
-    Collection<? extends TreeNode<ID>> c = children();
-    return Objects.isNull(c) || c.isEmpty();
+    return children().isEmpty();
   }
 
-  /**
-   * 是否有子节点
-   */
-  default boolean hasChildren() {
-    val c = children();
-    return Objects.nonNull(c) && !c.isEmpty();
+  /** 以该节点为根的 DFS 流。DFS stream of subtree. */
+  default Stream<TreeNode<T>> stream() {
+    return Stream.concat(Stream.of(this), children().stream().flatMap(TreeNode::stream));
   }
 }

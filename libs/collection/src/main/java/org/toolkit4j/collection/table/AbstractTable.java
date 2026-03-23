@@ -1,11 +1,14 @@
 package org.toolkit4j.collection.table;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public abstract class AbstractTable<R, C, V> implements Table<R, C, V> {
+  private final AtomicInteger size = new AtomicInteger(0);
+
   protected abstract Map<R, Map<C, V>> getBackingMap();
 
   /**
@@ -24,22 +27,25 @@ public abstract class AbstractTable<R, C, V> implements Table<R, C, V> {
 
   @Override
   public void put(R rowKey, C columnKey, V value) {
-    getBackingMap()
-      .computeIfAbsent(rowKey, k -> createColumnMap())
-      .put(columnKey, value);
+    Map<C, V> row = getBackingMap().computeIfAbsent(rowKey, k -> createColumnMap());
+    V old = row.put(columnKey, value);
+    if (old == null) {
+      size.incrementAndGet();
+    }
   }
 
   @Override
   public V remove(R rowKey, C columnKey) {
-    return Optional.ofNullable(getBackingMap().get(rowKey))
-      .map(row -> {
-        V removed = row.remove(columnKey);
-        if (row.isEmpty()) {
-          getBackingMap().remove(rowKey);
-        }
-        return removed;
-      })
-      .orElse(null);
+    Map<C, V> row = getBackingMap().get(rowKey);
+    if (row == null) return null;
+    V removed = row.remove(columnKey);
+    if (removed != null) {
+      size.decrementAndGet();
+      if (row.isEmpty()) {
+        getBackingMap().remove(rowKey);
+      }
+    }
+    return removed;
   }
 
   @Override
@@ -100,6 +106,7 @@ public abstract class AbstractTable<R, C, V> implements Table<R, C, V> {
   @Override
   public void clear() {
     getBackingMap().clear();
+    size.set(0);
   }
 
   @Override
@@ -109,9 +116,7 @@ public abstract class AbstractTable<R, C, V> implements Table<R, C, V> {
 
   @Override
   public int size() {
-    return getBackingMap().values().stream()
-      .mapToInt(Map::size)
-      .sum();
+    return size.get();
   }
 
   @Override
