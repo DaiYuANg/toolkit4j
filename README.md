@@ -1,8 +1,12 @@
 # toolkit4j
 
-A toolkit for jvm
+**English** · A lightweight JVM utility toolkit for collections, data models, and small infrastructure helpers.
 
-## Getting started
+**中文** · 面向 JVM 的轻量级工具库，提供集合、数据模型及小型基础设施扩展。
+
+---
+
+## Getting started / 快速开始
 
 ### Installation
 
@@ -28,32 +32,22 @@ Use the built-in continuous integration in GitLab.
 - [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
 - [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
 
-## License
+## License / 许可证
 
 [MIT](./LICENSE.txt)
 
-## Roadmap
+## Roadmap / 路线图
 
-- boxes
-    - [ ] Either
-    - [ ] NumberContainer
-    - [ ] StringContainer
-    - [ ] Try
-    - [ ] TryCatch
-    - [ ] TryOr
 - collection
     - graph
         - [ ] UndirectedGraph
     - pageable
-        - [ ] PageableList
-        - [ ] pageableSet
+        - [X] PageableList
+        - [X] PageableSet
     - table
         - [X] ConcurrentHashTable
     - tree
         - [ ] ListTreeNode
-- dispatcher
-- [ ] AllDone Dispatcher
-- [ ] Loop
 
 ## Project status
 

@@ -1,7 +1,6 @@
 package org.toolkit4j.data.model;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /**
  * 通用分页查询参数模型。

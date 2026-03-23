@@ -5,7 +5,7 @@ plugins {
   idea
   `java-library`
   alias(libs.plugins.jmh)
-  alias(libs.plugins.versionCheck)
+  alias(libs.plugins.version.check)
   alias(libs.plugins.spotless)
   alias(libs.plugins.dokka)
   alias(libs.plugins.git)
@@ -49,8 +49,7 @@ subprojects {
     dependencies {
       compileOnly(rlibs.jetbrainsAnnotation)
       compileOnly(rlibs.slf4j)
-      implementation(rlibs.record.builder.core)
-      annotationProcessor(rlibs.record.builder.processor)
+//
       testImplementation(enforcedPlatform(rlibs.junitBom))
       testImplementation(rlibs.junitJuiter)
       testImplementation(rlibs.junitApi)
