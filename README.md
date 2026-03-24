@@ -1,56 +1,67 @@
 # toolkit4j
 
-**English** · A lightweight JVM utility toolkit for collections, data models, and small infrastructure helpers.
-
+**English** · A lightweight JVM utility toolkit for collections, data models, and small infrastructure helpers.  
 **中文** · 面向 JVM 的轻量级工具库，提供集合、数据模型及小型基础设施扩展。
 
 ---
 
-## Getting started / 快速开始
+## Installation
 
-### Installation
+`toolkit4j` artifacts are published to Maven Central under `io.github.daiyuang`.
 
-## Integrate with your tools
+### Gradle (Kotlin DSL)
 
-- [ ] [Set up project integrations](https://dev.daiyuang.cloud:83/gitlab/daiyuang/toolkit/-/settings/integrations)
+```kotlin
+dependencies {
+  implementation("io.github.daiyuang:collection:0.0.1")
+  // implementation("io.github.daiyuang:data-model:0.0.1")
+  // implementation("io.github.daiyuang:web-data-model:0.0.1")
+  // implementation("io.github.daiyuang:net:0.0.1")
+  // implementation("io.github.daiyuang:hibernate-snowflake-id:0.0.1")
+  // implementation("io.github.daiyuang:quartz-task:0.0.1")
+}
+```
 
-## Collaborate with your team
+### Maven
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+```xml
+<dependency>
+  <groupId>io.github.daiyuang</groupId>
+  <artifactId>collection</artifactId>
+  <version>0.0.1</version>
+</dependency>
+```
 
-## Test and Deploy
+---
 
-Use the built-in continuous integration in GitLab.
+## Modules
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+- `collection`: data structures such as pageable collections, table, trie, and tree helpers.
+- `data-model`: reusable model types such as `PageRequest`, `PageResult`, `KeyValue`, `Option`.
+- `web-data-model`: generic web response model `Result<C, T>`.
+- `net`: IP / CIDR utility types (`Ipv4Address`, `Ipv6Address`, `Cidr`, `IpInfo`).
+- `hibernate-snowflake-id`: Hibernate integration for Agrona Snowflake ID generator.
+- `quartz-task`: high-level Quartz task registration and scheduling API.
 
-## License / 许可证
+---
+
+## Documentation
+
+Start from the docs index:
+
+- [docs/README.md](./docs/README.md)
+
+Per-module guides:
+
+- [Collection](./docs/collection.md)
+- [Data Model](./docs/data-model.md)
+- [Web Data Model](./docs/web-data-model.md)
+- [Net](./docs/net.md)
+- [Hibernate Snowflake ID](./docs/hibernate-snowflake-id.md)
+- [Quartz Task](./docs/quartz-task.md)
+
+---
+
+## License
 
 [Apache License 2.0](./LICENSE.txt)
-
-## Roadmap / 路线图
-
-- collection
-    - graph
-        - [ ] UndirectedGraph
-    - pageable
-        - [X] PageableList
-        - [X] PageableSet
-    - table
-        - [X] ConcurrentHashTable
-    - tree
-        - [ ] ListTreeNode
-
-## Project status
-
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has
-slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or
-owner, allowing your project to keep going. You can also make an explicit request for maintainers.
