@@ -69,7 +69,7 @@ allprojects {
 val rlibs = rootProject.libs;
 
 subprojects {
-  if (project.name != "document") {
+  if (project.name != "document" && project.childProjects.isEmpty()) {
     applyPublishingPropsFromDotenv()
     apply<JMHPlugin>()
     apply<LombokPlugin>()
@@ -159,6 +159,10 @@ subprojects {
         attributes("Version" to project.version)
       }
       duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    }
+    // Gradle 9 strict validation: ensure metadata generation has explicit dependency on javadoc jar.
+    tasks.matching { it.name == "generateMetadataFileForMavenPublication" }.configureEach {
+      dependsOn(tasks.matching { task -> task.name == "plainJavadocJar" })
     }
 
     tasks.test {
