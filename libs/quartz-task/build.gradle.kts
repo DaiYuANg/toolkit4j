@@ -5,6 +5,7 @@ plugins {
 group = "org.toolkit4j"
 
 dependencies {
-  implementation(libs.quartz)
+  compileOnly(libs.quartz)
+  testImplementation(libs.quartz)
 }
 

@@ -1,5 +1,7 @@
 package org.toolkit4j.quartz.task;
 
+import org.quartz.Job;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -9,7 +11,7 @@ import java.util.function.Consumer;
  */
 public interface TaskScheduler {
 
-  void register(TaskHandler<?> handler, Consumer<TaskBuilder> options);
+  void register(Class<? extends Job> jobClass, Consumer<TaskOptions> options);
 
   void pause(String taskId);
 
@@ -19,9 +21,9 @@ public interface TaskScheduler {
 
   void unschedule(String taskId);
 
-  Optional<TaskStatus> getStatus(String taskId);
+  boolean exists(String taskId);
 
-  List<TaskStatus> listStatuses();
+  Optional<TaskInfo> getTask(String taskId);
 
-  List<TaskExecutionRecord> getRecentExecutions(String taskId, int limit);
+  List<TaskInfo> listTasks();
 }

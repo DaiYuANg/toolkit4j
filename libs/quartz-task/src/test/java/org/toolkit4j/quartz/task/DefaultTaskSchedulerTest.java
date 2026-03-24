@@ -1,19 +1,24 @@
 package org.toolkit4j.quartz.task;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
+import org.quartz.Job;
+import org.quartz.JobExecutionContext;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.impl.StdSchedulerFactory;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -22,6 +27,17 @@ class DefaultTaskSchedulerTest {
 
   private Scheduler scheduler;
   private DefaultTaskScheduler taskScheduler;
+
+  private static final AtomicReference<CountDownLatch> LATCH_REF = new AtomicReference<>();
+  private static final AtomicReference<String> TENANT_ID_REF = new AtomicReference<>();
+  private static final AtomicReference<String> SOURCE_REF = new AtomicReference<>();
+
+  @BeforeEach
+  void resetState() {
+    LATCH_REF.set(null);
+    TENANT_ID_REF.set(null);
+    SOURCE_REF.set(null);
+  }
 
   private static Scheduler createTestScheduler() throws SchedulerException {
     Properties props = new Properties();
@@ -44,50 +60,30 @@ class DefaultTaskSchedulerTest {
     taskScheduler = new DefaultTaskScheduler(scheduler);
 
     CountDownLatch latch = new CountDownLatch(1);
+    LATCH_REF.set(latch);
 
-    TaskHandler<String> handler = new TaskHandler<>() {
-      @Override
-      public String type() {
-        return "test-type";
-      }
-
-      @Override
-      public Class<String> payloadType() {
-        return String.class;
-      }
-
-      @Override
-      public void execute(TaskContext<String> context) {
-        assertEquals("t1", context.taskId());
-        assertEquals("test-type", context.taskType());
-        assertEquals("payload-1", context.payload());
-        latch.countDown();
-      }
-    };
-
-    taskScheduler.register(handler, options -> options
+    taskScheduler.register(OneTimeJob.class, options -> options
       .id("t1")
       .description("once-test")
-      .once(Instant.now().plusMillis(200))
-      .payload("payload-1")
+      .startAt(Instant.now().plusMillis(200))
+      .jobData("tenantId", "tenant-1")
+      .jobData("source", "manual-test")
+      .durable(true)
       .enabled(true)
     );
 
+    Optional<TaskInfo> infoOpt = taskScheduler.getTask("t1");
+    assertTrue(infoOpt.isPresent());
+    TaskInfo info = infoOpt.get();
+    assertEquals("t1", info.taskId());
+    assertEquals(OneTimeJob.class, info.jobClass());
+    assertEquals(TaskScheduleKind.ONCE, info.scheduleType());
+    assertEquals("tenant-1", info.jobData().get("tenantId"));
+
     assertTrue(latch.await(5, TimeUnit.SECONDS), "task should execute");
-
-    Optional<TaskStatus> statusOpt = taskScheduler.getStatus("t1");
-    assertTrue(statusOpt.isPresent());
-    TaskStatus status = statusOpt.get();
-    assertEquals(ExecutionStatus.SUCCESS, status.lastStatus());
-    assertNotNull(status.lastFinishedAt());
-
-    List<TaskExecutionRecord> records = taskScheduler.getRecentExecutions("t1", 10);
-    assertFalse(records.isEmpty());
-    TaskExecutionRecord record = records.get(0);
-    assertEquals("t1", record.taskId());
-    assertEquals("test-type", record.taskType());
-    assertEquals(ExecutionStatus.SUCCESS, record.status());
-    assertEquals(TriggerSource.SCHEDULER, record.triggerSource());
+    assertEquals("tenant-1", TENANT_ID_REF.get());
+    assertEquals("manual-test", SOURCE_REF.get());
+    assertTrue(taskScheduler.exists("t1"));
   }
 
   @Test
@@ -96,48 +92,17 @@ class DefaultTaskSchedulerTest {
     taskScheduler = new DefaultTaskScheduler(scheduler);
 
     CountDownLatch latch = new CountDownLatch(1);
+    LATCH_REF.set(latch);
 
-    TaskHandler<String> handler = new TaskHandler<>() {
-      @Override
-      public String type() {
-        return "test-type-2";
-      }
-
-      @Override
-      public Class<String> payloadType() {
-        return String.class;
-      }
-
-      @Override
-      public void execute(TaskContext<String> context) {
-        latch.countDown();
-      }
-    };
-
-    taskScheduler.register(handler, options -> options
+    taskScheduler.register(ManualTriggerJob.class, options -> options
       .id("t2")
       .description("manual-trigger-test")
-      .once(Instant.now().plusSeconds(30)) // far in the future
-      .payload("payload-2")
+      .startAt(Instant.now().plusSeconds(30))
       .enabled(true)
     );
 
     taskScheduler.triggerNow("t2");
     assertTrue(latch.await(5, TimeUnit.SECONDS), "task should execute by triggerNow");
-
-    List<TaskExecutionRecord> records = List.of();
-    long deadline = System.currentTimeMillis() + 3000;
-    while (System.currentTimeMillis() < deadline) {
-      records = taskScheduler.getRecentExecutions("t2", 10);
-      if (!records.isEmpty()) break;
-      Thread.sleep(50);
-    }
-    assertFalse(records.isEmpty(), "recent executions should be recorded");
-    TaskExecutionRecord record = records.get(0);
-    assertEquals("t2", record.taskId());
-    assertEquals("test-type-2", record.taskType());
-    assertEquals(ExecutionStatus.SUCCESS, record.status());
-    assertEquals(TriggerSource.MANUAL, record.triggerSource());
   }
 
   @Test
@@ -145,33 +110,193 @@ class DefaultTaskSchedulerTest {
     scheduler = createTestScheduler();
     taskScheduler = new DefaultTaskScheduler(scheduler);
 
-    TaskHandler<String> handler = new TaskHandler<>() {
-      @Override
-      public String type() {
-        return "test-type-3";
-      }
-
-      @Override
-      public Class<String> payloadType() {
-        return String.class;
-      }
-
-      @Override
-      public void execute(TaskContext<String> context) {}
-    };
-
-    taskScheduler.register(handler, options -> options
+    taskScheduler.register(ManualTriggerJob.class, options -> options
       .id("t3")
       .description("unschedule-test")
-      .once(Instant.now().plusSeconds(30))
-      .payload("payload-3")
+      .startAt(Instant.now().plusSeconds(30))
       .enabled(true)
     );
 
-    assertTrue(taskScheduler.getStatus("t3").isPresent());
+    assertTrue(taskScheduler.getTask("t3").isPresent());
     taskScheduler.unschedule("t3");
-    assertTrue(taskScheduler.getStatus("t3").isEmpty());
-    assertTrue(taskScheduler.getRecentExecutions("t3", 10).isEmpty());
+    assertTrue(taskScheduler.getTask("t3").isEmpty());
+    assertFalse(taskScheduler.exists("t3"));
+  }
+
+  @Test
+  void testDisabledTask_isPausedUntilResume() throws Exception {
+    scheduler = createTestScheduler();
+    taskScheduler = new DefaultTaskScheduler(scheduler);
+
+    CountDownLatch latch = new CountDownLatch(1);
+    LATCH_REF.set(latch);
+
+    taskScheduler.register(ManualTriggerJob.class, options -> options
+      .id("t4")
+      .description("disabled-interval-test")
+      .interval(Duration.ofMillis(200))
+      .enabled(false)
+    );
+
+    TaskInfo pausedInfo = taskScheduler.getTask("t4").orElseThrow();
+    assertTrue(pausedInfo.paused());
+    assertFalse(pausedInfo.enabled());
+
+    assertFalse(latch.await(500, TimeUnit.MILLISECONDS), "disabled task should not execute");
+    taskScheduler.resume("t4");
+    assertTrue(latch.await(3, TimeUnit.SECONDS), "task should execute after resume");
+  }
+
+  @Test
+  void testListTasks_sortedByTaskId() throws Exception {
+    scheduler = createTestScheduler();
+    taskScheduler = new DefaultTaskScheduler(scheduler);
+
+    taskScheduler.register(ManualTriggerJob.class, options -> options
+      .id("task-b")
+      .interval(Duration.ofSeconds(10))
+      .enabled(true)
+    );
+    taskScheduler.register(ManualTriggerJob.class, options -> options
+      .id("task-a")
+      .startAt(Instant.now().plusSeconds(30))
+      .enabled(true)
+    );
+
+    List<TaskInfo> tasks = taskScheduler.listTasks();
+    assertEquals(2, tasks.size());
+    assertEquals("task-a", tasks.get(0).taskId());
+    assertEquals("task-b", tasks.get(1).taskId());
+  }
+
+  @Test
+  void testCronSchedule_exposesCronMetadata() throws Exception {
+    scheduler = createTestScheduler();
+    taskScheduler = new DefaultTaskScheduler(scheduler);
+
+    taskScheduler.register(ManualTriggerJob.class, options -> options
+      .id("cron-task")
+      .cron("0/30 * * * * ?")
+      .enabled(true)
+    );
+
+    TaskInfo taskInfo = taskScheduler.getTask("cron-task").orElseThrow();
+    assertEquals(TaskScheduleKind.CRON, taskInfo.scheduleType());
+    assertEquals("0/30 * * * * ?", taskInfo.cronExpression());
+    assertNotNull(taskInfo.cronZoneId());
+  }
+
+  @Test
+  void testInvalidCron_throwsTaskRegistrationException() throws Exception {
+    scheduler = createTestScheduler();
+    taskScheduler = new DefaultTaskScheduler(scheduler);
+
+    assertThrows(TaskRegistrationException.class, () ->
+      taskScheduler.register(ManualTriggerJob.class, options -> options
+        .id("bad-cron")
+        .cron("invalid cron")
+      )
+    );
+  }
+
+  @Test
+  void testDuplicateTaskId_defaultPolicyFails() throws Exception {
+    scheduler = createTestScheduler();
+    taskScheduler = new DefaultTaskScheduler(scheduler);
+
+    taskScheduler.register(ManualTriggerJob.class, options -> options
+      .id("dup-task")
+      .interval(Duration.ofSeconds(10))
+      .enabled(true)
+    );
+
+    assertThrows(TaskRegistrationException.class, () ->
+      taskScheduler.register(ManualTriggerJob.class, options -> options
+        .id("dup-task")
+        .interval(Duration.ofSeconds(20))
+        .enabled(true)
+      )
+    );
+  }
+
+  @Test
+  void testDuplicateTaskId_recreatePolicyReplacesTask() throws Exception {
+    scheduler = createTestScheduler();
+    taskScheduler = new DefaultTaskScheduler(scheduler);
+
+    taskScheduler.register(ManualTriggerJob.class, options -> options
+      .id("replace-task")
+      .description("old-version")
+      .interval(Duration.ofSeconds(10))
+      .jobData("version", "v1")
+      .enabled(true)
+    );
+
+    taskScheduler.register(OneTimeJob.class, options -> options
+      .id("replace-task")
+      .description("new-version")
+      .startAt(Instant.now().plusSeconds(60))
+      .jobData("version", "v2")
+      .ifExistsRecreate(true)
+      .enabled(true)
+    );
+
+    TaskInfo taskInfo = taskScheduler.getTask("replace-task").orElseThrow();
+    assertEquals(OneTimeJob.class, taskInfo.jobClass());
+    assertEquals("new-version", taskInfo.description());
+    assertEquals(TaskScheduleKind.ONCE, taskInfo.scheduleType());
+    assertEquals("v2", taskInfo.jobData().get("version"));
+  }
+
+  @Test
+  void testDuplicateTaskId_ignorePolicyLeavesExistingTask() throws Exception {
+    scheduler = createTestScheduler();
+    taskScheduler = new DefaultTaskScheduler(scheduler);
+
+    taskScheduler.register(ManualTriggerJob.class, options -> options
+      .id("ignore-dup")
+      .description("first")
+      .interval(Duration.ofSeconds(10))
+      .jobData("version", "v1")
+      .enabled(true)
+    );
+
+    taskScheduler.register(OneTimeJob.class, options -> options
+      .id("ignore-dup")
+      .description("second-should-not-apply")
+      .startAt(Instant.now().plusSeconds(60))
+      .jobData("version", "v2")
+      .ifExistsIgnore(true)
+      .enabled(true)
+    );
+
+    TaskInfo taskInfo = taskScheduler.getTask("ignore-dup").orElseThrow();
+    assertEquals(ManualTriggerJob.class, taskInfo.jobClass());
+    assertEquals("first", taskInfo.description());
+    assertEquals(TaskScheduleKind.INTERVAL, taskInfo.scheduleType());
+    assertEquals("v1", taskInfo.jobData().get("version"));
+  }
+
+  public static class OneTimeJob implements Job {
+    @Override
+    public void execute(JobExecutionContext context) {
+      TENANT_ID_REF.set(context.getMergedJobDataMap().getString("tenantId"));
+      SOURCE_REF.set(context.getMergedJobDataMap().getString("source"));
+      CountDownLatch latch = LATCH_REF.get();
+      if (latch != null) {
+        latch.countDown();
+      }
+    }
+  }
+
+  public static class ManualTriggerJob implements Job {
+    @Override
+    public void execute(JobExecutionContext context) {
+      CountDownLatch latch = LATCH_REF.get();
+      if (latch != null) {
+        latch.countDown();
+      }
+    }
   }
 }
 
