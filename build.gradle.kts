@@ -19,7 +19,7 @@ plugins {
 /** Maven coordinates; Central GitHub namespace is typically io.github.{lowercase login}. */
 group = "io.github.daiyuang"
 
-version = "0.1.0-SNAPSHOT"
+version = "0.0.1"
 
 /** Copy selected keys from root `.env` (dotenv plugin) into Gradle extra properties for publishing. */
 private fun Project.applyPublishingPropsFromDotenv() {
@@ -149,7 +149,7 @@ subprojects {
     }
 
     java {
-      withJavadocJar()
+      // Vanniktech plugin provides plainJavadocJar; keep only one javadoc artifact to avoid duplicate javadoc.jar(.asc).
       withSourcesJar()
       modularity.inferModulePath.set(true)
     }
