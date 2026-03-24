@@ -1,7 +1,9 @@
+import com.vanniktech.maven.publish.MavenPublishBaseExtension
 import me.champeau.jmh.JMHPlugin
 import name.remal.gradle_plugins.lombok.LombokPlugin
 
 plugins {
+  alias(libs.plugins.dotenv)
   idea
   `java-library`
   alias(libs.plugins.jmh)
@@ -17,7 +19,43 @@ plugins {
 /** Maven coordinates; Central GitHub namespace is typically io.github.{lowercase login}. */
 group = "io.github.daiyuang"
 
-version = "0.1.0"
+version = "0.1.0-SNAPSHOT"
+
+/** Copy selected keys from root `.env` (dotenv plugin) into Gradle extra properties for publishing. */
+private fun Project.applyPublishingPropsFromDotenv() {
+  val envExt = rootProject.extensions.findByName("env") ?: return
+  val fetchOrNull =
+    envExt.javaClass.getMethod("fetchOrNull", String::class.java).let { method ->
+      { key: String -> method.invoke(envExt, key) as String? }
+    }
+  val keys =
+    listOf(
+      "mavenCentralUsername",
+      "mavenCentralPassword",
+      "signingInMemoryKey",
+      "signingInMemoryKeyId",
+      "signingInMemoryKeyPassword",
+      "POM_URL",
+      "POM_NAME",
+      "POM_DESCRIPTION",
+      "POM_INCEPTION_YEAR",
+      "POM_LICENSE_NAME",
+      "POM_LICENSE_URL",
+      "POM_LICENSE_DIST",
+      "POM_SCM_URL",
+      "POM_SCM_CONNECTION",
+      "POM_SCM_DEV_CONNECTION",
+      "POM_DEVELOPER_ID",
+      "POM_DEVELOPER_NAME",
+      "POM_DEVELOPER_URL",
+    )
+  keys.forEach { key ->
+    val v = fetchOrNull(key)
+    if (!v.isNullOrBlank()) {
+      extensions.extraProperties.set(key, v)
+    }
+  }
+}
 
 allprojects {
   repositories {
@@ -32,6 +70,7 @@ val rlibs = rootProject.libs;
 
 subprojects {
   if (project.name != "document") {
+    applyPublishingPropsFromDotenv()
     apply<JMHPlugin>()
     apply<LombokPlugin>()
     apply<JavaLibraryPlugin>()
@@ -39,34 +78,44 @@ subprojects {
     group = rootProject.group
     version = rootProject.version
 
-    mavenPublishing {
+    extensions.configure<MavenPublishBaseExtension>("mavenPublishing") {
       publishToMavenCentral()
       signAllPublications()
       pom {
-        name.set("toolkit4j-${project.name}")
-        description.set(
-          "Lightweight JVM utility toolkit — module \"${project.name}\". See https://github.com/DaiYuANg/toolkit4j",
-        )
-        inceptionYear.set("2026")
-        url.set("https://github.com/DaiYuANg/toolkit4j")
+        name.set(provider { findProperty("POM_NAME") as String? ?: "toolkit4j-${project.name}" })
+        description.set(provider {
+          findProperty("POM_DESCRIPTION") as String?
+            ?: "Lightweight JVM utility toolkit — module \"${project.name}\". See https://github.com/DaiYuANg/toolkit4j"
+        })
+        inceptionYear.set(provider { findProperty("POM_INCEPTION_YEAR") as String? ?: "2026" })
+        url.set(provider { findProperty("POM_URL") as String? ?: "https://github.com/DaiYuANg/toolkit4j" })
         licenses {
           license {
-            name.set("The Apache License, Version 2.0")
-            url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
-            distribution.set("repo")
+            name.set(provider { findProperty("POM_LICENSE_NAME") as String? ?: "The Apache License, Version 2.0" })
+            url.set(provider {
+              findProperty("POM_LICENSE_URL") as String? ?: "https://www.apache.org/licenses/LICENSE-2.0.txt"
+            })
+            distribution.set(provider { findProperty("POM_LICENSE_DIST") as String? ?: "repo" })
           }
         }
         developers {
           developer {
-            id.set("daiyuang")
-            name.set("DaiYuANg")
-            url.set("https://github.com/DaiYuANg")
+            id.set(provider { findProperty("POM_DEVELOPER_ID") as String? ?: "daiyuang" })
+            name.set(provider { findProperty("POM_DEVELOPER_NAME") as String? ?: "DaiYuANg" })
+            url.set(provider {
+              findProperty("POM_DEVELOPER_URL") as String? ?: "https://github.com/DaiYuANg"
+            })
           }
         }
         scm {
-          url.set("https://github.com/DaiYuANg/toolkit4j")
-          connection.set("scm:git:https://github.com/DaiYuANg/toolkit4j.git")
-          developerConnection.set("scm:git:ssh://git@github.com/DaiYuANg/toolkit4j.git")
+          url.set(provider { findProperty("POM_SCM_URL") as String? ?: "https://github.com/DaiYuANg/toolkit4j" })
+          connection.set(provider {
+            findProperty("POM_SCM_CONNECTION") as String? ?: "scm:git:https://github.com/DaiYuANg/toolkit4j.git"
+          })
+          developerConnection.set(provider {
+            findProperty("POM_SCM_DEV_CONNECTION") as String?
+              ?: "scm:git:ssh://git@github.com/DaiYuANg/toolkit4j.git"
+          })
         }
       }
     }
@@ -114,13 +163,20 @@ subprojects {
 
     tasks.test {
       useJUnitPlatform()
-      minHeapSize = "4g"
-      maxParallelForks = Runtime.getRuntime().availableProcessors() * 2
-      maxHeapSize = "8g"
-      systemProperties["junit.jupiter.execution.parallel.enabled"] = true
-      systemProperties["junit.jupiter.execution.parallel.mode.default"] = "concurrent"
+      val onCi = System.getenv("CI").equals("true", ignoreCase = true)
+      if (onCi) {
+        minHeapSize = "256m"
+        maxHeapSize = "1536m"
+        maxParallelForks = (Runtime.getRuntime().availableProcessors() / 2).coerceAtLeast(1)
+        systemProperties["junit.jupiter.execution.parallel.enabled"] = false
+      } else {
+        minHeapSize = "4g"
+        maxHeapSize = "8g"
+        maxParallelForks = Runtime.getRuntime().availableProcessors() * 2
+        systemProperties["junit.jupiter.execution.parallel.enabled"] = true
+        systemProperties["junit.jupiter.execution.parallel.mode.default"] = "concurrent"
+      }
       jvmArgs("-XX:+EnableDynamicAgentLoading")
-      maxParallelForks = Runtime.getRuntime().availableProcessors() * 2
     }
   }
 }
