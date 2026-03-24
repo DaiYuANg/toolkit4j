@@ -1,57 +1,72 @@
 [versions]
+agrona = "2.4.0"
+apacheCommonIO = "2.21.0"
+apacheCommonLang3 = "3.20.0"
+apacheCommonPool = "2.13.1"
+apacheDBUtil = "1.8.1"
 autoFactory = "1.1.0"
 autoService = "1.1.1"
-caffine = "3.2.3"
-eclipse-collection = "13.0.0"
+dataFaker = "2.5.4"
+dokka = "2.1.0"
+gitPlugin = "0.15.1"
+gson = "2.13.2"
+guava = "33.5.0-jre"
 hazelcast = "5.6.0"
+hibernate = "7.3.0.Final"
+jakartaPersistenceApi = "3.2.0"
+jakartaValidationApi = "3.1.1"
+jetbrainsAnnotations = "26.1.0"
+jmh = "0.7.3"
 junit = "6.0.3"
 junitInjectFile = "1.0.0"
-lettuce = "7.5.0.RELEASE"
+lombokPlugin = "3.1.6"
+mavenPublish = "0.36.0"
 mockito = "5.23.0"
-record-builder = "52"
+plantuml = "2.4.0"
+quartz = "2.5.2"
+recordBuilder = "52"
 slf4j = "2.1.0-alpha1"
-vavr = "1.0.1"
-version-check = "1.1.0"
+spotless = "8.4.0"
+versionCheck = "1.1.0"
 
 [plugins]
-dokka = "org.jetbrains.dokka:2.1.0"
-git = "com.xenoterracide.gradle.git:0.15.1"
-jmh = "me.champeau.jmh:0.7.3"
-lombok = "name.remal.lombok:3.1.6"
-maven-publish = "com.vanniktech.maven.publish:0.36.0"
-plantuml = "io.gitlab.plunts.plantuml:2.4.0"
-spotless = "com.diffplug.spotless:8.4.0"
-version-check = { id = "nl.littlerobots.version-catalog-update", version.ref = "version-check" }
+dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
+git = { id = "com.xenoterracide.gradle.git", version.ref = "gitPlugin" }
+jmh = { id = "me.champeau.jmh", version.ref = "jmh" }
+lombok = { id = "name.remal.lombok", version.ref = "lombokPlugin" }
+maven-publish = { id = "com.vanniktech.maven.publish", version.ref = "mavenPublish" }
+plantuml = { id = "io.gitlab.plunts.plantuml", version.ref = "plantuml" }
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
+version-check = { id = "nl.littlerobots.version-catalog-update", version.ref = "versionCheck" }
 
 [libraries]
-agrona = "org.agrona:agrona:2.4.0"
-apacheCommonIO = "commons-io:commons-io:2.21.0"
-apacheCommonLang3 = "org.apache.commons:commons-lang3:3.20.0"
-apacheCommonPool = "org.apache.commons:commons-pool2:2.13.1"
-apacheDBUtil = "commons-dbutils:commons-dbutils:1.8.1"
-autoFactory = { module = "com.google.auto.factory:auto-factory", version.ref = "autoFactory" }
-autoService = { module = "com.google.auto.service:auto-service", version.ref = "autoService" }
-dataFaker = "net.datafaker:datafaker:2.5.4"
-gson = "com.google.code.gson:gson:2.13.2"
-guava = "com.google.guava:guava:33.5.0-jre"
-hazelcast = { module = "com.hazelcast:hazelcast", version.ref = "hazelcast" }
-hibernate-orm = "org.hibernate.orm:hibernate-core:7.3.0.Final"
-jakarta-persistence-api = "jakarta.persistence:jakarta.persistence-api:3.2.0"
-jetbrainsAnnotation = "org.jetbrains:annotations:26.1.0"
-junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }
-junitApi = { module = "org.junit.jupiter:junit-jupiter-api" }
-junitBom = { module = "org.junit:junit-bom", version.ref = "junit" }
-junitEngine = { module = "org.junit.jupiter:junit-jupiter-engine" }
-junitInjectFile = { module = "io.hosuaby:inject-resources-junit-jupiter", version.ref = "junitInjectFile" }
-junitJuiter = { module = "org.junit.jupiter:junit-jupiter" }
-mockitoCore = { module = "org.mockito:mockito-core", version.ref = "mockito" }
-mockitoJunit = { module = "org.mockito:mockito-junit-jupiter", version.ref = "mockito" }
-record-builder-core = { module = "io.soabase.record-builder:record-builder-core", version.ref = "record-builder" }
-record-builder-processor = { module = "io.soabase.record-builder:record-builder-processor", version.ref = "record-builder" }
-slf4j = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
-slf4j-simple = { module = "org.slf4j:slf4j-simple", version.ref = "slf4j" }
-slf4jJdkPlatform = { module = "org.slf4j:slf4j-jdk-platform-logging", version.ref = "slf4j" }
-slf4jJulBridage = { module = "org.slf4j:jul-to-slf4j", version.ref = "slf4j" }
-validation-api = "jakarta.validation:jakarta.validation-api:3.1.1"
-vavr = { module = "io.vavr:vavr", version.ref = "vavr" }
-quartz = { group = "org.quartz-scheduler", name = "quartz", version = "2.5.2" }
+agrona = { group = "org.agrona", name = "agrona", version.ref = "agrona" }
+apacheCommonIO = { group = "commons-io", name = "commons-io", version.ref = "apacheCommonIO" }
+apacheCommonLang3 = { group = "org.apache.commons", name = "commons-lang3", version.ref = "apacheCommonLang3" }
+apacheCommonPool = { group = "org.apache.commons", name = "commons-pool2", version.ref = "apacheCommonPool" }
+apacheDBUtil = { group = "commons-dbutils", name = "commons-dbutils", version.ref = "apacheDBUtil" }
+autoFactory = { group = "com.google.auto.factory", name = "auto-factory", version.ref = "autoFactory" }
+autoService = { group = "com.google.auto.service", name = "auto-service", version.ref = "autoService" }
+dataFaker = { group = "net.datafaker", name = "datafaker", version.ref = "dataFaker" }
+gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
+guava = { group = "com.google.guava", name = "guava", version.ref = "guava" }
+hazelcast = { group = "com.hazelcast", name = "hazelcast", version.ref = "hazelcast" }
+hibernate-orm = { group = "org.hibernate.orm", name = "hibernate-core", version.ref = "hibernate" }
+jakarta-persistence-api = { group = "jakarta.persistence", name = "jakarta.persistence-api", version.ref = "jakartaPersistenceApi" }
+jetbrainsAnnotation = { group = "org.jetbrains", name = "annotations", version.ref = "jetbrainsAnnotations" }
+junit-platform-launcher = { group = "org.junit.platform", name = "junit-platform-launcher" }
+junitApi = { group = "org.junit.jupiter", name = "junit-jupiter-api" }
+junitBom = { group = "org.junit", name = "junit-bom", version.ref = "junit" }
+junitEngine = { group = "org.junit.jupiter", name = "junit-jupiter-engine" }
+junitInjectFile = { group = "io.hosuaby", name = "inject-resources-junit-jupiter", version.ref = "junitInjectFile" }
+junitJuiter = { group = "org.junit.jupiter", name = "junit-jupiter" }
+mockitoCore = { group = "org.mockito", name = "mockito-core", version.ref = "mockito" }
+mockitoJunit = { group = "org.mockito", name = "mockito-junit-jupiter", version.ref = "mockito" }
+quartz = { group = "org.quartz-scheduler", name = "quartz", version.ref = "quartz" }
+record-builder-core = { group = "io.soabase.record-builder", name = "record-builder-core", version.ref = "recordBuilder" }
+record-builder-processor = { group = "io.soabase.record-builder", name = "record-builder-processor", version.ref = "recordBuilder" }
+slf4j = { group = "org.slf4j", name = "slf4j-api", version.ref = "slf4j" }
+slf4j-simple = { group = "org.slf4j", name = "slf4j-simple", version.ref = "slf4j" }
+slf4jJdkPlatform = { group = "org.slf4j", name = "slf4j-jdk-platform-logging", version.ref = "slf4j" }
+slf4jJulBridage = { group = "org.slf4j", name = "jul-to-slf4j", version.ref = "slf4j" }
+validation-api = { group = "jakarta.validation", name = "jakarta.validation-api", version.ref = "jakartaValidationApi" }
