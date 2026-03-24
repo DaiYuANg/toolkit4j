@@ -39,14 +39,13 @@ public class HashMapTrie<K, V> implements Trie<K, V> {
 
   @Override
   public V search(Iterable<K> keySequence) {
-    return traverse(keySequence).filter(TrieNode::isEnd)
-      .map(TrieNode::getValue)
-      .orElse(null);
+    val node = findNode(keySequence);
+    return node != null && node.isEnd() ? node.getValue() : null;
   }
 
   @Override
   public boolean startsWith(Iterable<K> prefixSequence) {
-    return traverse(prefixSequence).isPresent();
+    return findNode(prefixSequence) != null;
   }
 
 
@@ -85,13 +84,13 @@ public class HashMapTrie<K, V> implements Trie<K, V> {
     for (K k : prefixSequence) {
       prefixList.add(k);
     }
-    return traverse(prefixList)
-      .map(node -> {
-        Set<List<K>> results = new HashSet<>();
-        collect(node, new LinkedList<>(prefixList), results);
-        return results;
-      })
-      .orElseGet(Collections::emptySet);
+    val node = findNode(prefixList);
+    if (node == null) {
+      return Collections.emptySet();
+    }
+    Set<List<K>> results = new HashSet<>();
+    collect(node, new LinkedList<>(prefixList), results);
+    return results;
   }
 
   private void collect(TrieNode<K, V> node, LinkedList<K> path, Set<List<K>> results) {
@@ -117,13 +116,19 @@ public class HashMapTrie<K, V> implements Trie<K, V> {
     return root.getChildren().isEmpty();
   }
 
-  private Optional<TrieNode<K, V>> traverse(@NotNull Iterable<K> sequence) {
+  /**
+   * Walks from root following {@code sequence}. Returns {@code null} if any step is missing.
+   */
+  private TrieNode<K, V> findNode(@NotNull Iterable<K> sequence) {
     TrieNode<K, V> node = root;
     for (K key : sequence) {
       node = node.getChild(key);
-      if (node == null) return Optional.empty();
+      if (node == null) {
+        return null;
+      }
     }
-    return Optional.of(node);
+    return node;
   }
 
 }
+
