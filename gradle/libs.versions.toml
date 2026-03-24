@@ -7,6 +7,7 @@ apacheDBUtil = "1.8.1"
 autoFactory = "1.1.0"
 autoService = "1.1.1"
 dataFaker = "2.5.4"
+dotenvGradle = "4.0.0"
 dokka = "2.1.0"
 gitPlugin = "0.15.1"
 gson = "2.13.2"
@@ -30,6 +31,7 @@ spotless = "8.4.0"
 versionCheck = "1.1.0"
 
 [plugins]
+dotenv = { id = "co.uzzu.dotenv.gradle", version.ref = "dotenvGradle" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 git = { id = "com.xenoterracide.gradle.git", version.ref = "gitPlugin" }
 jmh = { id = "me.champeau.jmh", version.ref = "jmh" }

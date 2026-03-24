@@ -3,7 +3,6 @@ plugins {
 }
 
 group = "org.toolkit4j"
-version = "unspecified"
 
 dependencies {
   compileOnly(libs.hibernate.orm)
