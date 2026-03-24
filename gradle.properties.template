@@ -7,3 +7,15 @@ systemProp.http.proxyHost=127.0.0.1
 systemProp.http.proxyPort=
 systemProp.https.proxyHost=127.0.0.1
 systemProp.https.proxyPort=
+
+# --- Maven Central (do not commit secrets; copy to local gradle.properties, which is gitignored) ---
+# Central Portal user token: https://central.sonatype.com/
+# mavenCentralUsername=
+# mavenCentralPassword=
+#
+# GPG signing (required for Central). Example using key ring file:
+# signing.keyId=ABCDEF01
+# signing.password=
+# signing.secretKeyRingFile=/path/to/secring.gpg
+#
+# Or use in-memory key (CI): https://vanniktech.github.io/gradle-maven-publish-plugin/central/#in-memory-gpg-key

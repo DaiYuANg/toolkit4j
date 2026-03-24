@@ -13,7 +13,11 @@ plugins {
   alias(libs.plugins.plantuml)
   alias(libs.plugins.maven.publish)
 }
-group = "org.toolkit4j"
+
+/** Maven coordinates; Central GitHub namespace is typically io.github.{lowercase login}. */
+group = "io.github.daiyuang"
+
+version = "0.1.0"
 
 allprojects {
   repositories {
@@ -34,6 +38,38 @@ subprojects {
     apply<com.vanniktech.maven.publish.MavenPublishPlugin>()
     group = rootProject.group
     version = rootProject.version
+
+    mavenPublishing {
+      publishToMavenCentral()
+      signAllPublications()
+      pom {
+        name.set("toolkit4j-${project.name}")
+        description.set(
+          "Lightweight JVM utility toolkit — module \"${project.name}\". See https://github.com/DaiYuANg/toolkit4j",
+        )
+        inceptionYear.set("2026")
+        url.set("https://github.com/DaiYuANg/toolkit4j")
+        licenses {
+          license {
+            name.set("The Apache License, Version 2.0")
+            url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
+            distribution.set("repo")
+          }
+        }
+        developers {
+          developer {
+            id.set("daiyuang")
+            name.set("DaiYuANg")
+            url.set("https://github.com/DaiYuANg")
+          }
+        }
+        scm {
+          url.set("https://github.com/DaiYuANg/toolkit4j")
+          connection.set("scm:git:https://github.com/DaiYuANg/toolkit4j.git")
+          developerConnection.set("scm:git:ssh://git@github.com/DaiYuANg/toolkit4j.git")
+        }
+      }
+    }
 //    tasks.register<Jar>("dokkaHtmlJar") {
 //      dependsOn(tasks.dokkaHtml)
 //      from(tasks.dokkaHtml.flatMap { it.outputDirectory })

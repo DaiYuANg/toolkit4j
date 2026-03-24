@@ -34,7 +34,7 @@ Use the built-in continuous integration in GitLab.
 
 ## License / 许可证
 
-[MIT](./LICENSE.txt)
+[Apache License 2.0](./LICENSE.txt)
 
 ## Roadmap / 路线图
 
