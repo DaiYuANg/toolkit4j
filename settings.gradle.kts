@@ -46,3 +46,5 @@ include("libs:data-model")
 
 include("libs:hibernate-snowflake-id")
 include("libs:quartz-task")
+include("libs:toolkit4j-bom")
+project(":libs:toolkit4j-bom").projectDir = file("libs/bom")

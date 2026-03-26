@@ -26,6 +26,8 @@ private val publishingPropertyKeys =
 
 fun Project.isPublishableLeafModule(): Boolean = name != "document" && childProjects.isEmpty()
 
+fun Project.isBomModule(): Boolean = path == ":libs:toolkit4j-bom"
+
 fun Project.applyPublishingPropsFromDotenv() {
     val envExt = rootProject.extensions.findByName("env") ?: return
     val fetchOrNullMethod = envExt.javaClass.getMethod("fetchOrNull", String::class.java)

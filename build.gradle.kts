@@ -1,6 +1,7 @@
 import com.vanniktech.maven.publish.MavenPublishBaseExtension
 import me.champeau.jmh.JMHPlugin
 import name.remal.gradle_plugins.lombok.LombokPlugin
+import org.gradle.api.plugins.JavaPlatformPlugin
 import org.gradle.external.javadoc.StandardJavadocDocletOptions
 
 plugins {
@@ -36,10 +37,14 @@ val rootCatalog = rootProject.libs
 subprojects {
   if (isPublishableLeafModule()) {
     applyPublishingPropsFromDotenv()
-    apply<JMHPlugin>()
-    apply<LombokPlugin>()
-    apply<JavaLibraryPlugin>()
     apply<com.vanniktech.maven.publish.MavenPublishPlugin>()
+    if (isBomModule()) {
+      apply<JavaPlatformPlugin>()
+    } else {
+      apply<JMHPlugin>()
+      apply<LombokPlugin>()
+      apply<JavaLibraryPlugin>()
+    }
     group = rootProject.group
     version = rootProject.version
 
@@ -94,51 +99,53 @@ subprojects {
 //      archiveClassifier.set("javadoc")
 //    }
 
-    dependencies {
-      compileOnly(rootCatalog.jetbrainsAnnotation)
-      compileOnly(rootCatalog.slf4j)
+    if (!isBomModule()) {
+      dependencies {
+        compileOnly(rootCatalog.jetbrainsAnnotation)
+        compileOnly(rootCatalog.slf4j)
 //
-      testImplementation(enforcedPlatform(rootCatalog.junitBom))
-      testImplementation(rootCatalog.junitJuiter)
-      testImplementation(rootCatalog.junitApi)
-      testImplementation(rootCatalog.junitEngine)
-      testImplementation(rootCatalog.junitInjectFile)
-      testRuntimeOnly(rootCatalog.junit.platform.launcher)
-      testImplementation(rootCatalog.mockitoCore)
-      testImplementation(rootCatalog.mockitoJunit)
-      testImplementation(rootCatalog.dataFaker)
-      testImplementation(rootCatalog.slf4j)
-      testImplementation(rootCatalog.slf4j.simple)
-    }
-
-    java {
-      // Vanniktech plugin provides plainJavadocJar; keep only one javadoc artifact to avoid duplicate javadoc.jar(.asc).
-      withSourcesJar()
-    }
-
-    tasks.jar {
-      manifest {
-        attributes("Version" to project.version)
+        testImplementation(enforcedPlatform(rootCatalog.junitBom))
+        testImplementation(rootCatalog.junitJuiter)
+        testImplementation(rootCatalog.junitApi)
+        testImplementation(rootCatalog.junitEngine)
+        testImplementation(rootCatalog.junitInjectFile)
+        testRuntimeOnly(rootCatalog.junit.platform.launcher)
+        testImplementation(rootCatalog.mockitoCore)
+        testImplementation(rootCatalog.mockitoJunit)
+        testImplementation(rootCatalog.dataFaker)
+        testImplementation(rootCatalog.slf4j)
+        testImplementation(rootCatalog.slf4j.simple)
       }
-      duplicatesStrategy = DuplicatesStrategy.INCLUDE
-    }
-    // Gradle 9 strict validation: ensure metadata generation has explicit dependency on javadoc jar.
-    tasks.matching { it.name == "generateMetadataFileForMavenPublication" }.configureEach {
-      dependsOn(tasks.matching { task -> task.name == "plainJavadocJar" })
-    }
 
-    tasks.test {
-      useJUnitPlatform()
-      configureToolkitTestRuntime()
-    }
+      java {
+        // Vanniktech plugin provides plainJavadocJar; keep only one javadoc artifact to avoid duplicate javadoc.jar(.asc).
+        withSourcesJar()
+      }
 
-    tasks.withType<Javadoc>().configureEach {
-      val standardOptions = options as StandardJavadocDocletOptions
-      standardOptions.encoding = "UTF-8"
-      standardOptions.charSet = "UTF-8"
-      standardOptions.docEncoding = "UTF-8"
-      // Keep malformed Javadoc visible, but do not fail the build on missing comments in delomboked/generated sources.
-      standardOptions.addStringOption("Xdoclint:all,-missing", "-quiet")
+      tasks.jar {
+        manifest {
+          attributes("Version" to project.version)
+        }
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE
+      }
+      // Gradle 9 strict validation: ensure metadata generation has explicit dependency on javadoc jar.
+      tasks.matching { it.name == "generateMetadataFileForMavenPublication" }.configureEach {
+        dependsOn(tasks.matching { task -> task.name == "plainJavadocJar" })
+      }
+
+      tasks.test {
+        useJUnitPlatform()
+        configureToolkitTestRuntime()
+      }
+
+      tasks.withType<Javadoc>().configureEach {
+        val standardOptions = options as StandardJavadocDocletOptions
+        standardOptions.encoding = "UTF-8"
+        standardOptions.charSet = "UTF-8"
+        standardOptions.docEncoding = "UTF-8"
+        // Keep malformed Javadoc visible, but do not fail the build on missing comments in delomboked/generated sources.
+        standardOptions.addStringOption("Xdoclint:all,-missing", "-quiet")
+      }
     }
   }
 }
