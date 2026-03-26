@@ -36,7 +36,7 @@ dependencies {
 ## Modules
 
 - `collection`: data structures such as pageable collections, table, trie, and tree helpers.
-- `data-model`: reusable model types such as `PageRequest`, `PageResult`, `Result`, `Sortable`, `Range`, `Money`, `ErrorInfo`, `EnumValue`.
+- `data-model`: reusable model types such as `PageRequest`, `PageResult`, `Result`, `Sortable`, `Range`, `Money`, `ErrorInfo`, `EnumValue`, plus time presets and semantic time ranges.
 - `net`: IP / CIDR utility types (`Ipv4Address`, `Ipv6Address`, `Cidr`, `IpInfo`).
 - `hibernate-snowflake-id`: Hibernate integration for Agrona Snowflake ID generator.
 - `quartz-task`: high-level Quartz task registration and scheduling API.

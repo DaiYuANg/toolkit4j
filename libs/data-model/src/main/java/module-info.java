@@ -11,5 +11,6 @@ module org.toolkit4j.data.model {
   exports org.toolkit4j.data.model.page;
   exports org.toolkit4j.data.model.range;
   exports org.toolkit4j.data.model.sort;
+  exports org.toolkit4j.data.model.time;
   exports org.toolkit4j.data.model.value;
 }
