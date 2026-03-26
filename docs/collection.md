@@ -9,6 +9,10 @@ Artifact: `io.github.daiyuang:collection:0.0.1`
 - Trie: `HashMapTrie`
 - Tree models and builders in `org.toolkit4j.collection.tree`
 
+## JPMS
+
+- Module name: `org.toolkit4j.collection`
+
 ## Minimal examples
 
 ```java
@@ -29,5 +33,6 @@ var value = trie.search(java.util.List.of('j', 'a', 'v', 'a'));
 
 ## Notes
 
+- Requesting a page beyond the end of the backing data returns an empty page for both `PageableList` and `PageableSet`.
 - `HashMapTrie` is marked experimental in the codebase.
 - This module targets utility scenarios and avoids heavyweight dependencies.

@@ -44,6 +44,10 @@ public final class Ipv6Address implements IpAddress {
     return new Ipv6Address(new BigInteger(1, bytes));
   }
 
+  static @NotNull Ipv6Address of(@NotNull BigInteger address) {
+    return new Ipv6Address(address);
+  }
+
   @Override
   public byte @NotNull [] bytes() {
     byte[] arr = address.toByteArray();

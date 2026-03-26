@@ -44,7 +44,5 @@ include("libs:net")
 
 include("libs:data-model")
 
-include("libs:web-data-model")
-
 include("libs:hibernate-snowflake-id")
 include("libs:quartz-task")

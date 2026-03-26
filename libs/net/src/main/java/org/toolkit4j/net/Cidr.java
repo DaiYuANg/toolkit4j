@@ -23,15 +23,15 @@ public final class Cidr {
       || (network instanceof Ipv6Address ipv6 && prefixLength > 128)) {
       throw new IllegalArgumentException("Invalid prefix length: " + prefixLength);
     }
-    this.network = network;
     this.prefixLength = prefixLength;
-
     byte[] bytes = network.bytes();
-    this.networkValue = new BigInteger(1, bytes);
+    BigInteger rawNetworkValue = new BigInteger(1, bytes);
 
     int bits = bytes.length * 8;
     this.maskValue = prefixLength == 0 ? BigInteger.ZERO : BigInteger.ONE.shiftLeft(bits).subtract(BigInteger.ONE)
       .shiftRight(prefixLength).not().and(BigInteger.ONE.shiftLeft(bits).subtract(BigInteger.ONE));
+    this.networkValue = rawNetworkValue.and(maskValue);
+    this.network = normalizeNetwork(network, networkValue);
   }
 
   @Contract("_ -> new")
@@ -52,8 +52,21 @@ public final class Cidr {
   }
 
   public boolean contains(@NotNull IpAddress ip) {
+    if (!network.getClass().equals(ip.getClass())) {
+      return false;
+    }
     val ipVal = new BigInteger(1, ip.bytes());
     return ipVal.and(maskValue).equals(networkValue);
+  }
+
+  private static IpAddress normalizeNetwork(IpAddress network, BigInteger normalizedValue) {
+    if (network instanceof Ipv4Address) {
+      return Ipv4Address.of(normalizedValue.intValue());
+    }
+    if (network instanceof Ipv6Address) {
+      return Ipv6Address.of(normalizedValue);
+    }
+    throw new IllegalArgumentException("Unsupported IP address type: " + network.getClass().getName());
   }
 
   @Override

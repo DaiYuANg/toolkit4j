@@ -6,7 +6,6 @@ This directory contains module-level usage guides.
 
 - [Collection](./collection.md)
 - [Data Model](./data-model.md)
-- [Web Data Model](./web-data-model.md)
 - [Net](./net.md)
 - [Hibernate Snowflake ID](./hibernate-snowflake-id.md)
 - [Quartz Task](./quartz-task.md)

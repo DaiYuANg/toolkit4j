@@ -1,7 +1,6 @@
 package org.toolkit4j.collection.pageable;
 
 import lombok.Data;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
@@ -20,6 +19,9 @@ public class PageableList<T> implements PageableCollection<T, List<T>> {
   public List<T> page(int pageNo, int pageSize) {
     checkPageArgument(pageNo, pageSize);
     val fromIndex = (pageNo - 1) * pageSize;
+    if (fromIndex >= data.size()) {
+      return List.of();
+    }
     val toIndex = Math.min(fromIndex + pageSize, data.size());
     return new ArrayList<>(data.subList(fromIndex, toIndex));
   }

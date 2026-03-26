@@ -15,7 +15,6 @@
 dependencies {
   implementation("io.github.daiyuang:collection:0.0.1")
   // implementation("io.github.daiyuang:data-model:0.0.1")
-  // implementation("io.github.daiyuang:web-data-model:0.0.1")
   // implementation("io.github.daiyuang:net:0.0.1")
   // implementation("io.github.daiyuang:hibernate-snowflake-id:0.0.1")
   // implementation("io.github.daiyuang:quartz-task:0.0.1")
@@ -37,8 +36,7 @@ dependencies {
 ## Modules
 
 - `collection`: data structures such as pageable collections, table, trie, and tree helpers.
-- `data-model`: reusable model types such as `PageRequest`, `PageResult`, `KeyValue`, `Option`.
-- `web-data-model`: generic web response model `Result<C, T>`.
+- `data-model`: reusable model types such as `PageRequest`, `PageResult`, `Result`, `Sortable`, `Range`, `Money`, `ErrorInfo`, `EnumValue`.
 - `net`: IP / CIDR utility types (`Ipv4Address`, `Ipv6Address`, `Cidr`, `IpInfo`).
 - `hibernate-snowflake-id`: Hibernate integration for Agrona Snowflake ID generator.
 - `quartz-task`: high-level Quartz task registration and scheduling API.
@@ -55,7 +53,6 @@ Per-module guides:
 
 - [Collection](./docs/collection.md)
 - [Data Model](./docs/data-model.md)
-- [Web Data Model](./docs/web-data-model.md)
 - [Net](./docs/net.md)
 - [Hibernate Snowflake ID](./docs/hibernate-snowflake-id.md)
 - [Quartz Task](./docs/quartz-task.md)

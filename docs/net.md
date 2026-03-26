@@ -27,3 +27,5 @@ var info = new IpInfo("192.168.1.10", IpVersion.IPV4);
 ## Notes
 
 - Supports both IPv4 and IPv6 under the same `IpAddress` abstraction.
+- `Cidr` normalizes host bits in the network part, so `192.168.1.99/24` is treated as `192.168.1.0/24`.
+- `Cidr.contains(...)` only matches addresses from the same IP family.

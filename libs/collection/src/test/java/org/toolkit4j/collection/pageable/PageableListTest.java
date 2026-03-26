@@ -67,4 +67,9 @@ class PageableListTest {
     val slice = pageable.slice(10, 20);
     assertEquals(10, slice.size());
   }
+
+  @Test
+  void testPageBeyondEndReturnsEmptyList() {
+    assertTrue(pageable.page(999, 100).isEmpty());
+  }
 }

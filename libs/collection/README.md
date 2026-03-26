@@ -11,6 +11,7 @@
 - **轻量级**：最小化依赖，优先使用 JDK 能力
 - **JPMS 支持**：支持 Java Platform Module System
 - **JDK 25**：基线版本
+- **模块名**：`org.toolkit4j.collection`
 
 ### 已实现
 
@@ -22,6 +23,7 @@
 #### PageableCollection（分页集合）
 - `PageableList`、`PageableSet`
 - 支持 `stream()`、`first()`、`last()`、`slice(from, to)`
+- 超出数据范围的页请求返回空页
 
 #### Trie（前缀树）
 - `HashMapTrie`，支持 insert、search、startsWith、keysWithPrefix 等
@@ -87,6 +89,7 @@ A lightweight JVM collection and data structure toolkit that complements the JDK
 - **Lightweight**: Minimal dependencies, JDK-first
 - **JPMS support**: Java Platform Module System compatible
 - **JDK 25**: Baseline version
+- **Module name**: `org.toolkit4j.collection`
 
 ### Implemented
 
@@ -98,6 +101,7 @@ A lightweight JVM collection and data structure toolkit that complements the JDK
 #### PageableCollection
 - `PageableList`, `PageableSet`
 - `stream()`, `first()`, `last()`, `slice(from, to)`
+- Requests beyond the end of the backing data return an empty page
 
 #### Trie (prefix tree)
 - `HashMapTrie` with insert, search, startsWith, keysWithPrefix, etc.
