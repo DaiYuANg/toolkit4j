@@ -1,3 +1,5 @@
+rootProject.name = "toolkit4j-build-logic"
+
 dependencyResolutionManagement {
     versionCatalogs {
         create("libs") {

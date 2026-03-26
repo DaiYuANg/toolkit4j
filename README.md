@@ -13,11 +13,11 @@
 
 ```kotlin
 dependencies {
-  implementation("io.github.daiyuang:collection:0.0.1")
-  // implementation("io.github.daiyuang:data-model:0.0.1")
-  // implementation("io.github.daiyuang:net:0.0.1")
-  // implementation("io.github.daiyuang:hibernate-snowflake-id:0.0.1")
-  // implementation("io.github.daiyuang:quartz-task:0.0.1")
+  implementation("io.github.daiyuang:collection:0.0.2")
+  // implementation("io.github.daiyuang:data-model:0.0.2")
+  // implementation("io.github.daiyuang:net:0.0.2")
+  // implementation("io.github.daiyuang:hibernate-snowflake-id:0.0.2")
+  // implementation("io.github.daiyuang:quartz-task:0.0.2")
 }
 ```
 
@@ -27,7 +27,7 @@ dependencies {
 <dependency>
   <groupId>io.github.daiyuang</groupId>
   <artifactId>collection</artifactId>
-  <version>0.0.1</version>
+  <version>0.0.2</version>
 </dependency>
 ```
 

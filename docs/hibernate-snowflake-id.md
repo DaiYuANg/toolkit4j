@@ -1,6 +1,6 @@
 # Hibernate Snowflake ID
 
-Artifact: `io.github.daiyuang:hibernate-snowflake-id:0.0.1`
+Artifact: `io.github.daiyuang:hibernate-snowflake-id:0.0.2`
 
 ## What it provides
 

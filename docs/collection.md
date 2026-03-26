@@ -1,6 +1,6 @@
 # Collection
 
-Artifact: `io.github.daiyuang:collection:0.0.1`
+Artifact: `io.github.daiyuang:collection:0.0.2`
 
 ## What it provides
 

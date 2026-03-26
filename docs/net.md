@@ -1,6 +1,6 @@
 # Net
 
-Artifact: `io.github.daiyuang:net:0.0.1`
+Artifact: `io.github.daiyuang:net:0.0.2`
 
 ## What it provides
 

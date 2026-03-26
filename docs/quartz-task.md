@@ -1,6 +1,6 @@
 # Quartz Task
 
-Artifact: `io.github.daiyuang:quartz-task:0.0.1`
+Artifact: `io.github.daiyuang:quartz-task:0.0.2`
 
 ## What it provides
 
