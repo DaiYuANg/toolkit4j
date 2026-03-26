@@ -1,4 +1,4 @@
-package org.toolkit4j.integration.hibernate.snowflake.id;
+package org.toolkit4j.hibernate.snowflake.id;
 
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -14,7 +14,7 @@ import java.util.Objects;
 import java.util.Properties;
 
 import static java.util.Optional.ofNullable;
-import static org.toolkit4j.integration.hibernate.snowflake.id.HibernateConfigureKey.SNOW_FLAKE_HIBERNATE_PROPERTIES_KEY;
+import static org.toolkit4j.hibernate.snowflake.id.HibernateConfigureKey.SNOW_FLAKE_HIBERNATE_PROPERTIES_KEY;
 
 @Slf4j
 public class HibernateSnowflakeIdGenerator implements IdentifierGenerator, Configurable {

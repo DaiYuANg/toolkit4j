@@ -1,4 +1,4 @@
-package org.toolkit4j.integration.hibernate.snowflake.id;
+package org.toolkit4j.hibernate.snowflake.id;
 
 import org.hibernate.annotations.IdGeneratorType;
 

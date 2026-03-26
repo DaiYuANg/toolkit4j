@@ -1,4 +1,4 @@
-package org.toolkit4j.integration.hibernate.snowflake.id;
+package org.toolkit4j.hibernate.snowflake.id;
 
 import org.hibernate.MappingException;
 import org.junit.jupiter.api.Test;

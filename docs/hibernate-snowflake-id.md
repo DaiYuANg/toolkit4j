@@ -13,7 +13,7 @@ Artifact: `io.github.daiyuang:hibernate-snowflake-id:0.0.1`
 ```java
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import org.toolkit4j.integration.hibernate.snowflake.id.SnowflakeGenerator;
+import org.toolkit4j.hibernate.snowflake.id.SnowflakeGenerator;
 
 @Entity
 class OrderEntity {
