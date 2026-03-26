@@ -1,6 +1,6 @@
 # Data Model
 
-Artifact: `io.github.daiyuang:data-model:0.0.2`
+Artifact: `io.github.daiyuang:data-model:0.0.3`
 
 ## What it provides
 
@@ -118,6 +118,5 @@ var error = ErrorInfo.of("INVALID_INPUT", "invalid input")
 - `PageResult.empty()` uses first-page semantics (`page = 1`) rather than zero-based page numbering.
 - `Result<C, T>` now lives under `org.toolkit4j.data.model.envelope`.
 - `Money` is intentionally lightweight: same-currency arithmetic only, with no exchange-rate or formatting layer.
-- Module name: `org.toolkit4j.data.model`
 - `data-model` is organized by subpackage responsibility rather than a flat package.
 - Models are intended for reuse across services and API layers.

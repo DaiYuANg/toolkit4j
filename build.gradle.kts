@@ -113,7 +113,6 @@ subprojects {
     java {
       // Vanniktech plugin provides plainJavadocJar; keep only one javadoc artifact to avoid duplicate javadoc.jar(.asc).
       withSourcesJar()
-      modularity.inferModulePath.set(true)
     }
 
     tasks.jar {

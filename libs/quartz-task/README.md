@@ -282,13 +282,6 @@ Use this library to schedule and manage them with less boilerplate.
 - Applications must provide Quartz at runtime (for example, by adding Quartz in the application module or platform BOM).
 - This keeps the toolkit module lightweight and avoids forcing runtime dependency decisions on consumers.
 
-## JPMS
-
-- Module name: `org.toolkit4j.quartz.task`
-- This module exports: `org.toolkit4j.quartz.task`
-- It requires Quartz via JPMS: `requires org.quartz`
-- Applications using JPMS should ensure Quartz is present on the module path.
-
 ## Example Job
 
     package com.example.jobs;

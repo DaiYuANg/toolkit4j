@@ -15,4 +15,4 @@ This directory contains module-level usage guides.
 All modules use:
 
 - Group: `io.github.daiyuang`
-- Version: `0.0.2`
+- Version: `0.0.3`

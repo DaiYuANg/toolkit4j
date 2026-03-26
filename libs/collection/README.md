@@ -9,9 +9,7 @@
 ### 模块定位
 
 - **轻量级**：最小化依赖，优先使用 JDK 能力
-- **JPMS 支持**：支持 Java Platform Module System
 - **JDK 25**：基线版本
-- **模块名**：`org.toolkit4j.collection`
 
 ### 已实现
 
@@ -87,9 +85,7 @@ A lightweight JVM collection and data structure toolkit that complements the JDK
 ### Module Overview
 
 - **Lightweight**: Minimal dependencies, JDK-first
-- **JPMS support**: Java Platform Module System compatible
 - **JDK 25**: Baseline version
-- **Module name**: `org.toolkit4j.collection`
 
 ### Implemented
 
