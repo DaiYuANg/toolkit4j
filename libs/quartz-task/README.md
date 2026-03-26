@@ -64,7 +64,6 @@ The library focuses on simplifying common tasks such as:
 - register a job with a stable id
 - attach cron or interval schedules
 - attach job data
-- enable or disable scheduling
 - pause, resume, trigger now, or unschedule jobs
 - inspect scheduled task metadata
 
@@ -137,8 +136,6 @@ A possible `TaskOptions` API:
       TaskOptions durable(boolean durable);
     
       TaskOptions requestRecovery(boolean requestRecovery);
-    
-      TaskOptions enabled(boolean enabled);
 
       TaskOptions registrationConflictPolicy(TaskRegistrationConflictPolicy policy);
 
@@ -152,8 +149,17 @@ This gives users a concise builder-style API without taking Quartz away from the
 By default, registering with an existing task id fails fast.  
 Use `ifExistsRecreate(true)` to replace the existing job, or `ifExistsIgnore(true)` for idempotent registration that leaves an existing job unchanged.  
 You can also set `registrationConflictPolicy(TaskRegistrationConflictPolicy.IGNORE_IF_EXISTS)` (or `RECREATE`) explicitly.
+Registration always creates an active Quartz job/trigger; use `pause(taskId)` and `resume(taskId)` to control dispatch after registration.
+The caller owns the Quartz `Scheduler` lifecycle and must provide, start, and stop it externally.
 
 ## Example Usage
+
+### Prepare the Quartz scheduler
+
+    Scheduler quartzScheduler = StdSchedulerFactory.getDefaultScheduler();
+    quartzScheduler.start();
+
+    TaskScheduler scheduler = new DefaultTaskScheduler(quartzScheduler);
 
 ### Register a cron job
 
@@ -161,7 +167,6 @@ You can also set `registrationConflictPolicy(TaskRegistrationConflictPolicy.IGNO
         .id("user-sync")
         .description("Sync users from remote system")
         .cron("0 */5 * * * ?")
-        .enabled(true)
     );
 
 ### Register a one-time job
@@ -170,7 +175,6 @@ You can also set `registrationConflictPolicy(TaskRegistrationConflictPolicy.IGNO
         .id("cleanup-once")
         .description("Run one-time cleanup")
         .startAt(Instant.now().plusSeconds(300))
-        .enabled(true)
     );
 
 ### Register a fixed interval job
@@ -179,7 +183,6 @@ You can also set `registrationConflictPolicy(TaskRegistrationConflictPolicy.IGNO
         .id("refresh-cache")
         .description("Refresh local cache periodically")
         .interval(Duration.ofMinutes(10))
-        .enabled(true)
     );
 
 ### Attach job data
@@ -189,7 +192,6 @@ You can also set `registrationConflictPolicy(TaskRegistrationConflictPolicy.IGNO
         .cron("0 */5 * * * ?")
         .jobData("tenantId", "default")
         .jobData("source", "remote-system")
-        .enabled(true)
     );
 
 Inside the job:
@@ -281,6 +283,7 @@ Use this library to schedule and manage them with less boilerplate.
 - `toolkit4j-quartz` declares Quartz as a compile-time dependency only.
 - Applications must provide Quartz at runtime (for example, by adding Quartz in the application module or platform BOM).
 - This keeps the toolkit module lightweight and avoids forcing runtime dependency decisions on consumers.
+- The wrapper emits operation-level debug logs through SLF4J, so callers can inspect scheduling behavior by enabling debug logging for `org.toolkit4j.quartz.task`.
 
 ## Example Job
 
@@ -307,5 +310,4 @@ Use this library to schedule and manage them with less boilerplate.
         .cron("0 */5 * * * ?")
         .jobData("tenantId", "default")
         .requestRecovery(true)
-        .enabled(true)
     );

@@ -38,8 +38,6 @@ public interface TaskOptions {
 
   TaskOptions requestRecovery(boolean requestRecovery);
 
-  TaskOptions enabled(boolean enabled);
-
   TaskOptions registrationConflictPolicy(TaskRegistrationConflictPolicy policy);
 
   TaskOptions ifExistsRecreate(boolean enabled);

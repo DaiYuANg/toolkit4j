@@ -1,6 +1,6 @@
 # Quartz Task
 
-Artifact: `io.github.daiyuang:quartz-task:0.0.3`
+Artifact: `io.github.daiyuang:quartz-task:0.0.4`
 
 ## What it provides
 
@@ -15,6 +15,8 @@ Artifact: `io.github.daiyuang:quartz-task:0.0.3`
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+import org.quartz.Scheduler;
+import org.quartz.impl.StdSchedulerFactory;
 import org.toolkit4j.quartz.task.DefaultTaskScheduler;
 import org.toolkit4j.quartz.task.TaskScheduler;
 
@@ -25,7 +27,10 @@ public class DemoJob implements Job {
   }
 }
 
-TaskScheduler scheduler = new DefaultTaskScheduler();
+Scheduler quartzScheduler = StdSchedulerFactory.getDefaultScheduler();
+quartzScheduler.start();
+
+TaskScheduler scheduler = new DefaultTaskScheduler(quartzScheduler);
 scheduler.register(DemoJob.class, opts -> opts
   .id("demo-job")
   .cron("0/30 * * * * ?")
@@ -36,3 +41,5 @@ scheduler.register(DemoJob.class, opts -> opts
 ## Notes
 
 - This module keeps Quartz as the execution engine and wraps common scheduling flows with a simpler API.
+- The caller owns the Quartz `Scheduler` lifecycle and is responsible for starting and shutting it down.
+- Operation-level debug logs are emitted through SLF4J under `org.toolkit4j.quartz.task`.

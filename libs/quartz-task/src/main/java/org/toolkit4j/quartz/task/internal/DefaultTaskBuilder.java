@@ -21,7 +21,6 @@ public class DefaultTaskBuilder implements TaskOptions {
   private final Map<String, Object> jobData = new LinkedHashMap<>();
   private boolean durable;
   private boolean requestRecovery;
-  private boolean enabled = true;
   private TaskRegistrationConflictPolicy conflictPolicy = TaskRegistrationConflictPolicy.FAIL;
 
   @Override
@@ -108,12 +107,6 @@ public class DefaultTaskBuilder implements TaskOptions {
   }
 
   @Override
-  public TaskOptions enabled(boolean enabled) {
-    this.enabled = enabled;
-    return this;
-  }
-
-  @Override
   public TaskOptions registrationConflictPolicy(TaskRegistrationConflictPolicy policy) {
     this.conflictPolicy = Objects.requireNonNull(policy, "policy");
     return this;
@@ -143,22 +136,24 @@ public class DefaultTaskBuilder implements TaskOptions {
 
     val copiedJobData = Map.copyOf(jobData);
 
-    return new TaskRegistration(
-      id,
-      jobClass,
-      description,
-      durable,
-      requestRecovery,
-      enabled,
-      conflictPolicy,
-      copiedJobData,
-      schedule
-    );
+    return TaskRegistrationBuilder.builder()
+      .taskId(id)
+      .jobClass(jobClass)
+      .description(description)
+      .durable(durable)
+      .requestRecovery(requestRecovery)
+      .conflictPolicy(conflictPolicy)
+      .jobData(copiedJobData)
+      .schedule(schedule)
+      .build();
   }
 
   private void putJobData(String key, Object value) {
     if (key == null || key.isBlank()) {
       throw new TaskRegistrationException("jobData key must not be blank.");
+    }
+    if (value == null) {
+      throw new TaskRegistrationException("jobData value must not be null.");
     }
     jobData.put(key, value);
   }

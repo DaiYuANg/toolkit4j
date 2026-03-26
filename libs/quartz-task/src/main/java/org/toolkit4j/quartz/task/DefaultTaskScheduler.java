@@ -1,12 +1,12 @@
 package org.toolkit4j.quartz.task;
 
 import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 import org.quartz.*;
 import org.quartz.impl.matchers.GroupMatcher;
-import org.quartz.impl.StdSchedulerFactory;
 import org.toolkit4j.quartz.task.internal.DefaultTaskBuilder;
-import org.toolkit4j.quartz.task.internal.TaskSchedule;
 import org.toolkit4j.quartz.task.internal.TaskRegistration;
+import org.toolkit4j.quartz.task.internal.TaskSchedule;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -22,7 +22,10 @@ import java.util.function.Consumer;
 
 /**
  * Default implementation of {@link TaskScheduler}.
+ * <p>
+ * The wrapped Quartz {@link Scheduler} is owned, started, and stopped by the caller.
  */
+@Slf4j
 public class DefaultTaskScheduler implements TaskScheduler {
 
   private static final String JOB_GROUP = "toolkit4j-tasks";
@@ -30,28 +33,9 @@ public class DefaultTaskScheduler implements TaskScheduler {
 
   private final Scheduler scheduler;
 
-  public DefaultTaskScheduler() {
-    this(buildDefaultScheduler());
-  }
-
   public DefaultTaskScheduler(Scheduler scheduler) {
     this.scheduler = Objects.requireNonNull(scheduler, "scheduler");
-    try {
-      if (!this.scheduler.isStarted()) {
-        this.scheduler.start();
-      }
-    } catch (SchedulerException e) {
-      throw new TaskSchedulingException("failed to start Quartz scheduler", e);
-    }
-  }
-
-  private static Scheduler buildDefaultScheduler() {
-    try {
-      val factory = new StdSchedulerFactory();
-      return factory.getScheduler();
-    } catch (SchedulerException e) {
-      throw new TaskSchedulingException("failed to create Quartz scheduler", e);
-    }
+    log.debug("Initialized quartz-task wrapper with external scheduler type={}", scheduler.getClass().getName());
   }
 
   @Override
@@ -62,6 +46,15 @@ public class DefaultTaskScheduler implements TaskScheduler {
     val builder = new DefaultTaskBuilder();
     options.accept(builder);
     val registration = builder.build(jobClass);
+    log.debug(
+      "Registering Quartz task id={}, jobClass={}, scheduleType={}, conflictPolicy={}, durable={}, requestRecovery={}",
+      registration.taskId(),
+      registration.jobClass().getName(),
+      registration.schedule().type(),
+      registration.conflictPolicy(),
+      registration.durable(),
+      registration.requestRecovery()
+    );
 
     val jobKey = jobKey(registration.taskId());
     JobBuilder jobBuilder = JobBuilder.newJob(registration.jobClass())
@@ -79,14 +72,20 @@ public class DefaultTaskScheduler implements TaskScheduler {
 
     try {
       scheduler.scheduleJob(jobDetail, trigger);
-      if (!registration.enabled()) {
-        scheduler.pauseJob(jobKey);
-      }
+      log.debug(
+        "Registered Quartz task id={} with triggerKey={}, jobGroup={}, triggerGroup={}",
+        registration.taskId(),
+        trigger.getKey(),
+        JOB_GROUP,
+        TRIGGER_GROUP
+      );
     } catch (ObjectAlreadyExistsException e) {
       if (registration.conflictPolicy() == TaskRegistrationConflictPolicy.IGNORE_IF_EXISTS) {
+        log.debug("Skipping Quartz task registration for id={} because it already exists", registration.taskId());
         return;
       }
       if (registration.conflictPolicy() == TaskRegistrationConflictPolicy.RECREATE) {
+        log.debug("Recreating existing Quartz task id={}", registration.taskId());
         recreateExistingTask(registration, jobKey, jobDetail, trigger);
         return;
       }
@@ -107,11 +106,10 @@ public class DefaultTaskScheduler implements TaskScheduler {
     Trigger trigger
   ) {
     try {
+      log.debug("Deleting existing Quartz task id={} before recreation", registration.taskId());
       scheduler.deleteJob(jobKey);
       scheduler.scheduleJob(jobDetail, trigger);
-      if (!registration.enabled()) {
-        scheduler.pauseJob(jobKey);
-      }
+      log.debug("Recreated Quartz task id={} with triggerKey={}", registration.taskId(), trigger.getKey());
     } catch (SchedulerException e) {
       throw new TaskSchedulingException("failed to recreate task: " + registration.taskId(), e);
     }
@@ -121,20 +119,24 @@ public class DefaultTaskScheduler implements TaskScheduler {
   public void pause(String taskId) {
     requireNotNull(taskId);
     val jobKey = jobKey(taskId);
+    log.debug("Pausing Quartz task id={}", taskId);
     withScheduler("pause task: " + taskId, () -> scheduler.pauseJob(jobKey));
     if (!exists(taskId)) {
       throw new TaskNotFoundException("task not found: " + taskId);
     }
+    log.debug("Paused Quartz task id={}", taskId);
   }
 
   @Override
   public void resume(String taskId) {
     requireNotNull(taskId);
     val jobKey = jobKey(taskId);
+    log.debug("Resuming Quartz task id={}", taskId);
     withScheduler("resume task: " + taskId, () -> scheduler.resumeJob(jobKey));
     if (!exists(taskId)) {
       throw new TaskNotFoundException("task not found: " + taskId);
     }
+    log.debug("Resumed Quartz task id={}", taskId);
   }
 
   @Override
@@ -142,7 +144,9 @@ public class DefaultTaskScheduler implements TaskScheduler {
     requireNotNull(taskId);
     val jobKey = jobKey(taskId);
     try {
+      log.debug("Triggering Quartz task immediately id={}", taskId);
       scheduler.triggerJob(jobKey);
+      log.debug("Triggered Quartz task immediately id={}", taskId);
     } catch (SchedulerException e) {
       if (!exists(taskId)) {
         throw new TaskNotFoundException("task not found: " + taskId);
@@ -155,10 +159,12 @@ public class DefaultTaskScheduler implements TaskScheduler {
   public void unschedule(String taskId) {
     requireNotNull(taskId);
     val jobKey = jobKey(taskId);
+    log.debug("Unscheduling Quartz task id={}", taskId);
     val deleted = withScheduler("unschedule task: " + taskId, () -> scheduler.deleteJob(jobKey));
     if (!deleted) {
       throw new TaskNotFoundException("task not found: " + taskId);
     }
+    log.debug("Unscheduled Quartz task id={}", taskId);
   }
 
   @Override
@@ -208,7 +214,6 @@ public class DefaultTaskScheduler implements TaskScheduler {
       jobDetail.getDescription(),
       jobDetail.isDurable(),
       jobDetail.requestsRecovery(),
-      !paused,
       metadata.kind(),
       metadata.cronExpression(),
       metadata.cronZoneId(),
@@ -319,27 +324,30 @@ public class DefaultTaskScheduler implements TaskScheduler {
     }
     val startAt = primaryTrigger.getStartTime() == null ? null : primaryTrigger.getStartTime().toInstant();
     if (primaryTrigger instanceof CronTrigger cronTrigger) {
-      return new ScheduleMetadata(
-        TaskScheduleKind.CRON,
-        cronTrigger.getCronExpression(),
-        cronTrigger.getTimeZone().toZoneId(),
-        null,
-        startAt
-      );
+      return ScheduleMetadataBuilder.builder()
+        .kind(TaskScheduleKind.CRON)
+        .cronExpression(cronTrigger.getCronExpression())
+        .cronZoneId(cronTrigger.getTimeZone().toZoneId())
+        .startAt(startAt)
+        .build();
     }
     if (primaryTrigger instanceof SimpleTrigger simpleTrigger) {
       if (simpleTrigger.getRepeatInterval() > 0L) {
-        return new ScheduleMetadata(
-          TaskScheduleKind.INTERVAL,
-          null,
-          null,
-          Duration.ofMillis(simpleTrigger.getRepeatInterval()),
-          startAt
-        );
+        return ScheduleMetadataBuilder.builder()
+          .kind(TaskScheduleKind.INTERVAL)
+          .interval(Duration.ofMillis(simpleTrigger.getRepeatInterval()))
+          .startAt(startAt)
+          .build();
       }
-      return new ScheduleMetadata(TaskScheduleKind.ONCE, null, null, null, startAt);
+      return ScheduleMetadataBuilder.builder()
+        .kind(TaskScheduleKind.ONCE)
+        .startAt(startAt)
+        .build();
     }
-    return new ScheduleMetadata(TaskScheduleKind.UNKNOWN, null, null, null, startAt);
+    return ScheduleMetadataBuilder.builder()
+      .kind(TaskScheduleKind.UNKNOWN)
+      .startAt(startAt)
+      .build();
   }
 
   private void withScheduler(String operation, QuartzRunnable runnable) {
@@ -366,18 +374,6 @@ public class DefaultTaskScheduler implements TaskScheduler {
   @FunctionalInterface
   private interface QuartzSupplier<T> {
     T get() throws SchedulerException;
-  }
-
-  private record ScheduleMetadata(
-    TaskScheduleKind kind,
-    String cronExpression,
-    ZoneId cronZoneId,
-    Duration interval,
-    Instant startAt
-  ) {
-    private static ScheduleMetadata unknown() {
-      return new ScheduleMetadata(TaskScheduleKind.UNKNOWN, null, null, null, null);
-    }
   }
 
   private JobKey jobKey(String taskId) {

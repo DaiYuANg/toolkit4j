@@ -58,6 +58,7 @@ class DefaultTaskSchedulerTest {
   void testOnceSchedule_executesAndRecordsStatus() throws Exception {
     scheduler = createTestScheduler();
     taskScheduler = new DefaultTaskScheduler(scheduler);
+    scheduler.start();
 
     CountDownLatch latch = new CountDownLatch(1);
     LATCH_REF.set(latch);
@@ -69,7 +70,6 @@ class DefaultTaskSchedulerTest {
       .jobData("tenantId", "tenant-1")
       .jobData("source", "manual-test")
       .durable(true)
-      .enabled(true)
     );
 
     Optional<TaskInfo> infoOpt = taskScheduler.getTask("t1");
@@ -90,6 +90,7 @@ class DefaultTaskSchedulerTest {
   void testTriggerNow_executesWithManualTriggerSource() throws Exception {
     scheduler = createTestScheduler();
     taskScheduler = new DefaultTaskScheduler(scheduler);
+    scheduler.start();
 
     CountDownLatch latch = new CountDownLatch(1);
     LATCH_REF.set(latch);
@@ -98,7 +99,6 @@ class DefaultTaskSchedulerTest {
       .id("t2")
       .description("manual-trigger-test")
       .startAt(Instant.now().plusSeconds(30))
-      .enabled(true)
     );
 
     taskScheduler.triggerNow("t2");
@@ -114,7 +114,6 @@ class DefaultTaskSchedulerTest {
       .id("t3")
       .description("unschedule-test")
       .startAt(Instant.now().plusSeconds(30))
-      .enabled(true)
     );
 
     assertTrue(taskScheduler.getTask("t3").isPresent());
@@ -124,27 +123,23 @@ class DefaultTaskSchedulerTest {
   }
 
   @Test
-  void testDisabledTask_isPausedUntilResume() throws Exception {
+  void testPauseAndResume_updatesPausedState() throws Exception {
     scheduler = createTestScheduler();
     taskScheduler = new DefaultTaskScheduler(scheduler);
 
-    CountDownLatch latch = new CountDownLatch(1);
-    LATCH_REF.set(latch);
-
     taskScheduler.register(ManualTriggerJob.class, options -> options
       .id("t4")
-      .description("disabled-interval-test")
-      .interval(Duration.ofMillis(200))
-      .enabled(false)
+      .description("pause-resume-test")
+      .startAt(Instant.now().plusSeconds(30))
     );
 
+    taskScheduler.pause("t4");
     TaskInfo pausedInfo = taskScheduler.getTask("t4").orElseThrow();
     assertTrue(pausedInfo.paused());
-    assertFalse(pausedInfo.enabled());
 
-    assertFalse(latch.await(500, TimeUnit.MILLISECONDS), "disabled task should not execute");
     taskScheduler.resume("t4");
-    assertTrue(latch.await(3, TimeUnit.SECONDS), "task should execute after resume");
+    TaskInfo resumedInfo = taskScheduler.getTask("t4").orElseThrow();
+    assertFalse(resumedInfo.paused());
   }
 
   @Test
@@ -155,12 +150,10 @@ class DefaultTaskSchedulerTest {
     taskScheduler.register(ManualTriggerJob.class, options -> options
       .id("task-b")
       .interval(Duration.ofSeconds(10))
-      .enabled(true)
     );
     taskScheduler.register(ManualTriggerJob.class, options -> options
       .id("task-a")
       .startAt(Instant.now().plusSeconds(30))
-      .enabled(true)
     );
 
     List<TaskInfo> tasks = taskScheduler.listTasks();
@@ -177,7 +170,6 @@ class DefaultTaskSchedulerTest {
     taskScheduler.register(ManualTriggerJob.class, options -> options
       .id("cron-task")
       .cron("0/30 * * * * ?")
-      .enabled(true)
     );
 
     TaskInfo taskInfo = taskScheduler.getTask("cron-task").orElseThrow();
@@ -207,14 +199,12 @@ class DefaultTaskSchedulerTest {
     taskScheduler.register(ManualTriggerJob.class, options -> options
       .id("dup-task")
       .interval(Duration.ofSeconds(10))
-      .enabled(true)
     );
 
     assertThrows(TaskRegistrationException.class, () ->
       taskScheduler.register(ManualTriggerJob.class, options -> options
         .id("dup-task")
         .interval(Duration.ofSeconds(20))
-        .enabled(true)
       )
     );
   }
@@ -229,7 +219,6 @@ class DefaultTaskSchedulerTest {
       .description("old-version")
       .interval(Duration.ofSeconds(10))
       .jobData("version", "v1")
-      .enabled(true)
     );
 
     taskScheduler.register(OneTimeJob.class, options -> options
@@ -238,7 +227,6 @@ class DefaultTaskSchedulerTest {
       .startAt(Instant.now().plusSeconds(60))
       .jobData("version", "v2")
       .ifExistsRecreate(true)
-      .enabled(true)
     );
 
     TaskInfo taskInfo = taskScheduler.getTask("replace-task").orElseThrow();
@@ -258,7 +246,6 @@ class DefaultTaskSchedulerTest {
       .description("first")
       .interval(Duration.ofSeconds(10))
       .jobData("version", "v1")
-      .enabled(true)
     );
 
     taskScheduler.register(OneTimeJob.class, options -> options
@@ -267,7 +254,6 @@ class DefaultTaskSchedulerTest {
       .startAt(Instant.now().plusSeconds(60))
       .jobData("version", "v2")
       .ifExistsIgnore(true)
-      .enabled(true)
     );
 
     TaskInfo taskInfo = taskScheduler.getTask("ignore-dup").orElseThrow();
@@ -275,6 +261,30 @@ class DefaultTaskSchedulerTest {
     assertEquals("first", taskInfo.description());
     assertEquals(TaskScheduleKind.INTERVAL, taskInfo.scheduleType());
     assertEquals("v1", taskInfo.jobData().get("version"));
+  }
+
+  @Test
+  void testNullJobDataValue_throwsTaskRegistrationException() throws Exception {
+    scheduler = createTestScheduler();
+    taskScheduler = new DefaultTaskScheduler(scheduler);
+
+    assertThrows(TaskRegistrationException.class, () ->
+      taskScheduler.register(ManualTriggerJob.class, options -> options
+        .id("null-job-data")
+        .startAt(Instant.now().plusSeconds(30))
+        .jobData("tenantId", (String) null)
+      )
+    );
+  }
+
+  @Test
+  void testWrapperDoesNotStartExternalScheduler() throws Exception {
+    scheduler = createTestScheduler();
+    assertFalse(scheduler.isStarted());
+
+    taskScheduler = new DefaultTaskScheduler(scheduler);
+
+    assertFalse(scheduler.isStarted());
   }
 
   public static class OneTimeJob implements Job {

@@ -1,6 +1,6 @@
 # Hibernate Snowflake ID
 
-Artifact: `io.github.daiyuang:hibernate-snowflake-id:0.0.3`
+Artifact: `io.github.daiyuang:hibernate-snowflake-id:0.0.4`
 
 ## What it provides
 
@@ -30,3 +30,4 @@ Set explicit node id in generator parameters/properties with key:
 ## Notes
 
 - Current implementation validates node id against default Agrona layout bounds.
+- Debug logs are emitted through SLF4J under `org.toolkit4j.hibernate.snowflake.id` for node-id resolution and generator initialization.
