@@ -1,5 +1,5 @@
 module org.toolkit4j.collection {
-  requires static lombok;
+  requires lombok;
   requires static org.jetbrains.annotations;
 
   exports org.toolkit4j.collection.pageable;

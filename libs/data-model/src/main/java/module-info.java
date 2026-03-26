@@ -1,7 +1,7 @@
 module org.toolkit4j.data.model {
   requires static java.compiler;
-  requires static io.soabase.recordbuilder.core;
-  requires static lombok;
+  requires io.soabase.recordbuilder.core;
+  requires lombok;
   requires static org.jetbrains.annotations;
 
   exports org.toolkit4j.data.model.envelope;
