@@ -15,6 +15,9 @@ import java.io.Serializable;
 
 /**
  * Generic response wrapper for API and service boundaries.
+ *
+ * @param <C> response code type
+ * @param <T> response payload type
  */
 @Getter
 @Setter

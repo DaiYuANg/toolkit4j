@@ -1,6 +1,7 @@
 import com.vanniktech.maven.publish.MavenPublishBaseExtension
 import me.champeau.jmh.JMHPlugin
 import name.remal.gradle_plugins.lombok.LombokPlugin
+import org.gradle.external.javadoc.StandardJavadocDocletOptions
 
 plugins {
   alias(libs.plugins.dotenv)
@@ -129,6 +130,15 @@ subprojects {
     tasks.test {
       useJUnitPlatform()
       configureToolkitTestRuntime()
+    }
+
+    tasks.withType<Javadoc>().configureEach {
+      val standardOptions = options as StandardJavadocDocletOptions
+      standardOptions.encoding = "UTF-8"
+      standardOptions.charSet = "UTF-8"
+      standardOptions.docEncoding = "UTF-8"
+      // Keep malformed Javadoc visible, but do not fail the build on missing comments in delomboked/generated sources.
+      standardOptions.addStringOption("Xdoclint:all,-missing", "-quiet")
     }
   }
 }
