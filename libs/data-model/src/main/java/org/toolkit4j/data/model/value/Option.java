@@ -1,21 +1,13 @@
 package org.toolkit4j.data.model.value;
 
 import io.soabase.recordbuilder.core.RecordBuilder;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.List;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
 @RecordBuilder
-public record Option<T>(
-  T value,
+public record Option<T>(T value, String label, String tag, List<Option<T>> children) {
 
-  String label,
-
-  String tag,
-
-  List<Option<T>> children
-) {
   public Option {
     children = List.copyOf(Objects.requireNonNullElse(children, List.of()));
   }

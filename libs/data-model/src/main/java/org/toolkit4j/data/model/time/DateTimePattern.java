@@ -1,10 +1,9 @@
 package org.toolkit4j.data.model.time;
 
-import org.jetbrains.annotations.NotNull;
-import org.toolkit4j.data.model.enumeration.EnumValue;
-
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
+import org.toolkit4j.data.model.enumeration.EnumValue;
 
 public enum DateTimePattern implements EnumValue<String> {
   STANDARD_DATE_TIME("yyyy-MM-dd HH:mm:ss"),

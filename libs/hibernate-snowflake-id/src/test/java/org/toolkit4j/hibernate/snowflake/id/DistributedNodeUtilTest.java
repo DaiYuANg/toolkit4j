@@ -1,9 +1,9 @@
 package org.toolkit4j.hibernate.snowflake.id;
 
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
 
 class DistributedNodeUtilTest {
 

@@ -1,23 +1,23 @@
 package org.toolkit4j.data.model.enumeration;
 
-import org.jetbrains.annotations.NotNull;
+import static java.util.Objects.requireNonNull;
 
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
+import lombok.val;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 
 public final class EnumLookup<T, E extends Enum<E> & EnumValue<T>> {
   private final Class<E> enumClass;
   private final Map<T, E> values;
 
   private EnumLookup(Class<E> enumClass) {
-    this.enumClass = Objects.requireNonNull(enumClass, "enumClass");
+    this.enumClass = requireNonNull(enumClass, "enumClass");
     this.values = buildLookup(enumClass);
   }
 
-  public static <T, E extends Enum<E> & EnumValue<T>> @NotNull EnumLookup<T, E> of(@NotNull Class<E> enumClass) {
+  public static <T, E extends Enum<E> & EnumValue<T>> @NotNull EnumLookup<T, E> of(
+      @NotNull Class<E> enumClass) {
     return new EnumLookup<>(enumClass);
   }
 
@@ -26,12 +26,15 @@ public final class EnumLookup<T, E extends Enum<E> & EnumValue<T>> {
   }
 
   public @NotNull E fromPrimaryValue(T value) {
-    Objects.requireNonNull(value, "value");
-    return findByPrimaryValue(value).orElseThrow(() ->
-      new IllegalArgumentException(
-        "No enum constant in " + enumClass.getSimpleName() + " for primary value: " + value
-      )
-    );
+    requireNonNull(value, "value");
+    return findByPrimaryValue(value)
+        .orElseThrow(
+            () ->
+                new IllegalArgumentException(
+                    "No enum constant in "
+                        + enumClass.getSimpleName()
+                        + " for primary value: "
+                        + value));
   }
 
   public @NotNull Optional<E> findByPrimaryValue(T value) {
@@ -45,11 +48,11 @@ public final class EnumLookup<T, E extends Enum<E> & EnumValue<T>> {
     return findByPrimaryValue(value).isPresent();
   }
 
-  public @NotNull List<T> primaryValues() {
+  public @NotNull @Unmodifiable List<T> primaryValues() {
     return List.copyOf(values.keySet());
   }
 
-  public @NotNull List<E> values() {
+  public @NotNull @Unmodifiable List<E> values() {
     return List.copyOf(values.values());
   }
 
@@ -57,21 +60,25 @@ public final class EnumLookup<T, E extends Enum<E> & EnumValue<T>> {
     return values;
   }
 
-  private static <T, E extends Enum<E> & EnumValue<T>> Map<T, E> buildLookup(Class<E> enumClass) {
-    var constants = Objects.requireNonNull(enumClass.getEnumConstants(), "enum constants");
-    var lookup = new LinkedHashMap<T, E>(constants.length);
-    for (var constant : constants) {
-      var primaryValue = constant.getPrimaryValue();
-      if (primaryValue == null) {
-        throw new IllegalArgumentException("Primary value must not be null: " + constant.name());
-      }
-      var previous = lookup.putIfAbsent(primaryValue, constant);
-      if (previous != null) {
-        throw new IllegalArgumentException(
-          "Duplicate primary value [%s] in %s".formatted(primaryValue, enumClass.getName())
-        );
-      }
-    }
+  private static <T, E extends Enum<E> & EnumValue<T>> @Unmodifiable @NotNull Map<T, E> buildLookup(
+      @NotNull Class<E> enumClass) {
+    val constants = requireNonNull(enumClass.getEnumConstants(), "enum constants");
+    val lookup = new LinkedHashMap<T, E>(constants.length);
+    Arrays.stream(constants)
+        .forEach(
+            constant -> {
+              val primaryValue = constant.getPrimaryValue();
+              if (primaryValue == null) {
+                throw new IllegalArgumentException(
+                    "Primary value must not be null: " + constant.name());
+              }
+              val previous = lookup.putIfAbsent(primaryValue, constant);
+              if (previous != null) {
+                throw new IllegalArgumentException(
+                    "Duplicate primary value [%s] in %s"
+                        .formatted(primaryValue, enumClass.getName()));
+              }
+            });
     return Map.copyOf(lookup);
   }
 }

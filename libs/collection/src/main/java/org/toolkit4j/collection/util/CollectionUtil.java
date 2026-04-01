@@ -1,20 +1,18 @@
 package org.toolkit4j.collection.util;
 
-import lombok.experimental.UtilityClass;
-import lombok.val;
+import static java.util.Collections.emptyList;
 
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static java.util.Collections.emptyList;
+import lombok.experimental.UtilityClass;
+import lombok.val;
 
 /**
- * 多集合合并与交集操作。
- * Multi-collection merge and intersection operations.
+ * 多集合合并与交集操作。 Multi-collection merge and intersection operations.
  *
- * <p>职责限定为：合并多个集合、求交集。避免添加无关方法。
- * Responsibility: merge multiple collections, intersection. Avoid adding unrelated methods.
+ * <p>职责限定为：合并多个集合、求交集。避免添加无关方法。 Responsibility: merge multiple collections, intersection. Avoid
+ * adding unrelated methods.
  */
 @UtilityClass
 public class CollectionUtil {
@@ -34,35 +32,32 @@ public class CollectionUtil {
       return emptyList();
     }
 
-    val stream = Stream.of(collections)
-      .filter(Objects::nonNull)
-      .flatMap(Collection::stream);
+    val stream = Stream.of(collections).filter(Objects::nonNull).flatMap(Collection::stream);
 
     return (distinct ? stream.distinct() : stream).collect(Collectors.toList());
   }
 
-  /**
-   * 交集：求所有集合中的公共元素
-   */
+  /** 交集：求所有集合中的公共元素 */
   @SafeVarargs
   public static <T> Collection<T> intersection(Collection<T>... collections) {
     if (collections == null || collections.length == 0) {
       return emptyList();
     }
 
-    val hasEmpty = Stream.of(collections)
-      .filter(Objects::nonNull)
-      .anyMatch(Collection::isEmpty);
+    val hasEmpty = Stream.of(collections).filter(Objects::nonNull).anyMatch(Collection::isEmpty);
 
-    return hasEmpty ? Collections.emptyList() : Stream.of(collections)
-      .filter(Objects::nonNull)
-      .filter(c -> !c.isEmpty())
-      .map(HashSet::new)
-      .reduce((set1, set2) -> {
-        set1.retainAll(set2);
-        return set1;
-      })
-      .map(ArrayList::new)
-      .orElse(new ArrayList<>());
+    return hasEmpty
+        ? Collections.emptyList()
+        : Stream.of(collections)
+            .filter(Objects::nonNull)
+            .filter(c -> !c.isEmpty())
+            .map(HashSet::new)
+            .reduce(
+                (set1, set2) -> {
+                  set1.retainAll(set2);
+                  return set1;
+                })
+            .map(ArrayList::new)
+            .orElse(new ArrayList<>());
   }
 }

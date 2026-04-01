@@ -53,17 +53,23 @@ subprojects {
       signAllPublications()
       pom {
         name.set(stringPropertyOrDefault("POM_NAME") { "toolkit4j-${project.name}" })
-        description.set(stringPropertyOrDefault("POM_DESCRIPTION") {
-          "Lightweight JVM utility toolkit — module \"${project.name}\". See https://github.com/DaiYuANg/toolkit4j"
-        })
+        description.set(
+          stringPropertyOrDefault("POM_DESCRIPTION") {
+            "Lightweight JVM utility toolkit — module \"${project.name}\". See https://github.com/DaiYuANg/toolkit4j"
+          }
+        )
         inceptionYear.set(stringPropertyOrDefault("POM_INCEPTION_YEAR") { "2026" })
         url.set(stringPropertyOrDefault("POM_URL") { "https://github.com/DaiYuANg/toolkit4j" })
         licenses {
           license {
-            name.set(stringPropertyOrDefault("POM_LICENSE_NAME") { "The Apache License, Version 2.0" })
-            url.set(stringPropertyOrDefault("POM_LICENSE_URL") {
-              "https://www.apache.org/licenses/LICENSE-2.0.txt"
-            })
+            name.set(
+              stringPropertyOrDefault("POM_LICENSE_NAME") { "The Apache License, Version 2.0" }
+            )
+            url.set(
+              stringPropertyOrDefault("POM_LICENSE_URL") {
+                "https://www.apache.org/licenses/LICENSE-2.0.txt"
+              }
+            )
             distribution.set(stringPropertyOrDefault("POM_LICENSE_DIST") { "repo" })
           }
         }
@@ -71,39 +77,43 @@ subprojects {
           developer {
             id.set(stringPropertyOrDefault("POM_DEVELOPER_ID") { "daiyuang" })
             name.set(stringPropertyOrDefault("POM_DEVELOPER_NAME") { "DaiYuANg" })
-            url.set(stringPropertyOrDefault("POM_DEVELOPER_URL") {
-              "https://github.com/DaiYuANg"
-            })
+            url.set(stringPropertyOrDefault("POM_DEVELOPER_URL") { "https://github.com/DaiYuANg" })
           }
         }
         scm {
-          url.set(stringPropertyOrDefault("POM_SCM_URL") { "https://github.com/DaiYuANg/toolkit4j" })
-          connection.set(stringPropertyOrDefault("POM_SCM_CONNECTION") {
-            "scm:git:https://github.com/DaiYuANg/toolkit4j.git"
-          })
-          developerConnection.set(stringPropertyOrDefault("POM_SCM_DEV_CONNECTION") {
-            "scm:git:ssh://git@github.com/DaiYuANg/toolkit4j.git"
-          })
+          url.set(
+            stringPropertyOrDefault("POM_SCM_URL") { "https://github.com/DaiYuANg/toolkit4j" }
+          )
+          connection.set(
+            stringPropertyOrDefault("POM_SCM_CONNECTION") {
+              "scm:git:https://github.com/DaiYuANg/toolkit4j.git"
+            }
+          )
+          developerConnection.set(
+            stringPropertyOrDefault("POM_SCM_DEV_CONNECTION") {
+              "scm:git:ssh://git@github.com/DaiYuANg/toolkit4j.git"
+            }
+          )
         }
       }
     }
-//    tasks.register<Jar>("dokkaHtmlJar") {
-//      dependsOn(tasks.dokkaHtml)
-//      from(tasks.dokkaHtml.flatMap { it.outputDirectory })
-//      archiveClassifier.set("html-docs")
-//    }
-//
-//    tasks.register<Jar>("dokkaJavadocJar") {
-//      dependsOn(tasks.dokkaJavadoc)
-//      from(tasks.dokkaJavadoc.flatMap { it.outputDirectory })
-//      archiveClassifier.set("javadoc")
-//    }
+    //    tasks.register<Jar>("dokkaHtmlJar") {
+    //      dependsOn(tasks.dokkaHtml)
+    //      from(tasks.dokkaHtml.flatMap { it.outputDirectory })
+    //      archiveClassifier.set("html-docs")
+    //    }
+    //
+    //    tasks.register<Jar>("dokkaJavadocJar") {
+    //      dependsOn(tasks.dokkaJavadoc)
+    //      from(tasks.dokkaJavadoc.flatMap { it.outputDirectory })
+    //      archiveClassifier.set("javadoc")
+    //    }
 
     if (!isBomModule()) {
       dependencies {
         compileOnly(rootCatalog.jetbrainsAnnotation)
         compileOnly(rootCatalog.slf4j)
-//
+        //
         testImplementation(enforcedPlatform(rootCatalog.junitBom))
         testImplementation(rootCatalog.junitJuiter)
         testImplementation(rootCatalog.junitApi)
@@ -118,20 +128,20 @@ subprojects {
       }
 
       java {
-        // Vanniktech plugin provides plainJavadocJar; keep only one javadoc artifact to avoid duplicate javadoc.jar(.asc).
+        // Vanniktech plugin provides plainJavadocJar; keep only one javadoc artifact to avoid
+        // duplicate javadoc.jar(.asc).
         withSourcesJar()
       }
 
       tasks.jar {
-        manifest {
-          attributes("Version" to project.version)
-        }
+        manifest { attributes("Version" to project.version) }
         duplicatesStrategy = DuplicatesStrategy.INCLUDE
       }
-      // Gradle 9 strict validation: ensure metadata generation has explicit dependency on javadoc jar.
-      tasks.matching { it.name == "generateMetadataFileForMavenPublication" }.configureEach {
-        dependsOn(tasks.matching { task -> task.name == "plainJavadocJar" })
-      }
+      // Gradle 9 strict validation: ensure metadata generation has explicit dependency on javadoc
+      // jar.
+      tasks
+        .matching { it.name == "generateMetadataFileForMavenPublication" }
+        .configureEach { dependsOn(tasks.matching { task -> task.name == "plainJavadocJar" }) }
 
       tasks.test {
         useJUnitPlatform()
@@ -143,9 +153,27 @@ subprojects {
         standardOptions.encoding = "UTF-8"
         standardOptions.charSet = "UTF-8"
         standardOptions.docEncoding = "UTF-8"
-        // Keep malformed Javadoc visible, but do not fail the build on missing comments in delomboked/generated sources.
+        // Keep malformed Javadoc visible, but do not fail the build on missing comments in
+        // delomboked/generated sources.
         standardOptions.addStringOption("Xdoclint:all,-missing", "-quiet")
       }
     }
+  }
+}
+
+spotless {
+  format("misc") {
+    target("*.md", ".gitignore")
+    endWithNewline()
+  }
+  java {
+    target("**/*.java")
+    // GOOGLE style: 2-space indent (AOSP uses 4). Imports are handled by the formatter.
+    googleJavaFormat()
+    removeUnusedImports()
+  }
+  kotlinGradle {
+    target("**/*.gradle.kts")
+    ktfmt().googleStyle()
   }
 }

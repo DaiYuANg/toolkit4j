@@ -1,5 +1,15 @@
 package org.toolkit4j.quartz.task;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.time.Duration;
+import java.time.Instant;
+import java.util.List;
+import java.util.Optional;
+import java.util.Properties;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,17 +20,6 @@ import org.quartz.JobExecutionContext;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.impl.StdSchedulerFactory;
-
-import java.time.Duration;
-import java.time.Instant;
-import java.util.List;
-import java.util.Optional;
-import java.util.Properties;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicReference;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @Execution(ExecutionMode.SAME_THREAD)
 class DefaultTaskSchedulerTest {
@@ -41,7 +40,8 @@ class DefaultTaskSchedulerTest {
 
   private static Scheduler createTestScheduler() throws SchedulerException {
     Properties props = new Properties();
-    props.setProperty("org.quartz.scheduler.instanceName", "toolkit4j-test-scheduler-" + System.nanoTime());
+    props.setProperty(
+        "org.quartz.scheduler.instanceName", "toolkit4j-test-scheduler-" + System.nanoTime());
     props.setProperty("org.quartz.threadPool.threadCount", "2");
     props.setProperty("org.quartz.jobStore.class", "org.quartz.simpl.RAMJobStore");
     return new StdSchedulerFactory(props).getScheduler();
@@ -63,14 +63,16 @@ class DefaultTaskSchedulerTest {
     CountDownLatch latch = new CountDownLatch(1);
     LATCH_REF.set(latch);
 
-    taskScheduler.register(OneTimeJob.class, options -> options
-      .id("t1")
-      .description("once-test")
-      .startAt(Instant.now().plusMillis(200))
-      .jobData("tenantId", "tenant-1")
-      .jobData("source", "manual-test")
-      .durable(true)
-    );
+    taskScheduler.register(
+        OneTimeJob.class,
+        options ->
+            options
+                .id("t1")
+                .description("once-test")
+                .startAt(Instant.now().plusMillis(200))
+                .jobData("tenantId", "tenant-1")
+                .jobData("source", "manual-test")
+                .durable(true));
 
     Optional<TaskInfo> infoOpt = taskScheduler.getTask("t1");
     assertTrue(infoOpt.isPresent());
@@ -95,11 +97,13 @@ class DefaultTaskSchedulerTest {
     CountDownLatch latch = new CountDownLatch(1);
     LATCH_REF.set(latch);
 
-    taskScheduler.register(ManualTriggerJob.class, options -> options
-      .id("t2")
-      .description("manual-trigger-test")
-      .startAt(Instant.now().plusSeconds(30))
-    );
+    taskScheduler.register(
+        ManualTriggerJob.class,
+        options ->
+            options
+                .id("t2")
+                .description("manual-trigger-test")
+                .startAt(Instant.now().plusSeconds(30)));
 
     taskScheduler.triggerNow("t2");
     assertTrue(latch.await(5, TimeUnit.SECONDS), "task should execute by triggerNow");
@@ -110,11 +114,10 @@ class DefaultTaskSchedulerTest {
     scheduler = createTestScheduler();
     taskScheduler = new DefaultTaskScheduler(scheduler);
 
-    taskScheduler.register(ManualTriggerJob.class, options -> options
-      .id("t3")
-      .description("unschedule-test")
-      .startAt(Instant.now().plusSeconds(30))
-    );
+    taskScheduler.register(
+        ManualTriggerJob.class,
+        options ->
+            options.id("t3").description("unschedule-test").startAt(Instant.now().plusSeconds(30)));
 
     assertTrue(taskScheduler.getTask("t3").isPresent());
     taskScheduler.unschedule("t3");
@@ -127,11 +130,13 @@ class DefaultTaskSchedulerTest {
     scheduler = createTestScheduler();
     taskScheduler = new DefaultTaskScheduler(scheduler);
 
-    taskScheduler.register(ManualTriggerJob.class, options -> options
-      .id("t4")
-      .description("pause-resume-test")
-      .startAt(Instant.now().plusSeconds(30))
-    );
+    taskScheduler.register(
+        ManualTriggerJob.class,
+        options ->
+            options
+                .id("t4")
+                .description("pause-resume-test")
+                .startAt(Instant.now().plusSeconds(30)));
 
     taskScheduler.pause("t4");
     TaskInfo pausedInfo = taskScheduler.getTask("t4").orElseThrow();
@@ -147,14 +152,11 @@ class DefaultTaskSchedulerTest {
     scheduler = createTestScheduler();
     taskScheduler = new DefaultTaskScheduler(scheduler);
 
-    taskScheduler.register(ManualTriggerJob.class, options -> options
-      .id("task-b")
-      .interval(Duration.ofSeconds(10))
-    );
-    taskScheduler.register(ManualTriggerJob.class, options -> options
-      .id("task-a")
-      .startAt(Instant.now().plusSeconds(30))
-    );
+    taskScheduler.register(
+        ManualTriggerJob.class, options -> options.id("task-b").interval(Duration.ofSeconds(10)));
+    taskScheduler.register(
+        ManualTriggerJob.class,
+        options -> options.id("task-a").startAt(Instant.now().plusSeconds(30)));
 
     List<TaskInfo> tasks = taskScheduler.listTasks();
     assertEquals(2, tasks.size());
@@ -167,10 +169,8 @@ class DefaultTaskSchedulerTest {
     scheduler = createTestScheduler();
     taskScheduler = new DefaultTaskScheduler(scheduler);
 
-    taskScheduler.register(ManualTriggerJob.class, options -> options
-      .id("cron-task")
-      .cron("0/30 * * * * ?")
-    );
+    taskScheduler.register(
+        ManualTriggerJob.class, options -> options.id("cron-task").cron("0/30 * * * * ?"));
 
     TaskInfo taskInfo = taskScheduler.getTask("cron-task").orElseThrow();
     assertEquals(TaskScheduleKind.CRON, taskInfo.scheduleType());
@@ -183,12 +183,11 @@ class DefaultTaskSchedulerTest {
     scheduler = createTestScheduler();
     taskScheduler = new DefaultTaskScheduler(scheduler);
 
-    assertThrows(TaskRegistrationException.class, () ->
-      taskScheduler.register(ManualTriggerJob.class, options -> options
-        .id("bad-cron")
-        .cron("invalid cron")
-      )
-    );
+    assertThrows(
+        TaskRegistrationException.class,
+        () ->
+            taskScheduler.register(
+                ManualTriggerJob.class, options -> options.id("bad-cron").cron("invalid cron")));
   }
 
   @Test
@@ -196,17 +195,15 @@ class DefaultTaskSchedulerTest {
     scheduler = createTestScheduler();
     taskScheduler = new DefaultTaskScheduler(scheduler);
 
-    taskScheduler.register(ManualTriggerJob.class, options -> options
-      .id("dup-task")
-      .interval(Duration.ofSeconds(10))
-    );
+    taskScheduler.register(
+        ManualTriggerJob.class, options -> options.id("dup-task").interval(Duration.ofSeconds(10)));
 
-    assertThrows(TaskRegistrationException.class, () ->
-      taskScheduler.register(ManualTriggerJob.class, options -> options
-        .id("dup-task")
-        .interval(Duration.ofSeconds(20))
-      )
-    );
+    assertThrows(
+        TaskRegistrationException.class,
+        () ->
+            taskScheduler.register(
+                ManualTriggerJob.class,
+                options -> options.id("dup-task").interval(Duration.ofSeconds(20))));
   }
 
   @Test
@@ -214,20 +211,24 @@ class DefaultTaskSchedulerTest {
     scheduler = createTestScheduler();
     taskScheduler = new DefaultTaskScheduler(scheduler);
 
-    taskScheduler.register(ManualTriggerJob.class, options -> options
-      .id("replace-task")
-      .description("old-version")
-      .interval(Duration.ofSeconds(10))
-      .jobData("version", "v1")
-    );
+    taskScheduler.register(
+        ManualTriggerJob.class,
+        options ->
+            options
+                .id("replace-task")
+                .description("old-version")
+                .interval(Duration.ofSeconds(10))
+                .jobData("version", "v1"));
 
-    taskScheduler.register(OneTimeJob.class, options -> options
-      .id("replace-task")
-      .description("new-version")
-      .startAt(Instant.now().plusSeconds(60))
-      .jobData("version", "v2")
-      .ifExistsRecreate(true)
-    );
+    taskScheduler.register(
+        OneTimeJob.class,
+        options ->
+            options
+                .id("replace-task")
+                .description("new-version")
+                .startAt(Instant.now().plusSeconds(60))
+                .jobData("version", "v2")
+                .ifExistsRecreate(true));
 
     TaskInfo taskInfo = taskScheduler.getTask("replace-task").orElseThrow();
     assertEquals(OneTimeJob.class, taskInfo.jobClass());
@@ -241,20 +242,24 @@ class DefaultTaskSchedulerTest {
     scheduler = createTestScheduler();
     taskScheduler = new DefaultTaskScheduler(scheduler);
 
-    taskScheduler.register(ManualTriggerJob.class, options -> options
-      .id("ignore-dup")
-      .description("first")
-      .interval(Duration.ofSeconds(10))
-      .jobData("version", "v1")
-    );
+    taskScheduler.register(
+        ManualTriggerJob.class,
+        options ->
+            options
+                .id("ignore-dup")
+                .description("first")
+                .interval(Duration.ofSeconds(10))
+                .jobData("version", "v1"));
 
-    taskScheduler.register(OneTimeJob.class, options -> options
-      .id("ignore-dup")
-      .description("second-should-not-apply")
-      .startAt(Instant.now().plusSeconds(60))
-      .jobData("version", "v2")
-      .ifExistsIgnore(true)
-    );
+    taskScheduler.register(
+        OneTimeJob.class,
+        options ->
+            options
+                .id("ignore-dup")
+                .description("second-should-not-apply")
+                .startAt(Instant.now().plusSeconds(60))
+                .jobData("version", "v2")
+                .ifExistsIgnore(true));
 
     TaskInfo taskInfo = taskScheduler.getTask("ignore-dup").orElseThrow();
     assertEquals(ManualTriggerJob.class, taskInfo.jobClass());
@@ -268,13 +273,16 @@ class DefaultTaskSchedulerTest {
     scheduler = createTestScheduler();
     taskScheduler = new DefaultTaskScheduler(scheduler);
 
-    assertThrows(TaskRegistrationException.class, () ->
-      taskScheduler.register(ManualTriggerJob.class, options -> options
-        .id("null-job-data")
-        .startAt(Instant.now().plusSeconds(30))
-        .jobData("tenantId", (String) null)
-      )
-    );
+    assertThrows(
+        TaskRegistrationException.class,
+        () ->
+            taskScheduler.register(
+                ManualTriggerJob.class,
+                options ->
+                    options
+                        .id("null-job-data")
+                        .startAt(Instant.now().plusSeconds(30))
+                        .jobData("tenantId", (String) null)));
   }
 
   @Test
@@ -309,4 +317,3 @@ class DefaultTaskSchedulerTest {
     }
   }
 }
-

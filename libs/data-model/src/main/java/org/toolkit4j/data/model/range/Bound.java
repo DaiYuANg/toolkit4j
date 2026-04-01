@@ -1,16 +1,12 @@
 package org.toolkit4j.data.model.range;
 
+import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
-
-public record Bound<T extends Comparable<? super T>>(
-  T value,
-  BoundType type
-) {
+public record Bound<T extends Comparable<? super T>>(T value, BoundType type) {
   public Bound {
-    value = Objects.requireNonNull(value, "value");
-    type = Objects.requireNonNull(type, "type");
+    Objects.requireNonNull(value, "value");
+    Objects.requireNonNull(type, "type");
   }
 
   public static <T extends Comparable<? super T>> @NotNull Bound<T> open(@NotNull T value) {

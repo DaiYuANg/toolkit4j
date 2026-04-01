@@ -1,5 +1,9 @@
 package org.toolkit4j.hibernate.snowflake.id;
 
+import static org.toolkit4j.hibernate.snowflake.id.HibernateConfigureKey.SNOW_FLAKE_HIBERNATE_PROPERTIES_KEY;
+
+import java.util.Objects;
+import java.util.Properties;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.agrona.concurrent.SnowflakeIdGenerator;
@@ -10,18 +14,14 @@ import org.hibernate.id.Configurable;
 import org.hibernate.id.IdentifierGenerator;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
-import java.util.Properties;
-
-import static org.toolkit4j.hibernate.snowflake.id.HibernateConfigureKey.SNOW_FLAKE_HIBERNATE_PROPERTIES_KEY;
-
 @Slf4j
 public class HibernateSnowflakeIdGenerator implements IdentifierGenerator, Configurable {
 
   private SnowflakeIdGenerator generator;
 
   @Override
-  public void configure(GeneratorCreationContext creationContext, Properties parameters) throws MappingException {
+  public void configure(GeneratorCreationContext creationContext, Properties parameters)
+      throws MappingException {
     log.debug("Configuring Hibernate Snowflake ID generator");
     val nodeId = resolveNodeId(parameters);
     validateNodeIdForDefaultAgronaLayout(nodeId);
@@ -30,14 +30,17 @@ public class HibernateSnowflakeIdGenerator implements IdentifierGenerator, Confi
   }
 
   /**
-   * Agrona {@link SnowflakeIdGenerator#SnowflakeIdGenerator(long)} 使用默认 10 位 node 位，合法范围为 {@code [0, 1023]}。
+   * Agrona {@link SnowflakeIdGenerator#SnowflakeIdGenerator(long)} 使用默认 10 位 node 位，合法范围为 {@code
+   * [0, 1023]}。
    */
   private static void validateNodeIdForDefaultAgronaLayout(long nodeId) {
     long maxNodeId = (1L << SnowflakeIdGenerator.NODE_ID_BITS_DEFAULT) - 1;
     if (nodeId < 0 || nodeId > maxNodeId) {
       throw new MappingException(
-        "snowflake node-id must be between 0 and " + maxNodeId + " (inclusive) for default Agrona layout, got: " + nodeId
-      );
+          "snowflake node-id must be between 0 and "
+              + maxNodeId
+              + " (inclusive) for default Agrona layout, got: "
+              + nodeId);
     }
   }
 
@@ -46,19 +49,17 @@ public class HibernateSnowflakeIdGenerator implements IdentifierGenerator, Confi
     if (configuredNodeId != null) {
       val parsedNodeId = parseConfiguredNodeId(configuredNodeId);
       log.debug(
-        "Using explicitly configured snowflake nodeId={} from property {}",
-        parsedNodeId,
-        SNOW_FLAKE_HIBERNATE_PROPERTIES_KEY
-      );
+          "Using explicitly configured snowflake nodeId={} from property {}",
+          parsedNodeId,
+          SNOW_FLAKE_HIBERNATE_PROPERTIES_KEY);
       return parsedNodeId;
     }
 
     val resolvedNodeId = DistributedNodeUtil.getNodeId();
     log.debug(
-      "Using derived snowflake nodeId={} because property {} was not set",
-      resolvedNodeId,
-      SNOW_FLAKE_HIBERNATE_PROPERTIES_KEY
-    );
+        "Using derived snowflake nodeId={} because property {} was not set",
+        resolvedNodeId,
+        SNOW_FLAKE_HIBERNATE_PROPERTIES_KEY);
     return resolvedNodeId;
   }
 
@@ -72,6 +73,8 @@ public class HibernateSnowflakeIdGenerator implements IdentifierGenerator, Confi
 
   @Override
   public Object generate(SharedSessionContractImplementor session, Object object) {
-    return Objects.requireNonNull(generator, "HibernateSnowflakeIdGenerator is not properly configured").nextId();
+    return Objects.requireNonNull(
+            generator, "HibernateSnowflakeIdGenerator is not properly configured")
+        .nextId();
   }
 }

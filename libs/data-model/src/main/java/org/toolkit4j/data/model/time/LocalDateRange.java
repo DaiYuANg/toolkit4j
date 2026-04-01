@@ -1,17 +1,14 @@
 package org.toolkit4j.data.model.time;
 
+import java.time.LocalDate;
+import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.toolkit4j.data.model.range.Range;
 
-import java.time.LocalDate;
-import java.util.Objects;
-
-public record LocalDateRange(
-  Range<LocalDate> value
-) {
+public record LocalDateRange(Range<LocalDate> value) {
   public LocalDateRange {
-    value = Objects.requireNonNull(value, "value");
+    Objects.requireNonNull(value, "value");
   }
 
   public static @NotNull LocalDateRange unbounded() {
@@ -26,11 +23,13 @@ public record LocalDateRange(
     return new LocalDateRange(Range.open(lower, upper));
   }
 
-  public static @NotNull LocalDateRange closedOpen(@NotNull LocalDate lower, @NotNull LocalDate upper) {
+  public static @NotNull LocalDateRange closedOpen(
+      @NotNull LocalDate lower, @NotNull LocalDate upper) {
     return new LocalDateRange(Range.closedOpen(lower, upper));
   }
 
-  public static @NotNull LocalDateRange openClosed(@NotNull LocalDate lower, @NotNull LocalDate upper) {
+  public static @NotNull LocalDateRange openClosed(
+      @NotNull LocalDate lower, @NotNull LocalDate upper) {
     return new LocalDateRange(Range.openClosed(lower, upper));
   }
 

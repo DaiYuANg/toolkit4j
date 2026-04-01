@@ -1,11 +1,10 @@
 package org.toolkit4j.net;
 
+import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Objects;
 
 /*
  * IPv4 地址实现
@@ -47,11 +46,8 @@ public final class Ipv4Address implements IpAddress {
   @Contract(value = " -> new", pure = true)
   @Override
   public byte @NotNull [] bytes() {
-    return new byte[]{
-      (byte) (address >> 24),
-      (byte) (address >> 16),
-      (byte) (address >> 8),
-      (byte) address
+    return new byte[] {
+      (byte) (address >> 24), (byte) (address >> 16), (byte) (address >> 8), (byte) address
     };
   }
 
@@ -64,19 +60,17 @@ public final class Ipv4Address implements IpAddress {
   public boolean isPrivate() {
     int first = (address >>> 24) & 0xFF;
     int second = (address >>> 16) & 0xFF;
-    return (first == 10) ||
-      (first == 172 && second >= 16 && second <= 31) ||
-      (first == 192 && second == 168);
+    return (first == 10)
+        || (first == 172 && second >= 16 && second <= 31)
+        || (first == 192 && second == 168);
   }
 
   /** 转换成标准点分十进制字符串 */
   @Override
   public String toString() {
-    return String.format("%d.%d.%d.%d",
-      (address >> 24) & 0xFF,
-      (address >> 16) & 0xFF,
-      (address >> 8) & 0xFF,
-      address & 0xFF);
+    return String.format(
+        "%d.%d.%d.%d",
+        (address >> 24) & 0xFF, (address >> 16) & 0xFF, (address >> 8) & 0xFF, address & 0xFF);
   }
 
   @Override

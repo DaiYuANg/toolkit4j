@@ -1,25 +1,23 @@
 package org.toolkit4j.collection;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.random.RandomGenerator;
 import lombok.val;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.Blackhole;
 import org.toolkit4j.collection.tree.ListTree;
 import org.toolkit4j.collection.tree.Trees;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-import java.util.random.RandomGenerator;
-
-/**
- * 树构建性能基准
- * Tree build benchmark: flat list to tree conversion
- */
+/** 树构建性能基准 Tree build benchmark: flat list to tree conversion */
 @BenchmarkMode(Mode.Throughput)
 @OutputTimeUnit(TimeUnit.SECONDS)
 @State(Scope.Benchmark)
-@Fork(value = 1, jvmArgs = {"-Xms2g", "-Xmx2g"})
+@Fork(
+    value = 1,
+    jvmArgs = {"-Xms2g", "-Xmx2g"})
 @Warmup(iterations = 2, time = 2)
 @Measurement(iterations = 3, time = 3)
 public class TreeBenchmark {
@@ -48,7 +46,8 @@ public class TreeBenchmark {
 
   @Benchmark
   public ListTree<BenchNode> tree_buildList_withSort() {
-    return Trees.buildList(flatList, BenchNode::id, BenchNode::parentId, Comparator.comparing(BenchNode::weight));
+    return Trees.buildList(
+        flatList, BenchNode::id, BenchNode::parentId, Comparator.comparing(BenchNode::weight));
   }
 
   @Benchmark

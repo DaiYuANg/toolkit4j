@@ -1,26 +1,22 @@
 package org.toolkit4j.collection;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.IntStream;
 import lombok.val;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.Blackhole;
 import org.toolkit4j.collection.pageable.PageableList;
 import org.toolkit4j.collection.pageable.PageableSet;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.IntStream;
-
-/**
- * 分页集合性能基准
- * Pageable collection benchmark
- */
+/** 分页集合性能基准 Pageable collection benchmark */
 @BenchmarkMode(Mode.Throughput)
 @OutputTimeUnit(TimeUnit.SECONDS)
 @State(Scope.Benchmark)
-@Fork(value = 1, jvmArgs = {"-Xms2g", "-Xmx2g"})
+@Fork(
+    value = 1,
+    jvmArgs = {"-Xms2g", "-Xmx2g"})
 @Warmup(iterations = 2, time = 2)
 @Measurement(iterations = 3, time = 3)
 public class PageableBenchmark {

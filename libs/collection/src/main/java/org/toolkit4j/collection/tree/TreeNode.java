@@ -6,8 +6,8 @@ import java.util.stream.Stream;
 /**
  * 树节点接口。TreeNode interface.
  *
- * <p>子类可细化 children 的集合类型，如 ListTreeNode、SetTreeNode。
- * Sub-interfaces may narrow children to List or Set.
+ * <p>子类可细化 children 的集合类型，如 ListTreeNode、SetTreeNode。 Sub-interfaces may narrow children to List or
+ * Set.
  *
  * @param <T> 节点数据类型
  */

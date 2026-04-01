@@ -1,16 +1,13 @@
 package org.toolkit4j.data.model.time;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-public record YearMonthValue(
-  int year,
-  int month
-) implements Comparable<YearMonthValue> {
+@SuppressWarnings("unused")
+public record YearMonthValue(int year, int month) implements Comparable<YearMonthValue> {
   public YearMonthValue {
     YearMonth.of(year, month);
   }
@@ -50,7 +47,7 @@ public record YearMonthValue(
   }
 
   @Override
-  public String toString() {
+  public @NotNull String toString() {
     return toYearMonth().toString();
   }
 }

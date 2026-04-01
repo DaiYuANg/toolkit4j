@@ -1,11 +1,10 @@
 package org.toolkit4j.data.model.envelope;
 
-import org.junit.jupiter.api.Test;
-
-import java.util.Map;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+
+import java.util.Map;
+import org.junit.jupiter.api.Test;
 
 class ResultTest {
 

@@ -1,24 +1,23 @@
 package org.toolkit4j.data.model.time;
 
+import java.time.YearMonth;
+import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.toolkit4j.data.model.range.Range;
 
-import java.time.YearMonth;
-import java.util.Objects;
-
-public record YearMonthRange(
-  Range<YearMonthValue> value
-) {
+@SuppressWarnings("unused")
+public record YearMonthRange(Range<YearMonthValue> value) {
   public YearMonthRange {
-    value = Objects.requireNonNull(value, "value");
+    Objects.requireNonNull(value, "value");
   }
 
   public static @NotNull YearMonthRange unbounded() {
     return new YearMonthRange(Range.unbounded());
   }
 
-  public static @NotNull YearMonthRange closed(@NotNull YearMonthValue lower, @NotNull YearMonthValue upper) {
+  public static @NotNull YearMonthRange closed(
+      @NotNull YearMonthValue lower, @NotNull YearMonthValue upper) {
     return new YearMonthRange(Range.closed(lower, upper));
   }
 
@@ -26,15 +25,18 @@ public record YearMonthRange(
     return closed(YearMonthValue.from(lower), YearMonthValue.from(upper));
   }
 
-  public static @NotNull YearMonthRange open(@NotNull YearMonthValue lower, @NotNull YearMonthValue upper) {
+  public static @NotNull YearMonthRange open(
+      @NotNull YearMonthValue lower, @NotNull YearMonthValue upper) {
     return new YearMonthRange(Range.open(lower, upper));
   }
 
-  public static @NotNull YearMonthRange closedOpen(@NotNull YearMonthValue lower, @NotNull YearMonthValue upper) {
+  public static @NotNull YearMonthRange closedOpen(
+      @NotNull YearMonthValue lower, @NotNull YearMonthValue upper) {
     return new YearMonthRange(Range.closedOpen(lower, upper));
   }
 
-  public static @NotNull YearMonthRange openClosed(@NotNull YearMonthValue lower, @NotNull YearMonthValue upper) {
+  public static @NotNull YearMonthRange openClosed(
+      @NotNull YearMonthValue lower, @NotNull YearMonthValue upper) {
     return new YearMonthRange(Range.openClosed(lower, upper));
   }
 

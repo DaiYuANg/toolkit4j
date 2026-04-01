@@ -1,18 +1,16 @@
 package org.toolkit4j.collection.tree;
 
-import lombok.val;
-
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
+import lombok.val;
 
 /**
  * 树形结构接口。Tree interface.
  *
- * <p>子类可细化 roots 的集合类型，如 ListTree、SetTree。
- * Sub-interfaces may narrow roots to List or Set.
+ * <p>子类可细化 roots 的集合类型，如 ListTree、SetTree。 Sub-interfaces may narrow roots to List or Set.
  *
  * @param <T> 节点数据类型
  */

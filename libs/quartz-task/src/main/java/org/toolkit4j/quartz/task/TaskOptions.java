@@ -5,9 +5,7 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.util.Map;
 
-/**
- * Builder-style options for task registration.
- */
+/** Builder-style options for task registration. */
 public interface TaskOptions {
 
   TaskOptions id(String id);
@@ -43,7 +41,8 @@ public interface TaskOptions {
   TaskOptions ifExistsRecreate(boolean enabled);
 
   /**
-   * When {@code true}, an existing task id is left unchanged (no error). When {@code false}, restores default {@link TaskRegistrationConflictPolicy#FAIL}.
+   * When {@code true}, an existing task id is left unchanged (no error). When {@code false},
+   * restores default {@link TaskRegistrationConflictPolicy#FAIL}.
    */
   TaskOptions ifExistsIgnore(boolean enabled);
 }

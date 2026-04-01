@@ -4,10 +4,7 @@ import io.soabase.recordbuilder.core.RecordBuilder;
 
 @RecordBuilder
 @SuppressWarnings("unused")
-public record Geo(
-  Double longitude,
-  Double latitude
-) {
+public record Geo(Double longitude, Double latitude) {
 
   public boolean isComplete() {
     return longitude != null && latitude != null;

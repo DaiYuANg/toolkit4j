@@ -1,17 +1,14 @@
 package org.toolkit4j.collection.trie;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import java.util.HashMap;
 import java.util.Map;
+import lombok.Getter;
+import lombok.Setter;
 
 public class HashTrieNode<K, V> implements TrieNode<K, V> {
   private final Map<K, HashTrieNode<K, V>> children = new HashMap<>();
   private boolean isEnd = false;
-  @Getter
-  @Setter
-  private V value;
+  @Getter @Setter private V value;
 
   @Override
   public Map<K, HashTrieNode<K, V>> getChildren() {

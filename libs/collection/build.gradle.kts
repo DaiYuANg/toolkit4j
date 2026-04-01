@@ -1,3 +1,1 @@
-dependencies {
-  testImplementation(libs.gson)
-}
+dependencies { testImplementation(libs.gson) }

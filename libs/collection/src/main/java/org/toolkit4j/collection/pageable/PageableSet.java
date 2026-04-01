@@ -1,20 +1,19 @@
 package org.toolkit4j.collection.pageable;
 
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
-import lombok.val;
+import static java.util.Collections.emptySet;
 
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.stream.Stream;
-
-import static java.util.Collections.emptySet;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 /**
- * Paging over a {@link Set} using the backing collection's iterator order.
- * For {@link java.util.HashSet}, that order is unspecified but stable until the set is modified.
- * Use {@link java.util.LinkedHashSet} if you need a predictable order.
+ * Paging over a {@link Set} using the backing collection's iterator order. For {@link
+ * java.util.HashSet}, that order is unspecified but stable until the set is modified. Use {@link
+ * java.util.LinkedHashSet} if you need a predictable order.
  */
 @Data
 @RequiredArgsConstructor
@@ -80,7 +79,8 @@ public class PageableSet<T> implements PageableCollection<T, Set<T>> {
   public Set<T> slice(int fromIndex, int toIndex) {
     val size = set.size();
     if (fromIndex < 0 || toIndex > size || fromIndex > toIndex) {
-      throw new IndexOutOfBoundsException("fromIndex=%d, toIndex=%d, size=%d".formatted(fromIndex, toIndex, size));
+      throw new IndexOutOfBoundsException(
+          "fromIndex=%d, toIndex=%d, size=%d".formatted(fromIndex, toIndex, size));
     }
     if (fromIndex == toIndex) {
       return emptySet();
@@ -89,8 +89,8 @@ public class PageableSet<T> implements PageableCollection<T, Set<T>> {
   }
 
   /**
-   * Copies {@code length} elements starting after skipping {@code skip} iterator steps.
-   * Uses the same order as {@link Set#iterator()}.
+   * Copies {@code length} elements starting after skipping {@code skip} iterator steps. Uses the
+   * same order as {@link Set#iterator()}.
    */
   private Set<T> copyIteratorRange(int skip, int length) {
     if (length <= 0) {
@@ -99,7 +99,8 @@ public class PageableSet<T> implements PageableCollection<T, Set<T>> {
     Iterator<T> it = set.iterator();
     for (int i = 0; i < skip; i++) {
       if (!it.hasNext()) {
-        throw new IndexOutOfBoundsException("skip=%d past end of set (size=%d)".formatted(skip, set.size()));
+        throw new IndexOutOfBoundsException(
+            "skip=%d past end of set (size=%d)".formatted(skip, set.size()));
       }
       it.next();
     }
@@ -107,8 +108,8 @@ public class PageableSet<T> implements PageableCollection<T, Set<T>> {
     for (int n = 0; n < length; n++) {
       if (!it.hasNext()) {
         throw new IndexOutOfBoundsException(
-          "expected %d elements from offset %d but iterator ended early (size=%d)".formatted(length, skip, set.size())
-        );
+            "expected %d elements from offset %d but iterator ended early (size=%d)"
+                .formatted(length, skip, set.size()));
       }
       out.add(it.next());
     }

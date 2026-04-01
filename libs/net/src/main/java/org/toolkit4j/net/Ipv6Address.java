@@ -1,17 +1,14 @@
 package org.toolkit4j.net;
 
+import java.math.BigInteger;
+import java.net.InetAddress;
+import java.util.Objects;
 import lombok.SneakyThrows;
 import lombok.val;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import java.math.BigInteger;
-import java.net.InetAddress;
-import java.util.Objects;
-
-/**
- * IPv6 地址
- */
+/** IPv6 地址 */
 public final class Ipv6Address implements IpAddress {
   private final BigInteger address; // 128位
 
@@ -87,4 +84,3 @@ public final class Ipv6Address implements IpAddress {
     return address.hashCode();
   }
 }
-

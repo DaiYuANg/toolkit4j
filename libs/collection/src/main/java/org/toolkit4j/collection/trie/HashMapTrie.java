@@ -1,12 +1,10 @@
 package org.toolkit4j.collection.trie;
 
-import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-
-import lombok.val;
-
 import java.util.*;
 import java.util.function.Supplier;
+import lombok.val;
+import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 
 @ApiStatus.Experimental
 public class HashMapTrie<K, V> implements Trie<K, V> {
@@ -48,7 +46,6 @@ public class HashMapTrie<K, V> implements Trie<K, V> {
     return findNode(prefixSequence) != null;
   }
 
-
   @Override
   public boolean delete(Iterable<K> keySequence) {
     val found = new boolean[1];
@@ -77,7 +74,6 @@ public class HashMapTrie<K, V> implements Trie<K, V> {
     return false;
   }
 
-
   @Override
   public Set<List<K>> keysWithPrefix(Iterable<K> prefixSequence) {
     List<K> prefixList = new ArrayList<>();
@@ -97,11 +93,13 @@ public class HashMapTrie<K, V> implements Trie<K, V> {
     if (node.isEnd()) {
       results.add(new ArrayList<>(path));
     }
-    node.getChildren().forEach((key, value) -> {
-      path.addLast(key);
-      collect(value, path, results);
-      path.removeLast();
-    });
+    node.getChildren()
+        .forEach(
+            (key, value) -> {
+              path.addLast(key);
+              collect(value, path, results);
+              path.removeLast();
+            });
   }
 
   @Override
@@ -116,9 +114,7 @@ public class HashMapTrie<K, V> implements Trie<K, V> {
     return root.getChildren().isEmpty();
   }
 
-  /**
-   * Walks from root following {@code sequence}. Returns {@code null} if any step is missing.
-   */
+  /** Walks from root following {@code sequence}. Returns {@code null} if any step is missing. */
   private TrieNode<K, V> findNode(@NotNull Iterable<K> sequence) {
     TrieNode<K, V> node = root;
     for (K key : sequence) {
@@ -129,6 +125,4 @@ public class HashMapTrie<K, V> implements Trie<K, V> {
     }
     return node;
   }
-
 }
-

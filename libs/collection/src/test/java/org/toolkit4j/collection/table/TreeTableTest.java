@@ -1,12 +1,11 @@
 package org.toolkit4j.collection.table;
 
-import lombok.val;
-import org.junit.jupiter.api.Test;
-
-import java.util.Comparator;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+
+import java.util.Comparator;
+import lombok.val;
+import org.junit.jupiter.api.Test;
 
 class TreeTableTest {
   @Test

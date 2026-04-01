@@ -1,6 +1,4 @@
-plugins {
-  `java-library`
-}
+plugins { `java-library` }
 
 dependencies {
   compileOnly(libs.quartz)
@@ -8,4 +6,3 @@ dependencies {
   annotationProcessor(libs.record.builder.processor)
   testImplementation(libs.quartz)
 }
-

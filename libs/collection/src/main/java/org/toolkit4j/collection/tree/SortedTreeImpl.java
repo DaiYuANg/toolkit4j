@@ -1,14 +1,11 @@
 package org.toolkit4j.collection.tree;
 
-import lombok.val;
-
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.LinkedList;
-import java.util.Queue;
 import java.util.SortedSet;
-import java.util.TreeSet;
 import java.util.stream.Stream;
+import lombok.val;
+import org.jetbrains.annotations.NotNull;
 
 record SortedTreeImpl<T>(SortedSet<TreeNode<T>> roots) implements SortedTree<T> {
 
@@ -18,11 +15,11 @@ record SortedTreeImpl<T>(SortedSet<TreeNode<T>> roots) implements SortedTree<T> 
   }
 
   @Override
-  public Stream<TreeNode<T>> breadthFirst() {
+  public @NotNull Stream<TreeNode<T>> breadthFirst() {
     val result = new ArrayList<TreeNode<T>>();
-    val queue = new LinkedList<TreeNode<T>>(roots);
+    val queue = new LinkedList<>(roots);
     while (!queue.isEmpty()) {
-      var node = queue.poll();
+      val node = queue.poll();
       result.add(node);
       queue.addAll(node.children());
     }

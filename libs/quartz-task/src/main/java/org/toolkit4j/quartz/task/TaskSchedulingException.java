@@ -1,8 +1,6 @@
 package org.toolkit4j.quartz.task;
 
-/**
- * Thrown when scheduling operations fail.
- */
+/** Thrown when scheduling operations fail. */
 public class TaskSchedulingException extends RuntimeException {
 
   public TaskSchedulingException(String message) {

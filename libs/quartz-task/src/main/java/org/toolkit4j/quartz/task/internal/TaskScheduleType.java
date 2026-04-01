@@ -5,4 +5,3 @@ public enum TaskScheduleType {
   ONCE,
   FIXED_INTERVAL
 }
-

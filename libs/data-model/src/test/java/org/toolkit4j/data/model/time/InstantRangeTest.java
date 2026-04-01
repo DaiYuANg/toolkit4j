@@ -1,11 +1,10 @@
 package org.toolkit4j.data.model.time;
 
-import org.junit.jupiter.api.Test;
-
-import java.time.Instant;
-
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.time.Instant;
+import org.junit.jupiter.api.Test;
 
 class InstantRangeTest {
 

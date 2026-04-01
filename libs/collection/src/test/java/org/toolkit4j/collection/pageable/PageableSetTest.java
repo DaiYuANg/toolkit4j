@@ -1,17 +1,16 @@
 package org.toolkit4j.collection.pageable;
 
-import lombok.val;
-import net.datafaker.Faker;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import lombok.val;
+import net.datafaker.Faker;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 class PageableSetTest {
 
@@ -20,9 +19,8 @@ class PageableSetTest {
 
   @BeforeEach
   void setup() {
-    Set<String> fakeData = IntStream.range(0, 1000)
-      .mapToObj(i -> faker.name().fullName())
-      .collect(Collectors.toSet());
+    Set<String> fakeData =
+        IntStream.range(0, 1000).mapToObj(i -> faker.name().fullName()).collect(Collectors.toSet());
     pageable = new PageableSet<>(fakeData);
   }
 

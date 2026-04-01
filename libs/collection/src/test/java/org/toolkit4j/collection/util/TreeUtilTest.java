@@ -1,16 +1,15 @@
 package org.toolkit4j.collection.util;
 
-import org.junit.jupiter.api.Test;
-import lombok.val;
-import org.toolkit4j.collection.tree.ListTree;
-import org.toolkit4j.collection.tree.TreeNode;
-import org.toolkit4j.collection.tree.Trees;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
-import static org.junit.jupiter.api.Assertions.*;
+import lombok.val;
+import org.junit.jupiter.api.Test;
+import org.toolkit4j.collection.tree.ListTree;
+import org.toolkit4j.collection.tree.TreeNode;
+import org.toolkit4j.collection.tree.Trees;
 
 class TreeUtilBigDataTest {
 
@@ -39,9 +38,8 @@ class TreeUtilBigDataTest {
     assertEquals(totalNodes, bfsList.size());
     assertEquals(1L, bfsList.getFirst().data().id());
 
-    val secondLevelIds = tree.roots().getFirst().children().stream()
-        .map(n -> n.data().id())
-        .toList();
+    val secondLevelIds =
+        tree.roots().getFirst().children().stream().map(n -> n.data().id()).toList();
     assertFalse(secondLevelIds.isEmpty());
     assertTrue(secondLevelIds.contains(bfsList.get(1).data().id()));
 

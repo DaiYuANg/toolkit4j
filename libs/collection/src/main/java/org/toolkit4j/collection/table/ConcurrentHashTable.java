@@ -3,7 +3,7 @@ package org.toolkit4j.collection.table;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class ConcurrentHashTable<R,C,V>  extends AbstractTable<R, C, V>{
+public class ConcurrentHashTable<R, C, V> extends AbstractTable<R, C, V> {
   private final Map<R, Map<C, V>> backingMap = new ConcurrentHashMap<>();
 
   @Override

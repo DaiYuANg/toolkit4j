@@ -1,17 +1,14 @@
 package org.toolkit4j.data.model.time;
 
+import java.time.Instant;
+import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.toolkit4j.data.model.range.Range;
 
-import java.time.Instant;
-import java.util.Objects;
-
-public record InstantRange(
-  Range<Instant> value
-) {
+public record InstantRange(Range<Instant> value) {
   public InstantRange {
-    value = Objects.requireNonNull(value, "value");
+    Objects.requireNonNull(value, "value");
   }
 
   public static @NotNull InstantRange unbounded() {

@@ -1,14 +1,13 @@
 package org.toolkit4j.collection.table;
 
-import lombok.val;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import static org.junit.jupiter.api.Assertions.*;
+import lombok.val;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 class HashTableTest {
 
@@ -83,16 +82,22 @@ class HashTableTest {
     Set<Cell<String, String, Integer>> cells = table.cellSet();
     assertEquals(2, cells.size());
 
-    boolean foundR1C1 = cells.stream()
-      .anyMatch(cell -> cell.getRowKey().equals("r1") &&
-        cell.getColumnKey().equals("c1") &&
-        cell.getValue().equals(100));
+    boolean foundR1C1 =
+        cells.stream()
+            .anyMatch(
+                cell ->
+                    cell.getRowKey().equals("r1")
+                        && cell.getColumnKey().equals("c1")
+                        && cell.getValue().equals(100));
     assertTrue(foundR1C1);
 
-    boolean foundR2C2 = cells.stream()
-      .anyMatch(cell -> cell.getRowKey().equals("r2") &&
-        cell.getColumnKey().equals("c2") &&
-        cell.getValue().equals(200));
+    boolean foundR2C2 =
+        cells.stream()
+            .anyMatch(
+                cell ->
+                    cell.getRowKey().equals("r2")
+                        && cell.getColumnKey().equals("c2")
+                        && cell.getValue().equals(200));
     assertTrue(foundR2C2);
   }
 

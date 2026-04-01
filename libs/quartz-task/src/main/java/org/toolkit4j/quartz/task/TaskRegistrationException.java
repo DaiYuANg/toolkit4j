@@ -1,8 +1,6 @@
 package org.toolkit4j.quartz.task;
 
-/**
- * Thrown when task registration fails (e.g. duplicate id, invalid cron).
- */
+/** Thrown when task registration fails (e.g. duplicate id, invalid cron). */
 public class TaskRegistrationException extends RuntimeException {
 
   public TaskRegistrationException(String message) {

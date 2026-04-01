@@ -1,13 +1,12 @@
 package org.toolkit4j.data.model.money;
 
-import org.junit.jupiter.api.Test;
-
-import java.math.BigDecimal;
-import java.util.Currency;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.math.BigDecimal;
+import java.util.Currency;
+import org.junit.jupiter.api.Test;
 
 class MoneyTest {
 
@@ -24,9 +23,10 @@ class MoneyTest {
 
   @Test
   void arithmetic_requiresSameCurrency() {
-    var amount = Money.of(new BigDecimal("10.50"), USD)
-      .add(Money.of(new BigDecimal("2.25"), USD))
-      .subtract(Money.of(new BigDecimal("1.00"), USD));
+    var amount =
+        Money.of(new BigDecimal("10.50"), USD)
+            .add(Money.of(new BigDecimal("2.25"), USD))
+            .subtract(Money.of(new BigDecimal("1.00"), USD));
 
     assertEquals(Money.of(new BigDecimal("11.75"), USD), amount);
   }

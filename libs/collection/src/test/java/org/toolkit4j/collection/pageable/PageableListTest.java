@@ -1,18 +1,17 @@
 /* (C)2023*/
 package org.toolkit4j.collection.pageable;
 
-import lombok.val;
-import net.datafaker.Faker;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import lombok.val;
+import net.datafaker.Faker;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 class PageableListTest {
 
@@ -21,9 +20,7 @@ class PageableListTest {
 
   @BeforeEach
   void setup() {
-    List<String> fakeData = IntStream.range(0, 1000)
-      .mapToObj(i -> faker.camera().brand())
-      .toList();
+    List<String> fakeData = IntStream.range(0, 1000).mapToObj(i -> faker.camera().brand()).toList();
     pageable = new PageableList<>(new ArrayList<>(fakeData));
   }
 

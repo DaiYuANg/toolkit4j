@@ -1,17 +1,12 @@
 package org.toolkit4j.collection.table;
 
-import lombok.val;
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Map;
-import java.util.Set;
-
-import static org.junit.jupiter.api.Assertions.*;
-
-/**
- * WeakTable 基础行为测试。弱引用键的回收行为依赖 GC，不易稳定复现，此处仅验证 Table 契约。
- */
+/** WeakTable 基础行为测试。弱引用键的回收行为依赖 GC，不易稳定复现，此处仅验证 Table 契约。 */
 class WeakTableTest {
 
   private Table<String, String, Integer> table;

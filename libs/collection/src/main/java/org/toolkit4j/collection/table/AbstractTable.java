@@ -11,9 +11,7 @@ public abstract class AbstractTable<R, C, V> implements Table<R, C, V> {
 
   protected abstract Map<R, Map<C, V>> getBackingMap();
 
-  /**
-   * 创建新的列 map，子类可重写以使用不同的 map 实现，比如 concurrent 或 fastutil
-   */
+  /** 创建新的列 map，子类可重写以使用不同的 map 实现，比如 concurrent 或 fastutil */
   protected Map<C, V> createColumnMap() {
     return new HashMap<>();
   }
@@ -21,8 +19,8 @@ public abstract class AbstractTable<R, C, V> implements Table<R, C, V> {
   @Override
   public V get(R rowKey, C columnKey) {
     return Optional.ofNullable(getBackingMap().get(rowKey))
-      .map(row -> row.get(columnKey))
-      .orElse(null);
+        .map(row -> row.get(columnKey))
+        .orElse(null);
   }
 
   @Override
@@ -51,8 +49,8 @@ public abstract class AbstractTable<R, C, V> implements Table<R, C, V> {
   @Override
   public boolean contains(R rowKey, C columnKey) {
     return Optional.ofNullable(getBackingMap().get(rowKey))
-      .map(row -> row.containsKey(columnKey))
-      .orElse(false);
+        .map(row -> row.containsKey(columnKey))
+        .orElse(false);
   }
 
   @Override
@@ -62,27 +60,23 @@ public abstract class AbstractTable<R, C, V> implements Table<R, C, V> {
 
   @Override
   public boolean containsColumn(C columnKey) {
-    return getBackingMap().values().stream()
-      .anyMatch(row -> row.containsKey(columnKey));
+    return getBackingMap().values().stream().anyMatch(row -> row.containsKey(columnKey));
   }
 
   @Override
   public Map<C, V> row(R rowKey) {
     return Optional.ofNullable(getBackingMap().get(rowKey))
-      .map(Collections::unmodifiableMap)
-      .orElseGet(Collections::emptyMap);
+        .map(Collections::unmodifiableMap)
+        .orElseGet(Collections::emptyMap);
   }
 
   @Override
   public Map<R, V> column(C columnKey) {
     return getBackingMap().entrySet().stream()
-      .filter(e -> e.getValue().containsKey(columnKey))
-      .collect(Collectors.toMap(
-        Map.Entry::getKey,
-        e -> e.getValue().get(columnKey),
-        (a, b) -> b,
-        HashMap::new
-      ));
+        .filter(e -> e.getValue().containsKey(columnKey))
+        .collect(
+            Collectors.toMap(
+                Map.Entry::getKey, e -> e.getValue().get(columnKey), (a, b) -> b, HashMap::new));
   }
 
   @Override
@@ -93,14 +87,14 @@ public abstract class AbstractTable<R, C, V> implements Table<R, C, V> {
   @Override
   public Set<Cell<R, C, V>> cellSet() {
     return getBackingMap().entrySet().stream()
-      .flatMap(rowEntry -> rowEntry.getValue().entrySet().stream()
-        .map(cellEntry -> new RecordCell<>(
-          rowEntry.getKey(),
-          cellEntry.getKey(),
-          cellEntry.getValue()
-        ))
-      )
-      .collect(Collectors.toSet());
+        .flatMap(
+            rowEntry ->
+                rowEntry.getValue().entrySet().stream()
+                    .map(
+                        cellEntry ->
+                            new RecordCell<>(
+                                rowEntry.getKey(), cellEntry.getKey(), cellEntry.getValue())))
+        .collect(Collectors.toSet());
   }
 
   @Override
@@ -123,20 +117,21 @@ public abstract class AbstractTable<R, C, V> implements Table<R, C, V> {
   public Table<R, C, V> filter(BiPredicate<R, C> predicate) {
     AbstractTable<R, C, V> filtered = createInstance();
     cellSet().stream()
-      .filter(cell -> predicate.test(cell.getRowKey(), cell.getColumnKey()))
-      .forEach(cell -> filtered.put(cell.getRowKey(), cell.getColumnKey(), cell.getValue()));
+        .filter(cell -> predicate.test(cell.getRowKey(), cell.getColumnKey()))
+        .forEach(cell -> filtered.put(cell.getRowKey(), cell.getColumnKey(), cell.getValue()));
     return filtered;
   }
 
   @Override
   public <V2> Table<R, C, V2> mapValues(Function<? super V, ? extends V2> mapper) {
     AbstractTable<R, C, V2> mapped = createInstance();
-    cellSet().forEach(cell -> mapped.put(cell.getRowKey(), cell.getColumnKey(), mapper.apply(cell.getValue())));
+    cellSet()
+        .forEach(
+            cell ->
+                mapped.put(cell.getRowKey(), cell.getColumnKey(), mapper.apply(cell.getValue())));
     return mapped;
   }
 
-  /**
-   * 子类必须实现此方法，用于返回新的实例，方便 filter、mapValues 返回相同实现类
-   */
+  /** 子类必须实现此方法，用于返回新的实例，方便 filter、mapValues 返回相同实现类 */
   protected abstract <V2> AbstractTable<R, C, V2> createInstance();
 }

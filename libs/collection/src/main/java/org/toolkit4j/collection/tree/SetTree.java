@@ -1,11 +1,9 @@
 package org.toolkit4j.collection.tree;
 
 import java.util.Set;
-import java.util.stream.Stream;
 
 /**
- * roots 为 Set 的树，根节点无重复。
- * Tree with unique roots (Set).
+ * roots 为 Set 的树，根节点无重复。 Tree with unique roots (Set).
  *
  * @param <T> 节点数据类型
  */

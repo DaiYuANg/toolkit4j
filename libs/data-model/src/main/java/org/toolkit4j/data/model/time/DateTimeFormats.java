@@ -1,11 +1,11 @@
 package org.toolkit4j.data.model.time;
 
-import lombok.experimental.UtilityClass;
-import org.jetbrains.annotations.NotNull;
-import org.toolkit4j.data.model.enumeration.EnumValues;
-
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
+import lombok.experimental.UtilityClass;
+import lombok.val;
+import org.jetbrains.annotations.NotNull;
+import org.toolkit4j.data.model.enumeration.EnumValues;
 
 @UtilityClass
 public class DateTimeFormats {
@@ -17,10 +17,10 @@ public class DateTimeFormats {
   }
 
   public @NotNull DateTimeFormatter ofPattern(@NotNull String pattern) {
-    var normalizedPattern = Objects.requireNonNull(pattern, "pattern");
+    val normalizedPattern = Objects.requireNonNull(pattern, "pattern");
     return EnumValues.lookup(DateTimePattern.class)
-      .findByPrimaryValue(normalizedPattern)
-      .map(DateTimePattern::formatter)
-      .orElseGet(() -> DateTimeFormatter.ofPattern(normalizedPattern));
+        .findByPrimaryValue(normalizedPattern)
+        .map(DateTimePattern::formatter)
+        .orElseGet(() -> DateTimeFormatter.ofPattern(normalizedPattern));
   }
 }

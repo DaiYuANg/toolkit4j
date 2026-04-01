@@ -1,18 +1,15 @@
 package org.toolkit4j.data.model.money;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Currency;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-public record Money(
-  BigDecimal amount,
-  Currency currency
-) implements Comparable<Money> {
+public record Money(BigDecimal amount, Currency currency) implements Comparable<Money> {
   public Money {
     amount = normalizeAmount(Objects.requireNonNull(amount, "amount"));
-    currency = Objects.requireNonNull(currency, "currency");
+    Objects.requireNonNull(currency, "currency");
   }
 
   public static @NotNull Money of(@NotNull BigDecimal amount, @NotNull Currency currency) {
@@ -56,7 +53,8 @@ public record Money(
   }
 
   public @NotNull Money multiply(@NotNull BigDecimal multiplicand) {
-    return new Money(amount.multiply(Objects.requireNonNull(multiplicand, "multiplicand")), currency);
+    return new Money(
+        amount.multiply(Objects.requireNonNull(multiplicand, "multiplicand")), currency);
   }
 
   public @NotNull Money withAmount(@NotNull BigDecimal amount) {
@@ -75,14 +73,14 @@ public record Money(
   private Money requireSameCurrency(Money other) {
     if (!sameCurrency(other)) {
       throw new IllegalArgumentException(
-        "Currency mismatch: %s vs %s".formatted(currency.getCurrencyCode(), other.currency.getCurrencyCode())
-      );
+          "Currency mismatch: %s vs %s"
+              .formatted(currency.getCurrencyCode(), other.currency.getCurrencyCode()));
     }
     return other;
   }
 
-  private static BigDecimal normalizeAmount(BigDecimal amount) {
+  private BigDecimal normalizeAmount(@NotNull BigDecimal amount) {
     var normalized = amount.stripTrailingZeros();
-    return normalized.scale() < 0 ? normalized.setScale(0) : normalized;
+    return normalized.scale() < 0 ? normalized.setScale(0, RoundingMode.HALF_DOWN) : normalized;
   }
 }

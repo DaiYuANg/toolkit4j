@@ -1,17 +1,16 @@
 package org.toolkit4j.quartz.task.internal;
 
-import lombok.val;
-import org.quartz.Job;
-import org.toolkit4j.quartz.task.TaskOptions;
-import org.toolkit4j.quartz.task.TaskRegistrationConflictPolicy;
-import org.toolkit4j.quartz.task.TaskRegistrationException;
-
 import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
+import lombok.val;
+import org.quartz.Job;
+import org.toolkit4j.quartz.task.TaskOptions;
+import org.toolkit4j.quartz.task.TaskRegistrationConflictPolicy;
+import org.toolkit4j.quartz.task.TaskRegistrationException;
 
 public class DefaultTaskBuilder implements TaskOptions {
   private String id;
@@ -59,7 +58,8 @@ public class DefaultTaskBuilder implements TaskOptions {
 
   @Override
   public TaskOptions interval(Duration interval, Instant startAt) {
-    this.schedule = TaskSchedule.fixedInterval(interval, Objects.requireNonNull(startAt, "startAt"));
+    this.schedule =
+        TaskSchedule.fixedInterval(interval, Objects.requireNonNull(startAt, "startAt"));
     return this;
   }
 
@@ -114,13 +114,17 @@ public class DefaultTaskBuilder implements TaskOptions {
 
   @Override
   public TaskOptions ifExistsRecreate(boolean enabled) {
-    this.conflictPolicy = enabled ? TaskRegistrationConflictPolicy.RECREATE : TaskRegistrationConflictPolicy.FAIL;
+    this.conflictPolicy =
+        enabled ? TaskRegistrationConflictPolicy.RECREATE : TaskRegistrationConflictPolicy.FAIL;
     return this;
   }
 
   @Override
   public TaskOptions ifExistsIgnore(boolean enabled) {
-    this.conflictPolicy = enabled ? TaskRegistrationConflictPolicy.IGNORE_IF_EXISTS : TaskRegistrationConflictPolicy.FAIL;
+    this.conflictPolicy =
+        enabled
+            ? TaskRegistrationConflictPolicy.IGNORE_IF_EXISTS
+            : TaskRegistrationConflictPolicy.FAIL;
     return this;
   }
 
@@ -137,15 +141,15 @@ public class DefaultTaskBuilder implements TaskOptions {
     val copiedJobData = Map.copyOf(jobData);
 
     return TaskRegistrationBuilder.builder()
-      .taskId(id)
-      .jobClass(jobClass)
-      .description(description)
-      .durable(durable)
-      .requestRecovery(requestRecovery)
-      .conflictPolicy(conflictPolicy)
-      .jobData(copiedJobData)
-      .schedule(schedule)
-      .build();
+        .taskId(id)
+        .jobClass(jobClass)
+        .description(description)
+        .durable(durable)
+        .requestRecovery(requestRecovery)
+        .conflictPolicy(conflictPolicy)
+        .jobData(copiedJobData)
+        .schedule(schedule)
+        .build();
   }
 
   private void putJobData(String key, Object value) {
@@ -158,4 +162,3 @@ public class DefaultTaskBuilder implements TaskOptions {
     jobData.put(key, value);
   }
 }
-

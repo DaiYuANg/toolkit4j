@@ -1,10 +1,6 @@
 package org.toolkit4j.collection.table;
 
-public record RecordCell<R, C, V>(
-  R rowKey,
-  C columnKey,
-  V value
-) implements Cell<R, C, V> {
+public record RecordCell<R, C, V>(R rowKey, C columnKey, V value) implements Cell<R, C, V> {
   @Override
   public R getRowKey() {
     return rowKey;

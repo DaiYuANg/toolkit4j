@@ -5,7 +5,8 @@ import java.util.Map;
 import java.util.TreeMap;
 
 @SuppressWarnings("unused")
-public class TreeTable<R extends Comparable<R>, C extends Comparable<C>, V> extends AbstractTable<R, C, V> {
+public class TreeTable<R extends Comparable<R>, C extends Comparable<C>, V>
+    extends AbstractTable<R, C, V> {
 
   private final Comparator<R> rowComparator;
   private final Map<R, Map<C, V>> backingMap;

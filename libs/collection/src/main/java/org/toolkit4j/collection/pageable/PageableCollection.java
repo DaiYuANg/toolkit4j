@@ -17,9 +17,7 @@ public interface PageableCollection<T, C extends Collection<T>> {
 
   C page(int pageNo, int pageSize);
 
-  /**
-   * 校验分页参数。Validates page arguments.
-   */
+  /** 校验分页参数。Validates page arguments. */
   default void checkPageArgument(int pageNo, int pageSize) {
     if (pageNo <= 0) {
       throw new IllegalArgumentException("Page number must be positive.");
@@ -30,8 +28,7 @@ public interface PageableCollection<T, C extends Collection<T>> {
   }
 
   /**
-   * 在给定每页大小时，返回总页数。
-   * Returns total number of pages for the given page size.
+   * 在给定每页大小时，返回总页数。 Returns total number of pages for the given page size.
    *
    * @param pageSize 每页元素数量 / number of elements per page
    * @return 总页数 / total number of pages
@@ -52,28 +49,22 @@ public interface PageableCollection<T, C extends Collection<T>> {
 
   // --- Stream 与便捷方法 / Stream and convenience methods ---
 
-  /**
-   * 返回所有元素的流。Returns a stream of all elements.
-   */
+  /** 返回所有元素的流。Returns a stream of all elements. */
   Stream<T> stream();
 
-  /**
-   * 第一个元素（空集合返回 empty）。First element, or empty if collection is empty.
-   */
+  /** 第一个元素（空集合返回 empty）。First element, or empty if collection is empty. */
   default Optional<T> first() {
     return stream().findFirst();
   }
 
   /**
-   * 最后一个元素（空返回 empty；Set 为迭代顺序的最后一个）。
-   * Last element, or empty if collection is empty. For Set, last in iteration order.
+   * 最后一个元素（空返回 empty；Set 为迭代顺序的最后一个）。 Last element, or empty if collection is empty. For Set, last
+   * in iteration order.
    */
   default Optional<T> last() {
     return stream().reduce((a, b) -> b);
   }
 
-  /**
-   * 切片 [fromIndex, toIndex)。Returns sub-collection in range [fromIndex, toIndex).
-   */
+  /** 切片 [fromIndex, toIndex)。Returns sub-collection in range [fromIndex, toIndex). */
   C slice(int fromIndex, int toIndex);
 }

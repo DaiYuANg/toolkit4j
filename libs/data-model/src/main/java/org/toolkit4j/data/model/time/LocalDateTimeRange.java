@@ -1,36 +1,38 @@
 package org.toolkit4j.data.model.time;
 
+import java.time.LocalDateTime;
+import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.toolkit4j.data.model.range.Range;
 
-import java.time.LocalDateTime;
-import java.util.Objects;
-
-public record LocalDateTimeRange(
-  Range<LocalDateTime> value
-) {
+@SuppressWarnings("unused")
+public record LocalDateTimeRange(Range<LocalDateTime> value) {
   public LocalDateTimeRange {
-    value = Objects.requireNonNull(value, "value");
+    Objects.requireNonNull(value, "value");
   }
 
   public static @NotNull LocalDateTimeRange unbounded() {
     return new LocalDateTimeRange(Range.unbounded());
   }
 
-  public static @NotNull LocalDateTimeRange closed(@NotNull LocalDateTime lower, @NotNull LocalDateTime upper) {
+  public static @NotNull LocalDateTimeRange closed(
+      @NotNull LocalDateTime lower, @NotNull LocalDateTime upper) {
     return new LocalDateTimeRange(Range.closed(lower, upper));
   }
 
-  public static @NotNull LocalDateTimeRange open(@NotNull LocalDateTime lower, @NotNull LocalDateTime upper) {
+  public static @NotNull LocalDateTimeRange open(
+      @NotNull LocalDateTime lower, @NotNull LocalDateTime upper) {
     return new LocalDateTimeRange(Range.open(lower, upper));
   }
 
-  public static @NotNull LocalDateTimeRange closedOpen(@NotNull LocalDateTime lower, @NotNull LocalDateTime upper) {
+  public static @NotNull LocalDateTimeRange closedOpen(
+      @NotNull LocalDateTime lower, @NotNull LocalDateTime upper) {
     return new LocalDateTimeRange(Range.closedOpen(lower, upper));
   }
 
-  public static @NotNull LocalDateTimeRange openClosed(@NotNull LocalDateTime lower, @NotNull LocalDateTime upper) {
+  public static @NotNull LocalDateTimeRange openClosed(
+      @NotNull LocalDateTime lower, @NotNull LocalDateTime upper) {
     return new LocalDateTimeRange(Range.openClosed(lower, upper));
   }
 

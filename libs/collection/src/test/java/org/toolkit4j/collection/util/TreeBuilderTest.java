@@ -1,6 +1,13 @@
 package org.toolkit4j.collection.util;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.google.gson.Gson;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.LongStream;
 import lombok.SneakyThrows;
 import lombok.val;
 import net.datafaker.Faker;
@@ -8,14 +15,6 @@ import org.junit.jupiter.api.Test;
 import org.toolkit4j.collection.tree.ListTree;
 import org.toolkit4j.collection.tree.TreeNode;
 import org.toolkit4j.collection.tree.Trees;
-
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.LongStream;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class TreeBuilderTest {
 
@@ -25,13 +24,13 @@ class TreeBuilderTest {
   @SneakyThrows
   @Test
   void testBuildTree() {
-    List<Dept> list = List.of(
-        new Dept(1L, null, 2),
-        new Dept(2L, 1L, 1),
-        new Dept(3L, 1L, 2),
-        new Dept(4L, 2L, 1),
-        new Dept(5L, null, 1)
-    );
+    List<Dept> list =
+        List.of(
+            new Dept(1L, null, 2),
+            new Dept(2L, 1L, 1),
+            new Dept(3L, 1L, 2),
+            new Dept(4L, 2L, 1),
+            new Dept(5L, null, 1));
 
     ListTree<Dept> tree = Trees.build(list, Comparator.comparing(Dept::weight));
 
@@ -57,7 +56,8 @@ class TreeBuilderTest {
   private Object toSimple(TreeNode<Dept> n) {
     return new Object() {
       public final long id = n.data().id();
-      public final Object children = n.children().stream().map(TreeBuilderTest.this::toSimple).toList();
+      public final Object children =
+          n.children().stream().map(TreeBuilderTest.this::toSimple).toList();
     };
   }
 
@@ -69,10 +69,7 @@ class TreeBuilderTest {
 
   @Test
   void testBuildSet() {
-    List<Dept> list = List.of(
-        new Dept(1L, null, 2),
-        new Dept(2L, 1L, 1)
-    );
+    List<Dept> list = List.of(new Dept(1L, null, 2), new Dept(2L, 1L, 1));
     val setTree = Trees.buildSet(list);
     assertEquals(1, setTree.roots().size());
     assertTrue(setTree.roots().stream().anyMatch(n -> n.data().id() == 1L));
@@ -80,11 +77,7 @@ class TreeBuilderTest {
 
   @Test
   void testBuildLinked() {
-    List<Dept> list = List.of(
-        new Dept(1L, null, 2),
-        new Dept(2L, 1L, 1),
-        new Dept(3L, 1L, 2)
-    );
+    List<Dept> list = List.of(new Dept(1L, null, 2), new Dept(2L, 1L, 1), new Dept(3L, 1L, 2));
     val linkedTree = Trees.buildLinked(list);
     assertEquals(1, linkedTree.roots().size());
     val root = linkedTree.roots().iterator().next();
@@ -95,16 +88,14 @@ class TreeBuilderTest {
 
   @Test
   void testBuildSorted() {
-    List<Dept> list = List.of(
-        new Dept(1L, null, 2),
-        new Dept(2L, 1L, 1),
-        new Dept(3L, 1L, 0),
-        new Dept(5L, null, 1)
-    );
+    List<Dept> list =
+        List.of(
+            new Dept(1L, null, 2), new Dept(2L, 1L, 1), new Dept(3L, 1L, 0), new Dept(5L, null, 1));
     val sortedTree = Trees.buildSorted(list, Comparator.comparing(Dept::weight));
     val rootIds = sortedTree.roots().stream().map(n -> n.data().id()).toList();
     assertEquals(List.of(5L, 1L), rootIds);
-    val root1 = sortedTree.roots().stream().filter(n -> n.data().id() == 1L).findFirst().orElseThrow();
+    val root1 =
+        sortedTree.roots().stream().filter(n -> n.data().id() == 1L).findFirst().orElseThrow();
     val childIds = root1.children().stream().map(n -> n.data().id()).toList();
     assertEquals(List.of(3L, 2L), childIds);
   }
@@ -120,10 +111,11 @@ class TreeBuilderTest {
     List<Dept> roots = new ArrayList<>();
     LongStream.rangeClosed(1, 10)
         .mapToObj(i -> new Dept(i, null, faker.number().numberBetween(0, 10)))
-        .forEach(node -> {
-          nodes.add(node);
-          roots.add(node);
-        });
+        .forEach(
+            node -> {
+              nodes.add(node);
+              roots.add(node);
+            });
 
     for (long i = 11; i <= NODE_COUNT; i++) {
       Dept parent = nodes.get(faker.random().nextInt(nodes.size()));
@@ -138,9 +130,12 @@ class TreeBuilderTest {
     System.out.println("根节点数量: " + tree.roots().size());
     assertEquals(10, tree.roots().size());
 
-    tree.roots().stream().limit(3).forEach(root ->
-        System.out.println("rootId=" + root.data().id() + ", children=" + root.children().size())
-    );
+    tree.roots().stream()
+        .limit(3)
+        .forEach(
+            root ->
+                System.out.println(
+                    "rootId=" + root.data().id() + ", children=" + root.children().size()));
 
     val rootsForJson = tree.roots().stream().limit(5).map(this::toSimple).toList();
     System.err.println(gson.toJson(rootsForJson));

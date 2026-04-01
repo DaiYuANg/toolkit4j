@@ -1,10 +1,10 @@
 package org.toolkit4j.net;
 
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
 
 class IpAddressTest {
 
@@ -32,6 +32,7 @@ class IpAddressTest {
 
   @Test
   void ipv4BytesRoundTrip() {
-    assertArrayEquals(new byte[] {(byte) 192, (byte) 168, 1, 10}, Ipv4Address.of("192.168.1.10").bytes());
+    assertArrayEquals(
+        new byte[] {(byte) 192, (byte) 168, 1, 10}, Ipv4Address.of("192.168.1.10").bytes());
   }
 }

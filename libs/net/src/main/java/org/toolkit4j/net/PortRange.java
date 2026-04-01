@@ -1,15 +1,11 @@
 package org.toolkit4j.net;
 
-
+import java.util.Objects;
 import lombok.Getter;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
-
-/**
- * Port Range
- */
+/** Port Range */
 @Getter
 public final class PortRange {
   private final int start;

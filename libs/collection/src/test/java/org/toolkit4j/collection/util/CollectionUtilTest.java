@@ -1,15 +1,14 @@
 package org.toolkit4j.collection.util;
 
-import lombok.val;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import lombok.val;
+import org.junit.jupiter.api.Test;
 
 class CollectionUtilTest {
   @Test

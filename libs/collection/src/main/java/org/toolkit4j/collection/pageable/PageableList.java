@@ -1,12 +1,11 @@
 package org.toolkit4j.collection.pageable;
 
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
-import lombok.val;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 @RequiredArgsConstructor
 @Data
@@ -69,7 +68,8 @@ public class PageableList<T> implements PageableCollection<T, List<T>> {
   @Override
   public List<T> slice(int fromIndex, int toIndex) {
     if (fromIndex < 0 || toIndex > data.size() || fromIndex > toIndex) {
-      throw new IndexOutOfBoundsException("fromIndex=%d, toIndex=%d, size=%d".formatted(fromIndex, toIndex, data.size()));
+      throw new IndexOutOfBoundsException(
+          "fromIndex=%d, toIndex=%d, size=%d".formatted(fromIndex, toIndex, data.size()));
     }
     return new ArrayList<>(data.subList(fromIndex, toIndex));
   }

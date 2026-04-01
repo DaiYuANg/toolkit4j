@@ -1,13 +1,12 @@
 package org.toolkit4j.data.model.value;
 
-import org.junit.jupiter.api.Test;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import java.util.ArrayList;
+import java.util.List;
+import org.junit.jupiter.api.Test;
 
 class OptionTest {
 
@@ -26,6 +25,7 @@ class OptionTest {
     source.clear();
 
     assertEquals(1, option.children().size());
-    assertThrows(UnsupportedOperationException.class, () -> option.children().add(Option.of("x", "X")));
+    assertThrows(
+        UnsupportedOperationException.class, () -> option.children().add(Option.of("x", "X")));
   }
 }

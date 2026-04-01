@@ -1,4 +1,5 @@
 extra["POM_NAME"] = "toolkit4j-bom"
+
 extra["POM_DESCRIPTION"] = "Bill of materials for aligning toolkit4j module versions."
 
 dependencies {

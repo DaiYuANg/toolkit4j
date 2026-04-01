@@ -1,12 +1,10 @@
 package org.toolkit4j.data.model.range;
 
+import lombok.val;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public record Range<T extends Comparable<? super T>>(
-  Bound<T> lower,
-  Bound<T> upper
-) {
+public record Range<T extends Comparable<? super T>>(Bound<T> lower, Bound<T> upper) {
   public Range {
     if (lower != null && upper != null && lower.value().compareTo(upper.value()) > 0) {
       throw new IllegalArgumentException("lower bound must be less than or equal to upper bound");
@@ -17,19 +15,23 @@ public record Range<T extends Comparable<? super T>>(
     return new Range<>(null, null);
   }
 
-  public static <T extends Comparable<? super T>> @NotNull Range<T> closed(@NotNull T lower, @NotNull T upper) {
+  public static <T extends Comparable<? super T>> @NotNull Range<T> closed(
+      @NotNull T lower, @NotNull T upper) {
     return new Range<>(Bound.closed(lower), Bound.closed(upper));
   }
 
-  public static <T extends Comparable<? super T>> @NotNull Range<T> open(@NotNull T lower, @NotNull T upper) {
+  public static <T extends Comparable<? super T>> @NotNull Range<T> open(
+      @NotNull T lower, @NotNull T upper) {
     return new Range<>(Bound.open(lower), Bound.open(upper));
   }
 
-  public static <T extends Comparable<? super T>> @NotNull Range<T> closedOpen(@NotNull T lower, @NotNull T upper) {
+  public static <T extends Comparable<? super T>> @NotNull Range<T> closedOpen(
+      @NotNull T lower, @NotNull T upper) {
     return new Range<>(Bound.closed(lower), Bound.open(upper));
   }
 
-  public static <T extends Comparable<? super T>> @NotNull Range<T> openClosed(@NotNull T lower, @NotNull T upper) {
+  public static <T extends Comparable<? super T>> @NotNull Range<T> openClosed(
+      @NotNull T lower, @NotNull T upper) {
     return new Range<>(Bound.open(lower), Bound.closed(upper));
   }
 
@@ -61,7 +63,7 @@ public record Range<T extends Comparable<? super T>>(
     if (lower == null || upper == null) {
       return false;
     }
-    var comparison = lower.value().compareTo(upper.value());
+    val comparison = lower.value().compareTo(upper.value());
     if (comparison < 0) {
       return false;
     }
@@ -79,7 +81,7 @@ public record Range<T extends Comparable<? super T>>(
     if (lower == null) {
       return true;
     }
-    var comparison = value.compareTo(lower.value());
+    val comparison = value.compareTo(lower.value());
     return lower.type() == BoundType.CLOSED ? comparison >= 0 : comparison > 0;
   }
 
@@ -87,7 +89,7 @@ public record Range<T extends Comparable<? super T>>(
     if (upper == null) {
       return true;
     }
-    var comparison = value.compareTo(upper.value());
+    val comparison = value.compareTo(upper.value());
     return upper.type() == BoundType.CLOSED ? comparison <= 0 : comparison < 0;
   }
 }

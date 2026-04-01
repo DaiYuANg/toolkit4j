@@ -1,26 +1,23 @@
 package org.toolkit4j.net;
 
+import java.math.BigInteger;
+import java.util.Objects;
 import lombok.Getter;
 import lombok.val;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import java.math.BigInteger;
-import java.util.Objects;
-
-/**
- * CIDR 网段（支持 IPv4 / IPv6）
- */
+/** CIDR 网段（支持 IPv4 / IPv6） */
 public final class Cidr {
   private final IpAddress network;
-  @Getter
-  private final int prefixLength;
+  @Getter private final int prefixLength;
   private final BigInteger networkValue;
   private final BigInteger maskValue;
 
   private Cidr(IpAddress network, int prefixLength) {
-    if (prefixLength < 0 || (network instanceof Ipv4Address ipv4 && prefixLength > 32)
-      || (network instanceof Ipv6Address ipv6 && prefixLength > 128)) {
+    if (prefixLength < 0
+        || (network instanceof Ipv4Address ipv4 && prefixLength > 32)
+        || (network instanceof Ipv6Address ipv6 && prefixLength > 128)) {
       throw new IllegalArgumentException("Invalid prefix length: " + prefixLength);
     }
     this.prefixLength = prefixLength;
@@ -28,8 +25,15 @@ public final class Cidr {
     BigInteger rawNetworkValue = new BigInteger(1, bytes);
 
     int bits = bytes.length * 8;
-    this.maskValue = prefixLength == 0 ? BigInteger.ZERO : BigInteger.ONE.shiftLeft(bits).subtract(BigInteger.ONE)
-      .shiftRight(prefixLength).not().and(BigInteger.ONE.shiftLeft(bits).subtract(BigInteger.ONE));
+    this.maskValue =
+        prefixLength == 0
+            ? BigInteger.ZERO
+            : BigInteger.ONE
+                .shiftLeft(bits)
+                .subtract(BigInteger.ONE)
+                .shiftRight(prefixLength)
+                .not()
+                .and(BigInteger.ONE.shiftLeft(bits).subtract(BigInteger.ONE));
     this.networkValue = rawNetworkValue.and(maskValue);
     this.network = normalizeNetwork(network, networkValue);
   }
@@ -66,7 +70,8 @@ public final class Cidr {
     if (network instanceof Ipv6Address) {
       return Ipv6Address.of(normalizedValue);
     }
-    throw new IllegalArgumentException("Unsupported IP address type: " + network.getClass().getName());
+    throw new IllegalArgumentException(
+        "Unsupported IP address type: " + network.getClass().getName());
   }
 
   @Override
@@ -76,9 +81,9 @@ public final class Cidr {
 
   @Override
   public boolean equals(Object o) {
-    return o instanceof Cidr other &&
-      network.equals(other.network) &&
-      prefixLength == other.prefixLength;
+    return o instanceof Cidr other
+        && network.equals(other.network)
+        && prefixLength == other.prefixLength;
   }
 
   @Override
