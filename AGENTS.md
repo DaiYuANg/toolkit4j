@@ -36,14 +36,11 @@ The project should remain:
 - Prefer modern Java language features available in the current baseline.
 - Do not write code in an outdated Java style unless compatibility or integration constraints require it.
 
-### JPMS support
+### Module packaging
 
-- New modules should **prefer supporting JPMS**.
-- If a module can cleanly support JPMS, it should do so.
-- If upstream dependencies do not support JPMS well, JPMS support for that module may be abandoned pragmatically.
-- Do not force awkward or high-cost design changes purely to preserve JPMS if upstream ecosystem limitations make it unreasonable.
-- JPMS support is preferred, but not at the cost of introducing awkward design, excessive indirection, or poor maintainability.
-- When JPMS is not supported for a module, keep the reason explicit and documented.
+- The repository currently does **not** target JPMS support.
+- Do not add `module-info.java`, module-path-specific wiring, or JPMS-only documentation unless there is an explicit repository decision to restore it.
+- Prefer ordinary classpath-friendly packaging and documentation for published modules.
 
 ### Unit testing baseline
 
@@ -195,7 +192,7 @@ Dependency introduction must be conservative.
   - transitive dependency weight
   - API stability
   - learning and maintenance cost
-  - JPMS friendliness where practical
+  - packaging simplicity and integration cost
 4. Prefer libraries that are:
   - actively maintained
   - widely adopted
@@ -317,7 +314,7 @@ Prefer domain-specific naming and module-local cohesion over giant convenience c
   - Is this capability reusable?
   - Is this concern independent enough?
   - Does it justify separate publishing/versioning in the future?
-  - Can it support JPMS cleanly?
+  - Is the module boundary and dependency direction still clear without extra packaging complexity?
 
 ### Preferred direction
 
@@ -418,7 +415,7 @@ When adding or modifying a module:
 3. Provide minimal usage examples for non-obvious APIs.
 4. If a feature has constraints or trade-offs, document them directly.
 5. Do not leave placeholder documentation in published modules.
-6. Document JPMS limitations when a module cannot reasonably support JPMS.
+6. Document packaging or runtime constraints when they matter to consumers.
 
 ### For public-facing modules, document:
 
@@ -426,7 +423,6 @@ When adding or modifying a module:
 - when to use it
 - when not to use it
 - main dependencies
-- JPMS status where relevant
 - minimal example
 
 
@@ -447,7 +443,7 @@ When making changes in this repository:
 9. Do not rewrite working code without clear benefit.
 10. Keep public APIs stable and explicit.
 11. Add or update tests when behavior changes.
-12. Preserve or improve JPMS support where practical.
+12. Keep packaging and consumer setup simple unless stronger structure is clearly justified.
 13. Update documentation when public behavior or module purpose changes.
 
 ### Before introducing a dependency, explicitly evaluate
@@ -456,7 +452,7 @@ When making changes in this repository:
 - Can the required subset be implemented internally?
 - Is the maintenance cost justified?
 - Does it fit the lightweight philosophy of this repository?
-- Does it work reasonably with JPMS if that module is expected to support JPMS?
+- Does it fit the repository's lightweight packaging model without adding unnecessary complexity?
 
 ### Before adding a new abstraction, explicitly evaluate
 

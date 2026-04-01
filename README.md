@@ -9,25 +9,53 @@
 
 `toolkit4j` artifacts are published to Maven Central under `io.github.daiyuang`.
 
+### Gradle BOM
+
+```kotlin
+dependencies {
+  implementation(platform("io.github.daiyuang:toolkit4j-bom:0.0.4"))
+  implementation("io.github.daiyuang:collection")
+  // implementation("io.github.daiyuang:data-model")
+  // implementation("io.github.daiyuang:net")
+  // implementation("io.github.daiyuang:hibernate-snowflake-id")
+  // implementation("io.github.daiyuang:quartz-task")
+}
+```
+
 ### Gradle (Kotlin DSL)
 
 ```kotlin
 dependencies {
-  implementation("io.github.daiyuang:collection:0.0.2")
-  // implementation("io.github.daiyuang:data-model:0.0.2")
-  // implementation("io.github.daiyuang:net:0.0.2")
-  // implementation("io.github.daiyuang:hibernate-snowflake-id:0.0.2")
-  // implementation("io.github.daiyuang:quartz-task:0.0.2")
+  implementation("io.github.daiyuang:collection:0.0.4")
+  // implementation("io.github.daiyuang:data-model:0.0.4")
+  // implementation("io.github.daiyuang:net:0.0.4")
+  // implementation("io.github.daiyuang:hibernate-snowflake-id:0.0.4")
+  // implementation("io.github.daiyuang:quartz-task:0.0.4")
 }
 ```
 
 ### Maven
 
 ```xml
+<dependencyManagement>
+  <dependencies>
+    <dependency>
+      <groupId>io.github.daiyuang</groupId>
+      <artifactId>toolkit4j-bom</artifactId>
+      <version>0.0.4</version>
+      <type>pom</type>
+      <scope>import</scope>
+    </dependency>
+  </dependencies>
+</dependencyManagement>
+```
+
+### Maven Module Dependency
+
+```xml
 <dependency>
   <groupId>io.github.daiyuang</groupId>
   <artifactId>collection</artifactId>
-  <version>0.0.2</version>
 </dependency>
 ```
 

@@ -13,7 +13,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 import java.util.Properties;
 
-import static java.util.Optional.ofNullable;
 import static org.toolkit4j.hibernate.snowflake.id.HibernateConfigureKey.SNOW_FLAKE_HIBERNATE_PROPERTIES_KEY;
 
 @Slf4j
@@ -23,11 +22,11 @@ public class HibernateSnowflakeIdGenerator implements IdentifierGenerator, Confi
 
   @Override
   public void configure(GeneratorCreationContext creationContext, Properties parameters) throws MappingException {
+    log.debug("Configuring Hibernate Snowflake ID generator");
     val nodeId = resolveNodeId(parameters);
     validateNodeIdForDefaultAgronaLayout(nodeId);
-    log.atDebug().log("Current Node Id:{}", nodeId);
     this.generator = new SnowflakeIdGenerator(nodeId);
-    log.atDebug().log("Snowflake ID Generator initialized with node ID: {}", nodeId);
+    log.debug("Initialized Hibernate Snowflake ID generator with nodeId={}", nodeId);
   }
 
   /**
@@ -43,9 +42,24 @@ public class HibernateSnowflakeIdGenerator implements IdentifierGenerator, Confi
   }
 
   private long resolveNodeId(@NotNull Properties params) {
-    return ofNullable(params.getProperty(SNOW_FLAKE_HIBERNATE_PROPERTIES_KEY))
-      .map(HibernateSnowflakeIdGenerator::parseConfiguredNodeId)
-      .orElseGet(DistributedNodeUtil::getNodeId);
+    val configuredNodeId = params.getProperty(SNOW_FLAKE_HIBERNATE_PROPERTIES_KEY);
+    if (configuredNodeId != null) {
+      val parsedNodeId = parseConfiguredNodeId(configuredNodeId);
+      log.debug(
+        "Using explicitly configured snowflake nodeId={} from property {}",
+        parsedNodeId,
+        SNOW_FLAKE_HIBERNATE_PROPERTIES_KEY
+      );
+      return parsedNodeId;
+    }
+
+    val resolvedNodeId = DistributedNodeUtil.getNodeId();
+    log.debug(
+      "Using derived snowflake nodeId={} because property {} was not set",
+      resolvedNodeId,
+      SNOW_FLAKE_HIBERNATE_PROPERTIES_KEY
+    );
+    return resolvedNodeId;
   }
 
   private static long parseConfiguredNodeId(String nodeIdString) {

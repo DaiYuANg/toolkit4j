@@ -1,6 +1,6 @@
 # Collection
 
-Artifact: `io.github.daiyuang:collection:0.0.2`
+Artifact: `io.github.daiyuang:collection:0.0.4`
 
 ## What it provides
 
@@ -8,10 +8,6 @@ Artifact: `io.github.daiyuang:collection:0.0.2`
 - Table structures: `HashTable`, `TreeTable`, `ConcurrentHashTable`
 - Trie: `HashMapTrie`
 - Tree models and builders in `org.toolkit4j.collection.tree`
-
-## JPMS
-
-- Module name: `org.toolkit4j.collection`
 
 ## Minimal examples
 

@@ -20,4 +20,5 @@ Current highlights:
 All modules use:
 
 - Group: `io.github.daiyuang`
-- Version: `0.0.2`
+- Version: `0.0.4`
+- BOM: `io.github.daiyuang:toolkit4j-bom:0.0.4`

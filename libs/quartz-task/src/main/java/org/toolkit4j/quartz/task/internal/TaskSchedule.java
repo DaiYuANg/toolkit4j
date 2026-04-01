@@ -1,10 +1,13 @@
 package org.toolkit4j.quartz.task.internal;
 
+import io.soabase.recordbuilder.core.RecordBuilder;
+
 import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.util.Objects;
 
+@RecordBuilder
 public record TaskSchedule(
   TaskScheduleType type,
   String cronExpression,
@@ -15,13 +18,20 @@ public record TaskSchedule(
 ) {
   public static TaskSchedule cron(String expression, ZoneId zoneId) {
     Objects.requireNonNull(expression, "expression");
-    ZoneId z = zoneId == null ? ZoneId.systemDefault() : zoneId;
-    return new TaskSchedule(TaskScheduleType.CRON, expression, z, null, null, null);
+    ZoneId resolvedZoneId = zoneId == null ? ZoneId.systemDefault() : zoneId;
+    return TaskScheduleBuilder.builder()
+      .type(TaskScheduleType.CRON)
+      .cronExpression(expression)
+      .cronZoneId(resolvedZoneId)
+      .build();
   }
 
   public static TaskSchedule once(Instant fireAt) {
     Objects.requireNonNull(fireAt, "fireAt");
-    return new TaskSchedule(TaskScheduleType.ONCE, null, null, fireAt, null, null);
+    return TaskScheduleBuilder.builder()
+      .type(TaskScheduleType.ONCE)
+      .onceFireAt(fireAt)
+      .build();
   }
 
   public static TaskSchedule fixedInterval(Duration interval, Instant startAt) {
@@ -30,7 +40,11 @@ public record TaskSchedule(
     if (interval.isZero() || interval.isNegative()) {
       throw new IllegalArgumentException("interval must be positive.");
     }
-    return new TaskSchedule(TaskScheduleType.FIXED_INTERVAL, null, null, null, interval, startAt);
+    return TaskScheduleBuilder.builder()
+      .type(TaskScheduleType.FIXED_INTERVAL)
+      .fixedInterval(interval)
+      .fixedStartAt(startAt)
+      .build();
   }
 }
 

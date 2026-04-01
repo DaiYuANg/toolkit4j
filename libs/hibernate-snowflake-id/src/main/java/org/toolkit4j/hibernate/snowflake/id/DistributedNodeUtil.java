@@ -1,11 +1,13 @@
 package org.toolkit4j.hibernate.snowflake.id;
 
 import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+@Slf4j
 @UtilityClass
 public class DistributedNodeUtil {
 
@@ -34,9 +36,12 @@ public class DistributedNodeUtil {
   public long getNodeId() {
     String hostname = localHostNameOrNull();
     if (hostname == null || hostname.isBlank()) {
+      log.debug("Falling back to default snowflake nodeId={} because local hostname is unavailable", DEFAULT_NODE_ID);
       return DEFAULT_NODE_ID;
     }
-    return nodeIdFromHostname(hostname);
+    long nodeId = nodeIdFromHostname(hostname);
+    log.debug("Derived snowflake nodeId={} from hostname={}", nodeId, hostname);
+    return nodeId;
   }
 
   /**
@@ -57,6 +62,7 @@ public class DistributedNodeUtil {
     try {
       return InetAddress.getLocalHost().getHostName();
     } catch (UnknownHostException e) {
+      log.debug("Failed to resolve local hostname for snowflake nodeId derivation", e);
       return null;
     }
   }

@@ -25,11 +25,6 @@ import static java.util.Optional.ofNullable;
  * <p>
  * 本结构通常与 {@code PageRequest} 配合使用。
  *
- * @param content       当前页的数据内容
- * @param page          当前页码（从 1 开始）
- * @param size          每页数据量
- * @param totalElements 总数据条数
- * @param totalPages    总页数
  * @param <T>           内容的数据类型
  */
 @Getter
