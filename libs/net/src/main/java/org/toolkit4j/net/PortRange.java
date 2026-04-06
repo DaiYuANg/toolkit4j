@@ -12,7 +12,7 @@ public final class PortRange {
   private final int end;
 
   private PortRange(int start, int end) {
-    if (start < 0 || start > 65535 || end < 0 || end > 65535 || start > end) {
+    if (start < 0 || end < 0 || end > 65535 || start > end) {
       throw new IllegalArgumentException("Invalid port range: " + start + "-" + end);
     }
     this.start = start;

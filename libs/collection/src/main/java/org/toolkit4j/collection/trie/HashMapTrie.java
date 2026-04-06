@@ -2,9 +2,12 @@ package org.toolkit4j.collection.trie;
 
 import java.util.*;
 import java.util.function.Supplier;
+import java.util.stream.StreamSupport;
+
 import lombok.val;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 @ApiStatus.Experimental
 public class HashMapTrie<K, V> implements Trie<K, V> {
@@ -47,13 +50,13 @@ public class HashMapTrie<K, V> implements Trie<K, V> {
   }
 
   @Override
-  public boolean delete(Iterable<K> keySequence) {
+  public boolean delete(@NotNull Iterable<K> keySequence) {
     val found = new boolean[1];
     delete(root, keySequence.iterator(), found);
     return found[0];
   }
 
-  private boolean delete(TrieNode<K, V> current, Iterator<K> iterator, boolean[] found) {
+  private boolean delete(TrieNode<K, V> current, @NotNull Iterator<K> iterator, boolean[] found) {
     if (!iterator.hasNext()) {
       if (!current.isEnd()) return false;
       current.setEnd(false);
@@ -75,21 +78,18 @@ public class HashMapTrie<K, V> implements Trie<K, V> {
   }
 
   @Override
-  public Set<List<K>> keysWithPrefix(Iterable<K> prefixSequence) {
-    List<K> prefixList = new ArrayList<>();
-    for (K k : prefixSequence) {
-      prefixList.add(k);
-    }
+  public Set<List<K>> keysWithPrefix(@NotNull Iterable<K> prefixSequence) {
+    val prefixList = StreamSupport.stream(prefixSequence.spliterator(),false).toList();
     val node = findNode(prefixList);
     if (node == null) {
       return Collections.emptySet();
     }
-    Set<List<K>> results = new HashSet<>();
+    val results = new HashSet<List<K>>();
     collect(node, new LinkedList<>(prefixList), results);
     return results;
   }
 
-  private void collect(TrieNode<K, V> node, LinkedList<K> path, Set<List<K>> results) {
+  private void collect(@NotNull TrieNode<K, V> node, LinkedList<K> path, Set<List<K>> results) {
     if (node.isEnd()) {
       results.add(new ArrayList<>(path));
     }
@@ -115,8 +115,8 @@ public class HashMapTrie<K, V> implements Trie<K, V> {
   }
 
   /** Walks from root following {@code sequence}. Returns {@code null} if any step is missing. */
-  private TrieNode<K, V> findNode(@NotNull Iterable<K> sequence) {
-    TrieNode<K, V> node = root;
+  private @Nullable TrieNode<K, V> findNode(@NotNull Iterable<K> sequence) {
+    var node = root;
     for (K key : sequence) {
       node = node.getChild(key);
       if (node == null) {

@@ -5,10 +5,13 @@ import static java.util.Collections.emptySet;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
+
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Paging over a {@link Set} using the backing collection's iterator order. For {@link
@@ -80,7 +83,7 @@ public class PageableSet<T> implements PageableCollection<T, Set<T>> {
     val size = set.size();
     if (fromIndex < 0 || toIndex > size || fromIndex > toIndex) {
       throw new IndexOutOfBoundsException(
-          "fromIndex=%d, toIndex=%d, size=%d".formatted(fromIndex, toIndex, size));
+        "fromIndex=%d, toIndex=%d, size=%d".formatted(fromIndex, toIndex, size));
     }
     if (fromIndex == toIndex) {
       return emptySet();
@@ -92,7 +95,7 @@ public class PageableSet<T> implements PageableCollection<T, Set<T>> {
    * Copies {@code length} elements starting after skipping {@code skip} iterator steps. Uses the
    * same order as {@link Set#iterator()}.
    */
-  private Set<T> copyIteratorRange(int skip, int length) {
+  private @NotNull Set<T> copyIteratorRange(int skip, int length) {
     if (length <= 0) {
       return emptySet();
     }
@@ -100,19 +103,19 @@ public class PageableSet<T> implements PageableCollection<T, Set<T>> {
     for (int i = 0; i < skip; i++) {
       if (!it.hasNext()) {
         throw new IndexOutOfBoundsException(
-            "skip=%d past end of set (size=%d)".formatted(skip, set.size()));
+          "skip=%d past end of set (size=%d)".formatted(skip, set.size()));
       }
       it.next();
     }
-    HashSet<T> out = new HashSet<>(Math.max(length, 16));
-    for (int n = 0; n < length; n++) {
+    val out = new HashSet<T>(Math.max(length, 16));
+    IntStream.range(0, length).forEach(n -> {
       if (!it.hasNext()) {
         throw new IndexOutOfBoundsException(
-            "expected %d elements from offset %d but iterator ended early (size=%d)"
-                .formatted(length, skip, set.size()));
+          "expected %d elements from offset %d but iterator ended early (size=%d)"
+            .formatted(length, skip, set.size()));
       }
       out.add(it.next());
-    }
+    });
     return out;
   }
 }

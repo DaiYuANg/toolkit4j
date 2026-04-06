@@ -31,7 +31,6 @@ public class TreeTable<R extends Comparable<R>, C extends Comparable<C>, V>
   }
 
   @Override
-  @SuppressWarnings("unchecked")
   protected <V2> AbstractTable<R, C, V2> createInstance() {
     return rowComparator == null ? new TreeTable<>() : new TreeTable<>(rowComparator);
   }

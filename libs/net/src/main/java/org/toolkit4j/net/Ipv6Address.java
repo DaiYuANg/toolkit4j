@@ -3,6 +3,8 @@ package org.toolkit4j.net;
 import java.math.BigInteger;
 import java.net.InetAddress;
 import java.util.Objects;
+
+import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.val;
 import org.jetbrains.annotations.Contract;
@@ -20,9 +22,8 @@ public final class Ipv6Address implements IpAddress {
   }
 
   @Contract("_ -> new")
-  public static @NotNull Ipv6Address of(String ip) {
-    Objects.requireNonNull(ip, "IP address cannot be null");
-    String[] parts = ip.split(":", -1);
+  public static @NotNull Ipv6Address of(@NonNull String ip) {
+    val parts = ip.split(":", -1);
     if (parts.length < 3 || parts.length > 8) {
       throw new IllegalArgumentException("Invalid IPv6 address: " + ip);
     }
@@ -47,10 +48,10 @@ public final class Ipv6Address implements IpAddress {
 
   @Override
   public byte @NotNull [] bytes() {
-    byte[] arr = address.toByteArray();
+    val arr = address.toByteArray();
     if (arr.length == 16) return arr;
     // 补零到16字节
-    byte[] res = new byte[16];
+    val res = new byte[16];
     System.arraycopy(arr, 0, res, 16 - arr.length, arr.length);
     return res;
   }
@@ -70,7 +71,7 @@ public final class Ipv6Address implements IpAddress {
   @SneakyThrows
   @Override
   public String toString() {
-    java.net.InetAddress inet = java.net.InetAddress.getByAddress(bytes());
+    val inet = InetAddress.getByAddress(bytes());
     return inet.getHostAddress();
   }
 

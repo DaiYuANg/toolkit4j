@@ -10,8 +10,13 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.TimeZone;
 import java.util.function.Consumer;
+
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 import org.quartz.*;
 import org.quartz.impl.matchers.GroupMatcher;
 import org.toolkit4j.quartz.task.internal.DefaultTaskBuilder;
@@ -114,8 +119,7 @@ public class DefaultTaskScheduler implements TaskScheduler {
   }
 
   @Override
-  public void pause(String taskId) {
-    requireNotNull(taskId);
+  public void pause(@NonNull String taskId) {
     val jobKey = jobKey(taskId);
     log.debug("Pausing Quartz task id={}", taskId);
     withScheduler("pause task: " + taskId, () -> scheduler.pauseJob(jobKey));
@@ -126,8 +130,7 @@ public class DefaultTaskScheduler implements TaskScheduler {
   }
 
   @Override
-  public void resume(String taskId) {
-    requireNotNull(taskId);
+  public void resume(@NonNull String taskId) {
     val jobKey = jobKey(taskId);
     log.debug("Resuming Quartz task id={}", taskId);
     withScheduler("resume task: " + taskId, () -> scheduler.resumeJob(jobKey));
@@ -138,8 +141,7 @@ public class DefaultTaskScheduler implements TaskScheduler {
   }
 
   @Override
-  public void triggerNow(String taskId) {
-    requireNotNull(taskId);
+  public void triggerNow(@NonNull String taskId) {
     val jobKey = jobKey(taskId);
     try {
       log.debug("Triggering Quartz task immediately id={}", taskId);
@@ -154,8 +156,7 @@ public class DefaultTaskScheduler implements TaskScheduler {
   }
 
   @Override
-  public void unschedule(String taskId) {
-    requireNotNull(taskId);
+  public void unschedule(@NonNull String taskId) {
     val jobKey = jobKey(taskId);
     log.debug("Unscheduling Quartz task id={}", taskId);
     val deleted = withScheduler("unschedule task: " + taskId, () -> scheduler.deleteJob(jobKey));
@@ -166,15 +167,13 @@ public class DefaultTaskScheduler implements TaskScheduler {
   }
 
   @Override
-  public boolean exists(String taskId) {
-    requireNotNull(taskId);
+  public boolean exists(@NonNull String taskId) {
     return withScheduler(
         "check task existence: " + taskId, () -> scheduler.checkExists(jobKey(taskId)));
   }
 
   @Override
-  public Optional<TaskInfo> getTask(String taskId) {
-    requireNotNull(taskId);
+  public Optional<TaskInfo> getTask(@NonNull String taskId) {
     val jobKey = jobKey(taskId);
     val detail = withScheduler("query task: " + taskId, () -> scheduler.getJobDetail(jobKey));
     return Optional.ofNullable(detail).map(this::toTaskInfo);
@@ -196,13 +195,7 @@ public class DefaultTaskScheduler implements TaskScheduler {
     return withScheduler("query job detail: " + jobKey, () -> scheduler.getJobDetail(jobKey));
   }
 
-  private void requireNotNull(String taskId) {
-    if (taskId == null || taskId.isBlank()) {
-      throw new IllegalArgumentException("taskId must not be blank.");
-    }
-  }
-
-  private TaskInfo toTaskInfo(JobDetail jobDetail) {
+  private @NotNull TaskInfo toTaskInfo(@NotNull JobDetail jobDetail) {
     val triggers = getTriggers(jobDetail.getKey());
     val primaryTrigger = resolvePrimaryTrigger(triggers);
     val paused = isPaused(triggers, jobDetail.getKey().getName());
@@ -229,17 +222,18 @@ public class DefaultTaskScheduler implements TaskScheduler {
     return withScheduler("query triggers of: " + jobKey, () -> scheduler.getTriggersOfJob(jobKey));
   }
 
-  private Map<String, Object> jobDataOf(JobDataMap jobDataMap) {
+  @Contract(pure = true)
+  private @NotNull @Unmodifiable Map<String, Object> jobDataOf(JobDataMap jobDataMap) {
     return Map.copyOf(jobDataMap);
   }
 
-  private Trigger resolvePrimaryTrigger(List<? extends Trigger> triggers) {
+  private Trigger resolvePrimaryTrigger(@NotNull List<? extends Trigger> triggers) {
     return triggers.stream()
         .min(Comparator.comparing(Trigger::getNextFireTime, Comparator.nullsLast(Date::compareTo)))
         .orElse(null);
   }
 
-  private Instant nextFireAt(List<? extends Trigger> triggers) {
+  private Instant nextFireAt(@NotNull List<? extends Trigger> triggers) {
     return triggers.stream()
         .map(Trigger::getNextFireTime)
         .filter(Objects::nonNull)
@@ -248,7 +242,7 @@ public class DefaultTaskScheduler implements TaskScheduler {
         .orElse(null);
   }
 
-  private boolean isPaused(List<? extends Trigger> triggers, String taskId) {
+  private boolean isPaused(@NotNull List<? extends Trigger> triggers, String taskId) {
     if (triggers.isEmpty()) {
       return false;
     }
@@ -263,7 +257,7 @@ public class DefaultTaskScheduler implements TaskScheduler {
             });
   }
 
-  private Trigger buildTrigger(JobKey jobKey, TaskRegistration registration) {
+  private Trigger buildTrigger(JobKey jobKey, @NotNull TaskRegistration registration) {
     val schedule = registration.schedule();
     Objects.requireNonNull(schedule, "schedule");
 
@@ -283,7 +277,7 @@ public class DefaultTaskScheduler implements TaskScheduler {
     }
   }
 
-  private Trigger buildCronTrigger(JobKey jobKey, String identity, TaskSchedule schedule) {
+  private Trigger buildCronTrigger(JobKey jobKey, String identity, @NotNull TaskSchedule schedule) {
     val timezone =
         schedule.cronZoneId() == null
             ? TimeZone.getDefault()
@@ -303,7 +297,7 @@ public class DefaultTaskScheduler implements TaskScheduler {
         .build();
   }
 
-  private Trigger buildOnceTrigger(JobKey jobKey, String identity, TaskSchedule schedule) {
+  private Trigger buildOnceTrigger(JobKey jobKey, String identity, @NotNull TaskSchedule schedule) {
     val startAt = Date.from(schedule.onceFireAt());
     return TriggerBuilder.newTrigger()
         .withIdentity(identity, TRIGGER_GROUP)
@@ -313,7 +307,7 @@ public class DefaultTaskScheduler implements TaskScheduler {
         .build();
   }
 
-  private Trigger buildIntervalTrigger(JobKey jobKey, String identity, TaskSchedule schedule) {
+  private Trigger buildIntervalTrigger(JobKey jobKey, String identity, @NotNull TaskSchedule schedule) {
     val interval = schedule.fixedInterval();
     if (interval.isZero() || interval.isNegative()) {
       throw new TaskRegistrationException("fixedInterval must be positive.");
@@ -360,7 +354,7 @@ public class DefaultTaskScheduler implements TaskScheduler {
         .build();
   }
 
-  private void withScheduler(String operation, QuartzRunnable runnable) {
+  private void withScheduler(String operation, @NotNull QuartzRunnable runnable) {
     try {
       runnable.run();
     } catch (SchedulerException e) {
@@ -368,7 +362,7 @@ public class DefaultTaskScheduler implements TaskScheduler {
     }
   }
 
-  private <T> T withScheduler(String operation, QuartzSupplier<T> supplier) {
+  private <T> T withScheduler(String operation, @NotNull QuartzSupplier<T> supplier) {
     try {
       return supplier.get();
     } catch (SchedulerException e) {
@@ -386,7 +380,8 @@ public class DefaultTaskScheduler implements TaskScheduler {
     T get() throws SchedulerException;
   }
 
-  private JobKey jobKey(String taskId) {
+  @Contract("_ -> new")
+  private @NotNull JobKey jobKey(String taskId) {
     return JobKey.jobKey(taskId, JOB_GROUP);
   }
 }
