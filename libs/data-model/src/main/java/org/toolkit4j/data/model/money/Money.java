@@ -4,8 +4,11 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Currency;
 import java.util.Objects;
+
+import io.soabase.recordbuilder.core.RecordBuilder;
 import org.jetbrains.annotations.NotNull;
 
+@RecordBuilder
 public record Money(BigDecimal amount, Currency currency) implements Comparable<Money> {
   public Money {
     amount = normalizeAmount(Objects.requireNonNull(amount, "amount"));

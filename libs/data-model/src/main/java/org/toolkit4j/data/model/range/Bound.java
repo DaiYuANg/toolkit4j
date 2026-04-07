@@ -1,8 +1,11 @@
 package org.toolkit4j.data.model.range;
 
 import java.util.Objects;
+
+import io.soabase.recordbuilder.core.RecordBuilder;
 import org.jetbrains.annotations.NotNull;
 
+@RecordBuilder
 public record Bound<T extends Comparable<? super T>>(T value, BoundType type) {
   public Bound {
     Objects.requireNonNull(value, "value");

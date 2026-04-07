@@ -5,6 +5,7 @@ import static java.util.stream.IntStream.range;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
 import lombok.val;
+import org.jspecify.annotations.NonNull;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.Blackhole;
 import org.toolkit4j.collection.table.ConcurrentHashTable;
@@ -109,7 +110,7 @@ public class TableBenchmark {
     public HashTable<String, String, Integer> table;
 
     @Setup(Level.Trial)
-    public void setup(TableBenchmark b) {
+    public void setup(@NonNull TableBenchmark b) {
       table = new HashTable<>();
       for (int i = 0; i < b.size; i++) {
         val r = "r" + (i % 100);

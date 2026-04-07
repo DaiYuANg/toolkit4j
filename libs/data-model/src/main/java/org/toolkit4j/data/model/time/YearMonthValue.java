@@ -4,14 +4,13 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
+
+import io.soabase.recordbuilder.core.RecordBuilder;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("unused")
+@RecordBuilder
 public record YearMonthValue(int year, int month) implements Comparable<YearMonthValue> {
-  public YearMonthValue {
-    YearMonth.of(year, month);
-  }
-
   public static @NotNull YearMonthValue of(int year, int month) {
     return new YearMonthValue(year, month);
   }

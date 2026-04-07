@@ -33,7 +33,7 @@ public class HibernateSnowflakeIdGenerator implements IdentifierGenerator, Confi
    * Agrona {@link SnowflakeIdGenerator#SnowflakeIdGenerator(long)} 使用默认 10 位 node 位，合法范围为 {@code
    * [0, 1023]}。
    */
-  private static void validateNodeIdForDefaultAgronaLayout(long nodeId) {
+  private void validateNodeIdForDefaultAgronaLayout(long nodeId) {
     long maxNodeId = (1L << SnowflakeIdGenerator.NODE_ID_BITS_DEFAULT) - 1;
     if (nodeId < 0 || nodeId > maxNodeId) {
       throw new MappingException(
@@ -63,7 +63,7 @@ public class HibernateSnowflakeIdGenerator implements IdentifierGenerator, Confi
     return resolvedNodeId;
   }
 
-  private static long parseConfiguredNodeId(String nodeIdString) {
+  private long parseConfiguredNodeId(@NotNull String nodeIdString) {
     try {
       return Long.parseLong(nodeIdString.trim());
     } catch (NumberFormatException e) {
