@@ -21,7 +21,7 @@ plugins {
 /** Maven coordinates; Central GitHub namespace is typically io.github.{lowercase login}. */
 group = "io.github.daiyuang"
 
-version = "0.0.5"
+version = "0.0.6"
 
 allprojects {
   repositories {
