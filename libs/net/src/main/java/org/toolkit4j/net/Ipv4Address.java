@@ -2,7 +2,9 @@ package org.toolkit4j.net;
 
 import java.util.Objects;
 import lombok.AccessLevel;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -15,13 +17,12 @@ public final class Ipv4Address implements IpAddress {
 
   /** 构造方法：从字符串解析，例如 "192.168.1.1" */
   @Contract("_ -> new")
-  public static @NotNull Ipv4Address of(String ip) {
-    Objects.requireNonNull(ip, "IP address cannot be null");
-    String[] parts = ip.split("\\.");
+  public static @NotNull Ipv4Address of(@NonNull String ip) {
+    val parts = ip.split("\\.");
     if (parts.length != 4) {
       throw new IllegalArgumentException("Invalid IPv4 address: " + ip);
     }
-    int addr = 0;
+    var addr = 0;
     for (int i = 0; i < 4; i++) {
       int octet;
       try {
@@ -58,8 +59,8 @@ public final class Ipv4Address implements IpAddress {
 
   @Override
   public boolean isPrivate() {
-    int first = (address >>> 24) & 0xFF;
-    int second = (address >>> 16) & 0xFF;
+    val first = (address >>> 24) & 0xFF;
+    val second = (address >>> 16) & 0xFF;
     return (first == 10)
         || (first == 172 && second >= 16 && second <= 31)
         || (first == 192 && second == 168);

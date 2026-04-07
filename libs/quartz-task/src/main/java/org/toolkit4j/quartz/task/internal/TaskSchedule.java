@@ -1,10 +1,12 @@
 package org.toolkit4j.quartz.task.internal;
 
 import io.soabase.recordbuilder.core.RecordBuilder;
+import lombok.NonNull;
+import lombok.val;
+
 import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneId;
-import java.util.Objects;
 
 @RecordBuilder
 public record TaskSchedule(
@@ -14,9 +16,8 @@ public record TaskSchedule(
     Instant onceFireAt,
     Duration fixedInterval,
     Instant fixedStartAt) {
-  public static TaskSchedule cron(String expression, ZoneId zoneId) {
-    Objects.requireNonNull(expression, "expression");
-    ZoneId resolvedZoneId = zoneId == null ? ZoneId.systemDefault() : zoneId;
+  public static TaskSchedule cron(@NonNull String expression, ZoneId zoneId) {
+    val resolvedZoneId = zoneId == null ? ZoneId.systemDefault() : zoneId;
     return TaskScheduleBuilder.builder()
         .type(TaskScheduleType.CRON)
         .cronExpression(expression)
@@ -24,14 +25,11 @@ public record TaskSchedule(
         .build();
   }
 
-  public static TaskSchedule once(Instant fireAt) {
-    Objects.requireNonNull(fireAt, "fireAt");
+  public static TaskSchedule once(@NonNull Instant fireAt) {
     return TaskScheduleBuilder.builder().type(TaskScheduleType.ONCE).onceFireAt(fireAt).build();
   }
 
-  public static TaskSchedule fixedInterval(Duration interval, Instant startAt) {
-    Objects.requireNonNull(interval, "interval");
-    Objects.requireNonNull(startAt, "startAt");
+  public static TaskSchedule fixedInterval(@NonNull Duration interval,@NonNull Instant startAt) {
     if (interval.isZero() || interval.isNegative()) {
       throw new IllegalArgumentException("interval must be positive.");
     }

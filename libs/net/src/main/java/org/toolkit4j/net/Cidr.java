@@ -3,9 +3,11 @@ package org.toolkit4j.net;
 import java.math.BigInteger;
 import java.util.Objects;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.val;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 
 /** CIDR 网段（支持 IPv4 / IPv6） */
 public final class Cidr {
@@ -21,10 +23,10 @@ public final class Cidr {
       throw new IllegalArgumentException("Invalid prefix length: " + prefixLength);
     }
     this.prefixLength = prefixLength;
-    byte[] bytes = network.bytes();
-    BigInteger rawNetworkValue = new BigInteger(1, bytes);
+    val bytes = network.bytes();
+    val rawNetworkValue = new BigInteger(1, bytes);
 
-    int bits = bytes.length * 8;
+    val bits = bytes.length * 8;
     this.maskValue =
         prefixLength == 0
             ? BigInteger.ZERO
@@ -39,8 +41,7 @@ public final class Cidr {
   }
 
   @Contract("_ -> new")
-  public static @NotNull Cidr of(String cidrStr) {
-    Objects.requireNonNull(cidrStr, "CIDR cannot be null");
+  public static @NotNull Cidr of(@NonNull String cidrStr) {
     val parts = cidrStr.split("/", 2);
     if (parts.length != 2) throw new IllegalArgumentException("Invalid CIDR: " + cidrStr);
 
@@ -51,7 +52,7 @@ public final class Cidr {
       ip = Ipv6Address.of(parts[0]);
     }
 
-    int prefix = Integer.parseInt(parts[1]);
+    val prefix = Integer.parseInt(parts[1]);
     return new Cidr(ip, prefix);
   }
 
@@ -63,7 +64,8 @@ public final class Cidr {
     return ipVal.and(maskValue).equals(networkValue);
   }
 
-  private static IpAddress normalizeNetwork(IpAddress network, BigInteger normalizedValue) {
+  @Contract("null, _ -> fail")
+  private static @NotNull @Unmodifiable IpAddress normalizeNetwork(IpAddress network, BigInteger normalizedValue) {
     if (network instanceof Ipv4Address) {
       return Ipv4Address.of(normalizedValue.intValue());
     }
